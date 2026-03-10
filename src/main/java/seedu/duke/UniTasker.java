@@ -114,6 +114,9 @@ public class UniTasker {
         System.out.println("Welcome to UniTasker");
         Scanner in = new Scanner(System.in);
         while (true) {
+            if (!in.hasNextLine()) {  // Check if input is available
+                break;
+            }
             String line;
             line = in.nextLine();
             String[] sentence = line.split(" ");
@@ -148,6 +151,7 @@ public class UniTasker {
                 break;
             }
         }
+        in.close();
     }
 
     public static void main(String[] args) {
