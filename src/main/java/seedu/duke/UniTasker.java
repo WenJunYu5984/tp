@@ -40,6 +40,7 @@ public class UniTasker {
             int categoryIndex = Integer.parseInt(sentence[2]) - 1;
             int todoIndex = Integer.parseInt(sentence[3]) - 1;
             categories.deleteTodo(categoryIndex, todoIndex);
+            break;
         default:
             break;
         }
@@ -58,6 +59,7 @@ public class UniTasker {
             String[] descriptionArr = Arrays.copyOfRange(sentence, 3, sentence.length);
             String description = String.join(" ", descriptionArr);
             categories.addTodo(categoryIndex, description);
+            break;
         default:
             break;
         }
