@@ -7,6 +7,7 @@ public class DeadlineList extends TaskList<Deadline> {
     public DeadlineList() {
         super();
     }
+
     public String toString() {
         String result = "";
         for (int i = 0; i < tasks.size(); i++) {

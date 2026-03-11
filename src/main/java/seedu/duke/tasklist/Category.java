@@ -70,7 +70,9 @@ public class Category {
         }
     }
 
-    public DeadlineList getDeadlineList() { return deadlineList; }
+    public DeadlineList getDeadlineList() {
+        return deadlineList;
+    }
 
     @Override
     public String toString() {

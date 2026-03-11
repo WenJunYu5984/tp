@@ -2,8 +2,8 @@ package seedu.duke.storage;
 
 import seedu.duke.tasklist.Category;
 import seedu.duke.tasklist.CategoryList;
-import seedu.duke.task.Todo;
-import seedu.duke.task.Deadline;
+// import seedu.duke.task.Todo;
+// import seedu.duke.task.Deadline;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -28,12 +28,14 @@ public class Storage {
 
             // Save Todos from this category
             for (int j = 0; j < cat.getTodoList().getSize(); j++) {
-                todoWriter.write(cat.getName() + " | " + cat.getTodoList().get(j).toFileFormat() + System.lineSeparator());
+                todoWriter.write(cat.getName() + " | "
+                        + cat.getTodoList().get(j).toFileFormat() + System.lineSeparator());
             }
 
             // Save Deadlines from this category
             for (int j = 0; j < cat.getDeadlineList().getSize(); j++) {
-                deadlineWriter.write(cat.getName() + " | " + cat.getDeadlineList().get(j).toFileFormat() + System.lineSeparator());
+                deadlineWriter.write(cat.getName() + " | "
+                        + cat.getDeadlineList().get(j).toFileFormat() + System.lineSeparator());
             }
         }
         todoWriter.close();
@@ -88,7 +90,9 @@ public class Storage {
                     int catIdx = getCategoryIndex(categoryList, catName);
                     categoryList.addDeadline(catIdx, desc, by);
                     if (isDone)
-                        categoryList.setDeadlineStatus(catIdx, categoryList.getCategory(catIdx).getDeadlineList().getSize() - 1, true);
+                        categoryList.setDeadlineStatus(catIdx,
+                                categoryList.getCategory(catIdx).getDeadlineList().getSize() - 1,
+                                true);
                 }
             } catch (java.io.FileNotFoundException e) {
                 System.out.println("No existing Deadline file found.");
