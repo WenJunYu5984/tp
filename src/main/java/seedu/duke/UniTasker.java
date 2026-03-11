@@ -50,9 +50,9 @@ public class UniTasker {
             categories.deleteTodo(categoryIndex, todoIndex);
             break;
         case "deadline":
-            int deadCatIndex = Integer.parseInt(sentence[2]) - 1;
-            int deadIndex = Integer.parseInt(sentence[3]) - 1;
-            categories.deleteDeadline(deadCatIndex, deadIndex);
+            int deadlineCatIndex = Integer.parseInt(sentence[2]) - 1;
+            int deadlineIndex = Integer.parseInt(sentence[3]) - 1;
+            categories.deleteDeadline(deadlineCatIndex, deadlineIndex);
             break;
         default:
             break;
