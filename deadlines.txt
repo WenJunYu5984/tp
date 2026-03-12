@@ -1,2 +1,0 @@
-school | D | 0 | test paper | 2026-04-05 1900
-personall | D | 0 | test paper 2 | 2026-03-09 2000
