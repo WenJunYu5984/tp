@@ -3,7 +3,7 @@ package seedu.duke.task;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class Event extends Task {
+public class Event extends Task implements Timed {
 
     protected LocalDateTime from;
     protected LocalDateTime to;
@@ -26,7 +26,7 @@ public class Event extends Task {
         DateTimeFormatter displayFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         String fromFormatted = from.format(displayFormatter);
         String toFormatted = to.format(displayFormatter);
-        return super.toString() + " (from: " + fromFormatted + " to: " + toFormatted + ")";
+        return "[E]" + super.toString() + " (from: " + fromFormatted + " to: " + toFormatted + ")";
     }
 
     @Override
@@ -36,5 +36,10 @@ public class Event extends Task {
         String toFormatted = to.format(storageFormatter);
         return String.format("E | %d | %s | %s | %s", (isDone ? 1 : 0), description,
                 fromFormatted, toFormatted);
+    }
+
+    @Override
+    public LocalDateTime getDate() {
+        return from;
     }
 }

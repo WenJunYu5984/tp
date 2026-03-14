@@ -10,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 import seedu.duke.calender.Calendar;
 import seedu.duke.storage.Storage;
 import seedu.duke.task.Deadline;
+import seedu.duke.task.Event;
 import seedu.duke.tasklist.CategoryList;
 
 import seedu.duke.coursestracker.CourseException;
@@ -161,6 +162,10 @@ public class UniTasker {
                 java.time.LocalDateTime to = java.time.LocalDateTime.parse(eventTimeDetails[1], inputFormatter);
 
                 categories.addEvent(eventCategoryIndex, eventDetails[0], from,to);
+
+                Event newEvent = categories.getCategory(eventCategoryIndex).getLatestEvent();
+                calendar.registerTask(newEvent);
+
                 System.out.println("This event has been added:");
                 System.out.println(categories.getLatestEvent(eventCategoryIndex));
             } catch (java.time.format.DateTimeParseException e) {
@@ -250,6 +255,8 @@ public class UniTasker {
 
                 if (sentence.length > 4 && sentence[4].equalsIgnoreCase("/deadline")) {
                     calendar.displaySpecificTypeInRange(start, end, Deadline.class);
+                } else if (sentence.length > 4 && sentence[4].equalsIgnoreCase("/event")){
+                    calendar.displaySpecificTypeInRange(start, end, Event.class);
                 } else {
                     calendar.displayRange(start, end);
                 }

@@ -2,6 +2,8 @@ package seedu.duke.tasklist;
 
 import seedu.duke.task.Event;
 
+import java.util.Comparator;
+
 public class EventList extends TaskList<Event>{
 
     public EventList() {
@@ -18,6 +20,12 @@ public class EventList extends TaskList<Event>{
 
     public void clearAll() {
         tasks.clear();
+    }
+
+    public void sortByDate() {
+        tasks.sort(Comparator
+                .comparing(Event::getFrom)
+                .thenComparing(Event::getTo));
     }
 
     public Event getLatest() {
