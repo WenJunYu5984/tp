@@ -1,17 +1,19 @@
 package seedu.duke;
 
-import static seedu.duke.tasklist.CategoryList.refreshCalendar;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
+import java.time.format.DateTimeFormatter;
+
 import java.util.Arrays;
 import java.util.Scanner;
-import java.time.format.DateTimeFormatter;
 
 import seedu.duke.calender.Calendar;
 import seedu.duke.storage.Storage;
 import seedu.duke.task.Deadline;
+import seedu.duke.task.Event;
 import seedu.duke.tasklist.CategoryList;
+import static seedu.duke.tasklist.CategoryList.refreshCalendar;
 
 import seedu.duke.coursestracker.CourseException;
 import seedu.duke.coursestracker.CourseManager;
@@ -101,7 +103,7 @@ public class UniTasker {
                 }
                 break;
             default:
-                System.out.println("Unknown delete command. Use: delete category/todo/deadline [index]");
+                System.out.println("Unknown delete command. Use: delete category/todo/deadline/event [index]");
                 break;
             }
             saveData();
@@ -172,6 +174,10 @@ public class UniTasker {
                 java.time.LocalDateTime to = java.time.LocalDateTime.parse(eventTimeDetails[1], inputFormatter);
 
                 categories.addEvent(eventCategoryIndex, eventDetails[0], from,to);
+
+                Event newEvent = categories.getCategory(eventCategoryIndex).getLatestEvent();
+                calendar.registerTask(newEvent);
+
                 System.out.println("This event has been added:");
                 System.out.println(categories.getLatestEvent(eventCategoryIndex));
             } catch (java.time.format.DateTimeParseException e) {
@@ -261,11 +267,19 @@ public class UniTasker {
 
                 if (sentence.length > 4 && sentence[4].equalsIgnoreCase("/deadline")) {
                     calendar.displaySpecificTypeInRange(start, end, Deadline.class);
+                } else if (sentence.length > 4 && sentence[4].equalsIgnoreCase("/event")){
+                    calendar.displaySpecificTypeInRange(start, end, Event.class);
                 } else {
                     calendar.displayRange(start, end);
                 }
-            } catch (Exception e) {
+            } catch (DateTimeParseException e) {
                 System.out.println("Error: Use date format yyyy-mm-dd (e.g., list range 2026-03-01 2026-03-07)");
+            } catch (ArrayIndexOutOfBoundsException e) {
+                System.out.println("Error: Include start date and end date using the date format yyyy-mm-dd " +
+                        "(e.g., list range 2026-03-01 2026-03-07)");
+            } catch (IllegalArgumentException e) {
+                System.out.println("Error: Start date must be earlier than End date " +
+                        "(e.g., list range 2026-03-01 2026-03-07)");
             }
             break;
         default:

@@ -89,7 +89,9 @@ public class CategoryList {
         sb.append("=== ALL EVENTS ===").append(System.lineSeparator());
         for (Category cat : categories) {
             sb.append(cat.getName()).append(":").append(System.lineSeparator());
-            sb.append(cat.getEventList().toString());
+            EventList eventList = cat.getEventList();
+            eventList.sortByDate();
+            sb.append(eventList.toString());
         }
         return sb.toString();
     }
@@ -144,6 +146,9 @@ public class CategoryList {
             Category cat = categories.getCategory(i);
             for (int j = 0; j < cat.getDeadlineList().getSize(); j++) {
                 calendar.registerTask(cat.getDeadlineList().get(j));
+            }
+            for (int w = 0; w < cat.getEventList().getSize(); w++) {
+                calendar.registerTask(cat.getEventList().get(w));
             }
         }
     }
