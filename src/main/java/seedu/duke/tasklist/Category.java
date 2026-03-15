@@ -73,11 +73,11 @@ public class Category {
         }
     }
 
-    public Event getEvent(int index){
+    public Event getEvent(int index) {
         return eventList.get(index);
     }
 
-    public Event getLatestEvent(){
+    public Event getLatestEvent() {
         return eventList.getLatest();
     }
 

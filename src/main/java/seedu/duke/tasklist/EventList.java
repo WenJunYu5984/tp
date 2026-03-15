@@ -4,7 +4,7 @@ import seedu.duke.task.Event;
 
 import java.util.Comparator;
 
-public class EventList extends TaskList<Event>{
+public class EventList extends TaskList<Event> {
 
     public EventList() {
         super();

@@ -53,6 +53,7 @@ public class CalendarTest {
         CategoryList.refreshCalendar(categories, calendar);
         assertEquals(1, calendar.getTaskCountOnDate(LocalDate.of(2026, 6, 1)));
     }
+
     @Test
     public void getTaskCountOnDate_dateWithNoTasks_returnsZero() {
         Calendar calendar = new Calendar();
@@ -69,6 +70,7 @@ public class CalendarTest {
 
         assertEquals(2, calendar.getTaskCountOnDate(targetDate));
     }
+
     @Test
     public void displayRange_tasksOutsideRange_notDisplayed() {
         Calendar calendar = new Calendar();
@@ -86,8 +88,8 @@ public class CalendarTest {
         calendar.displayRange(start, end);
 
         String output = outContent.toString();
-        assert(output.contains("Inside"));
-        assert(!output.contains("Before"));
+        assert (output.contains("Inside"));
+        assert (!output.contains("Before"));
 
         System.setOut(System.out); // Reset console output
     }
@@ -108,8 +110,8 @@ public class CalendarTest {
         calendar.displaySpecificTypeInRange(date, date, Deadline.class);
 
         String output = outContent.toString();
-        assert(output.contains("I am a Deadline"));
-        assert(!output.contains("I am an Event"));
+        assert (output.contains("I am a Deadline"));
+        assert (!output.contains("I am an Event"));
 
         System.setOut(System.out);
     }

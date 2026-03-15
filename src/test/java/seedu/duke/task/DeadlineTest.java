@@ -56,6 +56,7 @@ public class DeadlineTest {
 
         assertEquals(0, categoryList.getCategory(0).getDeadlineList().getSize());
     }
+
     @Test
     public void parseDateTime_invalidYear_exceptionThrown() {
         // Verifies that years before 2026 throw the correct exception
