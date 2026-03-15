@@ -1,5 +1,6 @@
 package seedu.duke.tasklist;
 
+import seedu.duke.calender.Calendar;
 import seedu.duke.task.Deadline;
 import seedu.duke.task.Event;
 import seedu.duke.task.Todo;
@@ -59,6 +60,10 @@ public class Category {
 
     public void addEvent(Event event) {
         eventList.add(event);
+    }
+
+    public void addRecurringWeeklyEvent(Event event, Calendar calendar){
+        eventList.addRecurringWeeklyEvent(event,calendar);
     }
 
     public void deleteEvent(int index) {

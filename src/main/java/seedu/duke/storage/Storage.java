@@ -158,7 +158,7 @@ public class Storage {
                     String desc = parts[3];
                     String stringFrom = parts[4];
                     String stringTo = parts[5];
-
+                    String recurringId = (parts.length > 6) ? parts[6] : "";
                     // Ensure category exists
                     ensureCategoryExists(categoryList, catName);
                     // Convert the string dateTime to dateTime objects
@@ -167,7 +167,12 @@ public class Storage {
                     java.time.LocalDateTime to = java.time.LocalDateTime.parse(stringTo, storageFormatter);
 
                     int catIdx = getCategoryIndex(categoryList, catName);
-                    categoryList.addEvent(catIdx,desc,from,to);
+                    if (!recurringId.isEmpty() && parts[1].equals("RE")){
+                        int recurringGroupId = Integer.parseInt(recurringId);
+                        categoryList.addRecurringWeeklyEventFile(catIdx,desc,from,to,recurringGroupId);
+                    } else {
+                        categoryList.addEvent(catIdx, desc, from, to);
+                    }
                     if (isDone) {
                         categoryList.setEventStatus(catIdx,
                                 categoryList.getCategory(catIdx).getEventList().getSize() - 1, true);

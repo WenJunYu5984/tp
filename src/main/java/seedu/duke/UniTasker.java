@@ -1,9 +1,12 @@
 package seedu.duke;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 
 import java.util.Arrays;
 import java.util.Scanner;
@@ -20,6 +23,7 @@ import seedu.duke.coursestracker.CourseManager;
 import seedu.duke.coursestracker.CourseParser;
 
 public class UniTasker {
+    public static final String DOTTED_LINE = "____________________________________________________________";
     private static CategoryList categories = new CategoryList();
     private static Calendar calendar = new Calendar();
     private static Storage storage = new Storage("todos.txt", "deadlines.txt","events.txt");
@@ -54,12 +58,14 @@ public class UniTasker {
             break;
         case "event":
             categories.setEventStatus(categoryIndex, taskIndex, isMark);
+            System.out.println(DOTTED_LINE);
             if (isMark) {
                 System.out.println("This task is marked as done:");
             } else {
                 System.out.println("This task is marked as not done:");
             }
             System.out.println(categories.getEvent(categoryIndex,taskIndex));
+            System.out.println(DOTTED_LINE);
             break;
         default:
             break;
@@ -148,13 +154,13 @@ public class UniTasker {
                     calendar.registerTask(newDeadline);
                 }
 
-                System.out.println("____________________________________________________________");
+                System.out.println(DOTTED_LINE);
                 System.out.println(" Got it. I've added this deadline to category: "
                         + categories.getCategory(deadlineCatIdx).getName());
                 System.out.println("   " + newDeadline);
                 int count = categories.getCategory(deadlineCatIdx).getDeadlineList().getSize();
                 System.out.println(" Now you have " + count + " deadlines in this category.");
-                System.out.println("____________________________________________________________");
+                System.out.println(DOTTED_LINE);
                 
             } catch (java.time.format.DateTimeParseException e) {
                 System.out.println("Error: " + e.getMessage());
@@ -176,15 +182,51 @@ public class UniTasker {
                 categories.addEvent(eventCategoryIndex, eventDetails[0], from,to);
 
                 Event newEvent = categories.getCategory(eventCategoryIndex).getLatestEvent();
-                calendar.registerTask(newEvent);
+                if (newEvent != null) {
+                    calendar.registerTask(newEvent);
+                }
 
+                System.out.println(DOTTED_LINE);
                 System.out.println("This event has been added:");
-                System.out.println(categories.getLatestEvent(eventCategoryIndex));
+                System.out.println(categories.getLatestEvent(eventCategoryIndex).toString());
+                System.out.println(DOTTED_LINE);
+
             } catch (java.time.format.DateTimeParseException e) {
                 System.out.println("Error: Use format yyyy-MM-dd HHmm (e.g., 2026-03-11 1830)");
             } catch (Exception e) {
                 System.out.println("Error: Could not add event. Check your input format.");
             }
+            break;
+        case "recurring":
+            int eventCategoryIndex = getCategoryIndex(sentence);
+            String raw = String.join(" ", Arrays.copyOfRange(sentence, 5, sentence.length));
+            String[] eventDetails = raw.split(" /from ");
+            String[] eventTimeDetails = eventDetails[1].split(" /to ");
+
+            String fromDayOfWeek = eventTimeDetails[0].split(" ")[0];
+            String fromTime = eventTimeDetails[0].split(" ")[1];
+
+            String toDayOfWeek = eventTimeDetails[1].split(" ")[0];
+            String toTime = eventTimeDetails[1].split(" ")[1];
+            LocalDate today = LocalDate.now();
+
+            LocalDate dateFrom = today.with(TemporalAdjusters.nextOrSame(
+                    DayOfWeek.valueOf(fromDayOfWeek.toUpperCase())));
+            LocalDateTime from = LocalDateTime.of(dateFrom,
+                    LocalTime.parse(fromTime, DateTimeFormatter.ofPattern("HHmm")));
+
+            LocalDate dateTo = today.with(TemporalAdjusters.nextOrSame(
+                    DayOfWeek.valueOf(toDayOfWeek.toUpperCase())));
+            LocalDateTime to = LocalDateTime.of(dateTo, LocalTime.parse(
+                    toTime, DateTimeFormatter.ofPattern("HHmm")));
+
+            categories.addRecurringWeeklyEvent(eventCategoryIndex, eventDetails[0], from,to,calendar);
+
+            System.out.println(DOTTED_LINE);
+            System.out.println("This recurring event has been added:");
+            System.out.println(categories.getLatestEvent(eventCategoryIndex).toStringRecurring());
+            System.out.println(DOTTED_LINE);
+
             break;
         default:
             break;

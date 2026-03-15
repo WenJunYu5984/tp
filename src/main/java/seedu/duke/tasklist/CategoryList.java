@@ -4,10 +4,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import seedu.duke.calender.Calendar;
+import seedu.duke.task.Event;
 import seedu.duke.task.Todo;
 
 public class CategoryList {
     private ArrayList<Category> categories;
+    private int recurringGroupId = 0;
 
     public CategoryList() {
         categories = new ArrayList<>();
@@ -69,7 +71,21 @@ public class CategoryList {
     }
 
     public void addEvent(int categoryIndex, String description, LocalDateTime from, LocalDateTime to) {
-        categories.get(categoryIndex).addEvent(new seedu.duke.task.Event(description, from, to));
+        categories.get(categoryIndex).addEvent(new seedu.duke.task.Event(description, from, to,false,-1));
+    }
+
+    public void addRecurringWeeklyEventFile(int categoryIndex, String description,
+                                            LocalDateTime from, LocalDateTime to,int recurringGroupIndex) {
+        categories.get(categoryIndex).addEvent(new seedu.duke.task.Event(description,
+                from, to,true,recurringGroupIndex));
+        recurringGroupId = recurringGroupIndex;
+    }
+
+    public void addRecurringWeeklyEvent(int categoryIndex, String description,
+                                        LocalDateTime from, LocalDateTime to, Calendar calendar){
+        recurringGroupId +=1;
+        categories.get(categoryIndex).addRecurringWeeklyEvent(new seedu.duke.task.Event(description,
+                from, to,true,recurringGroupId),calendar);
     }
 
     public void deleteEvent(int categoryIndex, int eventIndex) {
@@ -166,7 +182,7 @@ public class CategoryList {
         return categories.get(categoryIndex).getEvent(taskIndex).toString();
     }
 
-    public String getLatestEvent(int eventCategoryIndex) {
-        return categories.get(eventCategoryIndex).getLatestEvent().toString();
+    public Event getLatestEvent(int eventCategoryIndex) {
+        return categories.get(eventCategoryIndex).getLatestEvent();
     }
 }
