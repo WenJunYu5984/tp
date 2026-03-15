@@ -18,6 +18,8 @@ public class TodoList extends TaskList<Todo> {
         if (toIndex > this.getSize()) {
             throw new UniTaskerException("Second todoIndex does not exist.");
         }
+        assert(fromIndex >= 0 && fromIndex < tasks.size());
+        assert(toIndex >= 0 && toIndex < tasks.size());
         Todo todo = tasks.remove(fromIndex);
         tasks.add(toIndex, todo);
     }
