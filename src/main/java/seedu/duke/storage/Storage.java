@@ -118,12 +118,18 @@ public class Storage {
                     String desc = parts[3];
                     String dateString = parts[4];
 
-                    DateTimeFormatter storageFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
-                    java.time.LocalDateTime by = java.time.LocalDateTime.parse(dateString, storageFormatter);
+                    java.time.LocalDateTime by;
 
-                    if (!categoryExists(categoryList, catName)) {
-                        categoryList.addCategory(catName);
+                    try {
+                        by = seedu.duke.task.Deadline.parseDateTime(dateString);
+                    } catch (java.time.format.DateTimeParseException e) {
+                        // Log the error and skip this specific task if parsing fails completely
+                        System.out.println("Skipping malformed deadline: " + desc);
+                        continue;
                     }
+
+                    // Ensure category exists
+                    ensureCategoryExists(categoryList, catName);
 
                     int catIdx = getCategoryIndex(categoryList, catName);
                     categoryList.addDeadline(catIdx, desc, by);
