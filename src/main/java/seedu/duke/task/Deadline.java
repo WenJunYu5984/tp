@@ -1,9 +1,7 @@
 package seedu.duke.task;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 
 import seedu.duke.exception.IllegalDateException;
 import seedu.duke.util.DateUtils;

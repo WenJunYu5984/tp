@@ -3,7 +3,6 @@ package seedu.duke.storage;
 
 import static seedu.duke.UniTasker.logger;
 
-import java.time.format.DateTimeParseException;
 import java.util.logging.Level;
 
 import seedu.duke.util.DateUtils;
