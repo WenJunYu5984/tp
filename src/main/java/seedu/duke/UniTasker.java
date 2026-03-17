@@ -113,7 +113,8 @@ public class UniTasker {
                 int groupIndex = Integer.parseInt(sentence[3]);
                 Event eventToDelete = categories.findRecurringEventToDelete(categoryIndex, groupIndex);
                 if (eventToDelete == null) {
-                    throw new UniTaskerException("Choose a positive integer that represents the group number that belongs to the category");
+                    throw new UniTaskerException("Choose a positive integer " +
+                            "that represents the group number that belongs to the category");
                 }
                 categories.deleteRecurringEvent(categoryIndex, groupIndex);
                 System.out.println(DOTTED_LINE);
@@ -214,8 +215,7 @@ public class UniTasker {
 
             } catch (java.time.format.DateTimeParseException e) {
                 System.out.println("Error: Use format yyyy-MM-dd HHmm (e.g., 2026-03-11 1830)");
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 System.out.println("Error: Could not add event. Check your input format.");
                 System.out.println(e.getMessage());
             }
