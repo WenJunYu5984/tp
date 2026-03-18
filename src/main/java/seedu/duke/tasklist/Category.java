@@ -60,10 +60,13 @@ public class Category {
     }
 
     public void addEvent(Event event) {
+        assert (event != null): "Event must not be null";
         eventList.add(event);
     }
 
     public void addRecurringWeeklyEvent(Event event, Calendar calendar){
+        assert (event != null): "Event must not be null";
+        assert (calendar != null) : "Calendar must not be null";
         eventList.addRecurringWeeklyEvent(event,calendar);
     }
 

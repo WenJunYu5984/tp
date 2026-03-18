@@ -2,6 +2,7 @@ package seedu.duke.storage;
 
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.logging.Level;
 
 import seedu.duke.exception.UniTaskerException;
@@ -185,11 +186,16 @@ public class Storage {
             logger.info("No deadline file found at " + deadlineFilePath + ". Skipping load.");
         }
         if (eventFile.exists()) {
+            logger.info("Attempting to load events from: " + eventFilePath);
+            int lineNumber = 0;
             try (java.util.Scanner s = new java.util.Scanner(eventFile)) {
+                DateTimeFormatter storageFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
                 while (s.hasNextLine()) {
+                    lineNumber++;
                     String[] parts = s.nextLine().split(" \\| ");
 
                     if (parts.length < 6) {
+                        logger.log(Level.WARNING, "Skipping malformed line " + lineNumber + " in events.txt");
                         continue;
                     }
 
@@ -203,14 +209,27 @@ public class Storage {
                     // Ensure category exists
                     ensureCategoryExists(categoryList, catName);
                     // Convert the string dateTime to dateTime objects
-                    DateTimeFormatter storageFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
-                    java.time.LocalDateTime from = java.time.LocalDateTime.parse(stringFrom, storageFormatter);
-                    java.time.LocalDateTime to = java.time.LocalDateTime.parse(stringTo, storageFormatter);
+                    java.time.LocalDateTime from = null;
+                    java.time.LocalDateTime to = null;
+                    try {
+                        from = java.time.LocalDateTime.parse(stringFrom, storageFormatter);
+                        to = java.time.LocalDateTime.parse(stringTo, storageFormatter);
+                    } catch (DateTimeParseException e) {
+                        logger.warning("Could not parse date time in events.txt from line: "
+                                + lineNumber + " " + e.getMessage());
+                        continue;
+                    }
 
                     int catIdx = getCategoryIndex(categoryList, catName);
                     if (!recurringId.isEmpty() && parts[1].equals("RE")){
-                        int recurringGroupId = Integer.parseInt(recurringId);
-                        categoryList.addRecurringWeeklyEventFile(catIdx,desc,from,to,recurringGroupId);
+                        try {
+                            int recurringGroupId = Integer.parseInt(recurringId);
+                            categoryList.addRecurringWeeklyEventFile(catIdx, desc, from, to, recurringGroupId);
+                        } catch (NumberFormatException e) {
+                            logger.warning("Could not parse recurring group ID from line: "
+                                    + lineNumber + " " + e.getMessage());
+                            continue;
+                        }
                     } else {
                         categoryList.addEvent(catIdx, desc, from, to);
                     }
@@ -219,8 +238,12 @@ public class Storage {
                                 categoryList.getCategory(catIdx).getEventList().getSize() - 1, true);
                     }
                 }
+                logger.info("Successfully loaded events from file.");
+
             } catch (java.io.FileNotFoundException e) {
                 System.out.println("No existing Event file found.");
+                logger.log(Level.SEVERE, "Event file cannot be found", e);
+
             }
         }
     }

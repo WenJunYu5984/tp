@@ -2,8 +2,10 @@ package seedu.duke.task;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.logging.Logger;
 
 public class Event extends Task implements Timed {
+    private static final Logger logger = Logger.getLogger(Event.class.getName());
 
     protected LocalDateTime from;
     protected LocalDateTime to;
@@ -12,10 +14,19 @@ public class Event extends Task implements Timed {
 
     public Event(String description, LocalDateTime from, LocalDateTime to, boolean isRecurring, int recurringGroupId) {
         super(description);
+        assert from.isBefore(to) || from.isEqual(to) : "The start date time must be before the end date time";
+        assert (recurringGroupId > 0 || recurringGroupId == -1) : "Recurring event must have a group ID > 0 " +
+                "or if it is not recurring its group id must be -1";
+        assert (from != null) : "Start date time cannot be null";
+        assert (to != null) : "End date time cannot be null";
+
         this.from = from;
         this.to = to;
         this.isRecurring = isRecurring;
         this.recurringGroupId = recurringGroupId;
+        logger.fine("Event created: " + description + " from " + from  +" to " + to
+                + " recurring " + isRecurring + " recurringGroupId " + recurringGroupId);
+
     }
 
     public LocalDateTime getFrom(){
@@ -31,6 +42,7 @@ public class Event extends Task implements Timed {
     }
 
     public void setRecurringGroupId(int recurringGroupIndex){
+        assert (recurringGroupIndex > 0): "Recurring event must have a group ID > 0";
         this.recurringGroupId = recurringGroupIndex;
     }
 
@@ -39,6 +51,9 @@ public class Event extends Task implements Timed {
     }
 
     public String toString() {
+        assert (from != null && to!=null): "There must be a start date time and end date time";
+        assert (description != null && !description.isEmpty()): "There must be a description for the events";
+
         DateTimeFormatter displayFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
         String fromFormatted = from.format(displayFormatter);
         String toFormatted = to.format(displayFormatter);
@@ -47,6 +62,10 @@ public class Event extends Task implements Timed {
     }
 
     public String toStringRecurring() {
+        assert (from != null && to!=null): "There must be a start date time and end date time";
+        assert (description != null && !description.isEmpty()): "There must be a description for the events";
+        assert (isRecurring): "Event to be printed must be recurring";
+
         DateTimeFormatter displayFormatterTime = DateTimeFormatter.ofPattern("EEEE HHmm");
         String fromFormatted = from.format(displayFormatterTime);
         String toFormatted = to.format(displayFormatterTime);
@@ -56,6 +75,10 @@ public class Event extends Task implements Timed {
     }
 
     public String toStringRecurringList() {
+        assert (from != null && to!=null): "There must be a start date time and end date time";
+        assert (description != null && !description.isEmpty()): "There must be a description for the events";
+        assert (isRecurring): "Event to be printed must be recurring";
+
         DateTimeFormatter displayFormatterTime = DateTimeFormatter.ofPattern("EEEE HHmm");
         String fromFormatted = from.format(displayFormatterTime);
         String toFormatted = to.format(displayFormatterTime);
@@ -66,6 +89,9 @@ public class Event extends Task implements Timed {
 
     @Override
     public String toFileFormat() {
+        assert (from != null && to!=null): "There must be a start date time and end date time";
+        assert (description != null && !description.isEmpty()): "There must be a description for the events";
+
         DateTimeFormatter storageFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
         String fromFormatted = from.format(storageFormatter);
         String toFormatted = to.format(storageFormatter);

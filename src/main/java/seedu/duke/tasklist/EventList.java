@@ -15,6 +15,7 @@ public class EventList extends TaskList<Event> {
     public String toString() {
         String result = "";
         for (int i = 0; i < tasks.size(); i++) {
+            assert tasks.get(i) != null : "Event must exist";
             result = result + (i + 1) + ". " + (tasks.get(i).toString()) + System.lineSeparator();
         }
         return result;
@@ -38,6 +39,8 @@ public class EventList extends TaskList<Event> {
     }
 
     public void addRecurringWeeklyEvent(Event event, Calendar calendar) {
+        assert (calendar != null): "There must be an instance of calendar";
+        assert (event != null) : "Event must exist";
         LocalDateTime boundaryDateTime = event.getFrom().plusMonths(1);
         LocalDateTime currentFromDateTime = event.getFrom();
         LocalDateTime currentToDateTime = event.getTo();
@@ -56,8 +59,7 @@ public class EventList extends TaskList<Event> {
     }
 
     public void sortByDay() {
-        Comparator<Event> dayOfWeek = (d1,d2)
-                -> Integer.compare(d1.getFrom().getDayOfWeek().getValue(),d2.getFrom().getDayOfWeek().getValue());
+        Comparator<Event> dayOfWeek = Comparator.comparingInt(d -> d.getFrom().getDayOfWeek().getValue());
         tasks.sort(dayOfWeek);
     }
 }
