@@ -1,5 +1,9 @@
 package seedu.duke.calender;
 
+import java.time.LocalDateTime;
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
 import seedu.duke.task.Task;
 import seedu.duke.task.Timed;
 
@@ -15,6 +19,9 @@ import java.util.TreeMap;
  */
 
 public class Calendar {
+
+    private static final Logger logger = Logger.getLogger(Calendar.class.getName());
+
     /**
      * Internal storage mapping a date to a list of tasks occurring on that day.
      */
@@ -26,18 +33,32 @@ public class Calendar {
 
     /**
      * Registers a task into the calendar if it contains date information.*
+     *
      * @param task The task to be added to the schedule.
-     *     Task must implement the {@link Timed} interface to be added to Calendar
+     *             Task must implement the {@link Timed} interface to be added to Calendar
      */
     public void registerTask(Task task) {
+        assert task != null : "Cannot register a null task";
+
         if (task instanceof Timed) {
-            LocalDate date = ((Timed) task).getDate().toLocalDate();
+            LocalDateTime dateTime = ((Timed) task).getDate();
+            if (dateTime == null) {
+                logger.log(Level.WARNING, "Timed task missing date: " + task.getDescription());
+                return;
+            }
+            LocalDate date = dateTime.toLocalDate();
             schedule.computeIfAbsent(date, k -> new ArrayList<>()).add(task);
+            logger.log(Level.INFO, "Task registered on date: " + date);
+        } else {
+            logger.log(Level.WARNING, "Attempted to register non-Timed task to Calendar: "
+                    + task.getClass().getSimpleName());
         }
     }
 
     public void clear() {
         schedule.clear();
+        assert schedule.isEmpty() : "Schedule should be empty after clear()";
+        logger.info("Calendar schedule cleared.");
     }
 
     public void displayRange(LocalDate start, LocalDate end) {

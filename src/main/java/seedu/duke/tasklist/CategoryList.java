@@ -9,6 +9,7 @@ import java.util.Map;
 import seedu.duke.calender.Calendar;
 import seedu.duke.task.Deadline;
 import seedu.duke.task.Event;
+import seedu.duke.exception.UniTaskerException;
 import seedu.duke.task.Todo;
 
 public class CategoryList {
@@ -53,24 +54,52 @@ public class CategoryList {
         categories.get(categoryIndex).deleteTodo(todoIndex);
     }
 
-    public void markTodo(int categoryIndex, int todoIndex) {
+    public void markTodo(int categoryIndex, int todoIndex) throws UniTaskerException {
+        if (categoryIndex >= this.getAmount() || categoryIndex < 0) {
+            throw new UniTaskerException("categoryIndex does not exist.");
+        }
+        int validTodoIndex = categories.get(categoryIndex).getTodoList().getSize();
+        if (todoIndex >= validTodoIndex || todoIndex < 0) {
+            throw new UniTaskerException("todoIndex does not exist.");
+        }
         categories.get(categoryIndex).markTodo(todoIndex);
     }
 
-    public void unmarkTodo(int categoryIndex, int todoIndex) {
+    public void unmarkTodo(int categoryIndex, int todoIndex) throws UniTaskerException {
+        if (categoryIndex >= this.getAmount() || categoryIndex < 0) {
+            throw new UniTaskerException("categoryIndex does not exist.");
+        }
+        if (todoIndex >= categories.get(categoryIndex).getTodoList().getSize() || todoIndex < 0) {
+            throw new UniTaskerException("todoIndex does not exist.");
+        }
         categories.get(categoryIndex).unmarkTodo(todoIndex);
     }
 
-    public void reorderCategory(int categoryIndex1, int categoryIndex2) {
+    public void reorderCategory(int categoryIndex1, int categoryIndex2) throws UniTaskerException {
+        if (categoryIndex1 >= this.getAmount() || categoryIndex1 < 0 ) {
+            throw new UniTaskerException("First categoryIndex does not exist.");
+        }
+        if (categoryIndex2 >= this.getAmount() || categoryIndex2 < 0) {
+            throw new UniTaskerException("Second categoryIndex does not exist.");
+        }
         Category category = categories.remove(categoryIndex1);
         categories.add(categoryIndex2, category);
     }
 
-    public void reorderTodo(int categoryIndex, int todoIndex1, int todoIndex2) {
+    public void reorderTodo(int categoryIndex, int todoIndex1, int todoIndex2) throws UniTaskerException {
+        if (categoryIndex > this.getAmount()) {
+            throw new UniTaskerException("categoryIndex does not exist.");
+        }
         categories.get(categoryIndex).reorderTodo(todoIndex1, todoIndex2);
     }
 
-    public void setTodoPriority(int categoryIndex, int todoIndex, int priority) {
+    public void setTodoPriority(int categoryIndex, int todoIndex, int priority) throws UniTaskerException {
+        if (categoryIndex >= this.getAmount() || categoryIndex < 0 ) {
+            throw new UniTaskerException("categoryIndex does not exist.");
+        }
+        if (todoIndex >= categories.get(categoryIndex).getTodoList().getSize() || todoIndex < 0) {
+            throw new UniTaskerException("todoIndex does not exist.");
+        }
         categories.get(categoryIndex).setTodoPriority(todoIndex, priority);
     }
 
@@ -150,7 +179,7 @@ public class CategoryList {
         StringBuilder sb = new StringBuilder();
         sb.append("=== ALL DEADLINES ===").append(System.lineSeparator());
         for (Category cat : categories) {
-            sb.append(cat.getName()).append(":").append(System.lineSeparator());
+            sb.append(cat.getName().trim()).append(":").append(System.lineSeparator());
             sb.append(cat.getDeadlineList().toString());
         }
         return sb.toString();
@@ -159,6 +188,7 @@ public class CategoryList {
     /**
      * Rebuilds the Calendar entries based on the current state of the CategoryList.
      * This ensures the Calendar view stays consistent with the task list.
+     *
      * @param categories The source CategoryList.
      * @param calendar   The Calendar instance to be refreshed.
      */
@@ -179,7 +209,7 @@ public class CategoryList {
     public String toString() {
         String result = "";
         for (int i = 0; i < categories.size(); i += 1) {
-            result += "[" + (i + 1) + "]" + categories.get(i).toString();
+            result += "[" + (i + 1) + "]" + categories.get(i).toString() + System.lineSeparator();
         }
         return result;
     }

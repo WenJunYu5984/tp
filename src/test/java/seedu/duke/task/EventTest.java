@@ -1,6 +1,7 @@
 package seedu.duke.task;
 
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import seedu.duke.calender.Calendar;
@@ -31,14 +32,14 @@ public class EventTest {
 
         LocalDateTime from = LocalDateTime.parse("2026-01-01 1830", formatter);
         LocalDateTime to = LocalDateTime.parse("2026-02-02 1830", formatter);
-        categoryList.addEvent(0, "consultation", from,to);
+        categoryList.addEvent(0, "consultation", from, to);
 
         assertEquals(1, categoryList.getCategory(0).getEventList().getSize());
         assertEquals("consultation", categoryList.getCategory(0).getEventList().get(0).getDescription());
     }
 
     @Test
-    public void addEvent_wrongDateTimeFormat_throwException(){
+    public void addEvent_wrongDateTimeFormat_throwException() {
         CategoryList categoryList = new CategoryList();
         categoryList.addCategory("School");
 
@@ -46,26 +47,26 @@ public class EventTest {
         System.setOut(new PrintStream(outContent));
         handleAdd("add event 1 interview /from 2026/01/02 1800 /to 2026/01/02 1900".split(" "));
         assertEquals(
-                "Error: Use format yyyy-MM-dd HHmm (e.g., 2026-03-11 1830)",
+                "Error: Use format yyyy-MM-dd HHmm (e.g., 2026-03-11 1830) and include a description",
                 outContent.toString().trim()
         );
     }
 
     @Test
-    public void deleteEvent_success(){
+    public void deleteEvent_success() {
         CategoryList categoryList = new CategoryList();
         categoryList.addCategory("School");
 
         LocalDateTime from = LocalDateTime.parse("2026-01-01 1830", formatter);
         LocalDateTime to = LocalDateTime.parse("2026-02-02 1830", formatter);
-        categoryList.addEvent(0, "consultation", from,to);
+        categoryList.addEvent(0, "consultation", from, to);
         categoryList.deleteEvent(0, 0);
 
         assertEquals(0, categoryList.getCategory(0).getEventList().getSize());
     }
 
     @Test
-    public void deleteEvent_invalidIndex_throwException(){
+    public void deleteEvent_invalidIndex_throwException() {
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
 
@@ -74,7 +75,7 @@ public class EventTest {
 
         LocalDateTime from = LocalDateTime.parse("2026-01-01 1830", formatter);
         LocalDateTime to = LocalDateTime.parse("2026-02-02 1830", formatter);
-        categoryList.addEvent(0, "consultation", from,to);
+        categoryList.addEvent(0, "consultation", from, to);
         handleDelete("delete event 1 0".split(" "));
         assertEquals(
                 "Error: That index does not exist in the list.",
@@ -83,7 +84,7 @@ public class EventTest {
     }
 
     @Test
-    public void listEventRange_success(){
+    public void listEventRange_success() {
         CategoryList categoryList = new CategoryList();
         categoryList.addCategory("School");
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -99,17 +100,17 @@ public class EventTest {
         LocalDateTime to3 = LocalDateTime.parse("2026-03-03 1930", formatter);
 
         Calendar calendar = new Calendar();
-        categoryList.addEvent(0, "consultation", from1,to1);
+        categoryList.addEvent(0, "consultation", from1, to1);
         calendar.registerTask(categoryList.getCategory(0).getLatestEvent());
 
-        categoryList.addEvent(0, "meeting", from2,to2);
+        categoryList.addEvent(0, "meeting", from2, to2);
         calendar.registerTask(categoryList.getCategory(0).getLatestEvent());
 
-        categoryList.addEvent(0, "interview", from3,to3);
+        categoryList.addEvent(0, "interview", from3, to3);
         calendar.registerTask(categoryList.getCategory(0).getLatestEvent());
 
-        calendar.displaySpecificTypeInRange(LocalDate.parse("2026-01-01",formatList),
-                LocalDate.parse("2026-02-25",formatList), Event.class);
+        calendar.displaySpecificTypeInRange(LocalDate.parse("2026-01-01", formatList),
+                LocalDate.parse("2026-02-25", formatList), Event.class);
 
         assertEquals(
                 """
@@ -124,7 +125,7 @@ public class EventTest {
     }
 
     @Test
-    public void listEventRange_startDateLargerThanEndDate_throwException(){
+    public void listEventRange_startDateLargerThanEndDate_throwException() {
         CategoryList categoryList = new CategoryList();
         categoryList.addCategory("School");
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -137,16 +138,16 @@ public class EventTest {
         LocalDateTime to2 = LocalDateTime.parse("2026-02-03 1930", formatter);
 
         Calendar calendar = new Calendar();
-        categoryList.addEvent(0, "consultation", from1,to1);
+        categoryList.addEvent(0, "consultation", from1, to1);
         calendar.registerTask(categoryList.getCategory(0).getLatestEvent());
 
-        categoryList.addEvent(0, "meeting", from2,to2);
+        categoryList.addEvent(0, "meeting", from2, to2);
         calendar.registerTask(categoryList.getCategory(0).getLatestEvent());
 
         handleList("list range 2026-02-25 2026-01-03 /event".split(" "));
 
         assertEquals("Error: Start date must be earlier than End date "
-                                + "(e.g., list range 2026-03-01 2026-03-07)",
+                        + "(e.g., list range 2026-03-01 2026-03-07)",
                 outContent.toString().trim()
         );
 

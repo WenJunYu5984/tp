@@ -1,6 +1,7 @@
 package seedu.duke.tasklist;
 
 import seedu.duke.calender.Calendar;
+import seedu.duke.exception.UniTaskerException;
 import seedu.duke.task.Deadline;
 import seedu.duke.task.Event;
 import seedu.duke.task.Todo;
@@ -54,7 +55,7 @@ public class Category {
         todoList.setPriority(index, priority);
     }
 
-    public void reorderTodo(int fromIndex, int toIndex) {
+    public void reorderTodo(int fromIndex, int toIndex) throws UniTaskerException {
         todoList.reorder(fromIndex, toIndex);
     }
 
@@ -78,11 +79,11 @@ public class Category {
         }
     }
 
-    public Event getEvent(int index){
+    public Event getEvent(int index) {
         return eventList.get(index);
     }
 
-    public Event getLatestEvent(){
+    public Event getLatestEvent() {
         return eventList.getLatest();
     }
 
@@ -127,9 +128,9 @@ public class Category {
     public String toString() {
         String result = "";
         result += "---" + getName() + "---" + System.lineSeparator();
-        result += "Todos:" + System.lineSeparator() + todoList.toString();
-        result += "Deadlines:" + System.lineSeparator() + deadlineList.toString();
-        result += "Events:" + System.lineSeparator() + eventList.toString();
+        result += "Todos:" + System.lineSeparator() + todoList.toString() + System.lineSeparator();
+        result += "Deadlines:" + System.lineSeparator() + deadlineList.toString() + System.lineSeparator();
+        result += "Events:" + System.lineSeparator() + eventList.toString() + System.lineSeparator();
 
         return result;
     }

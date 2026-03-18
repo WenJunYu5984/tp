@@ -1,9 +1,11 @@
 package seedu.duke.task;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
+import java.util.logging.Logger;
+
+import seedu.duke.exception.IllegalDateException;
+import seedu.duke.util.DateUtils;
 
 /**
  * Represents a deadline task.
@@ -12,40 +14,17 @@ import java.time.format.DateTimeParseException;
  * allow for chronological sorting and calendar integration.
  */
 public class Deadline extends Task implements Timed {
+    private static final Logger logger = Logger.getLogger(Deadline.class.getName());
     protected LocalDateTime by;
 
     public Deadline(String description, LocalDateTime by) {
         super(description);
         this.by = by;
+        logger.fine("Deadline created: " + description + " by " + by);
     }
 
-    /**
-     * Parses a string input into a {@code LocalDateTime} and ensures the year is 2026 or later.
-     * If only a date is provided, the time defaults to 23:59 (end of day).
-     *
-     * @param input The date or date-time string (e.g., "2026-12-31" or "2026-12-31 1800").
-     * @return A {@code LocalDateTime} representation of the input.
-     * @throws DateTimeParseException If the input does not match expected formats or year is before 2026.
-     */
-    public static LocalDateTime parseDateTime(String input) throws DateTimeParseException {
-        String trimmedInput = input.trim();
-        LocalDateTime parsedDate;
-
-        try {
-            DateTimeFormatter fullFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
-            parsedDate = LocalDateTime.parse(trimmedInput, fullFormatter);
-        } catch (DateTimeParseException e) {
-            DateTimeFormatter dateOnlyFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            LocalDate date = LocalDate.parse(trimmedInput, dateOnlyFormatter);
-            parsedDate = date.atTime(23, 59);
-        }
-        // --- Year Validation Limit ---
-        if (parsedDate.getYear() < 2026) {
-            throw new DateTimeParseException("Date must be in the year 2026 or later.",
-                    trimmedInput, 0);
-        }
-
-        return parsedDate;
+    public static LocalDateTime parseDateTime(String input) throws IllegalDateException {
+        return DateUtils.parseDateTime(input);
     }
 
     /**
