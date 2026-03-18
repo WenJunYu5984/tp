@@ -53,6 +53,9 @@ public class Storage {
             for (int i = 0; i < categoryList.getAmount(); i++) {
                 Category cat = categoryList.getCategory(i);
 
+                todoWriter.write(cat.getName() + " | "
+                        + "C" + System.lineSeparator());
+
                 for (int j = 0; j < cat.getTodoList().getSize(); j++) {
                     todoWriter.write(cat.getName() + " | "
                             + cat.getTodoList().get(j).toFileFormat() + System.lineSeparator());
@@ -94,6 +97,13 @@ public class Storage {
             try (java.util.Scanner s = new java.util.Scanner(todoFile)) {
                 while (s.hasNextLine()) {
                     String[] parts = s.nextLine().split(" \\| ");
+
+                    if (parts.length == 2) {
+                        if (parts[1].equals("C")) {
+                            categoryList.addCategory(parts[0].trim());
+                            continue;
+                        }
+                    }
 
                     if (parts.length < 5) {
                         continue;
