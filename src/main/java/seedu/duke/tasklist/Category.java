@@ -129,6 +129,12 @@ public class Category {
         deadlineList.clearAll();
     }
 
+    public void deleteMarkedTasks() {
+        todoList.deleteMarked();
+        deadlineList.deleteMarked();
+        eventList.deleteMarked();
+    }
+
     @Override
     public String toString() {
         String result = "";

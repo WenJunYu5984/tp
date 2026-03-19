@@ -34,5 +34,10 @@ public abstract class TaskList<T extends Task> {
     public int getSize() {
         return tasks.size();
     }
+
+    public void deleteMarked() {
+        tasks.removeIf(Task::getIsDone);
+    }
+
 }
 

@@ -118,14 +118,25 @@ public class UniTasker {
     }
 
     public static void handleDelete(String[] sentence) {
-        if (sentence.length < 3) {
+        if (sentence.length < 2) {
             System.out.println("Error: Missing arguments. Use: delete [type] [index]");
             return;
         }
+
+
         try {
             String secondCommand = sentence[1];
-            int categoryIndex = getCategoryIndex(sentence);
+
+            // Don't use getCategory if doing delete marked
+            int categoryIndex = -1;
+            if (!secondCommand.equals("marked") && !secondCommand.equals("category")) {
+                categoryIndex = getCategoryIndex(sentence);
+            }
             switch (secondCommand) {
+            case "marked":
+                categories.deleteMarkedTasks();
+                System.out.println("All marked tasks deleted.");
+                break;
             case "category":
                 int deleteIndex = Integer.parseInt(sentence[2]) - 1;
                 String catName = categories.getCategory(deleteIndex).getName();

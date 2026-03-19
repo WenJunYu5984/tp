@@ -356,4 +356,10 @@ public class CategoryList {
         }
         return currentGroupNumbers;
     }
+
+    public void deleteMarkedTasks() {
+        for (int i = 0; i < categories.size(); i += 1) {
+            categories.get(i).deleteMarkedTasks();
+        }
+    }
 }

@@ -3,6 +3,7 @@ package seedu.duke.tasklist;
 import java.util.Comparator;
 
 import seedu.duke.exception.UniTaskerException;
+import seedu.duke.task.Task;
 import seedu.duke.task.Todo;
 
 public class TodoList extends TaskList<Todo> {
