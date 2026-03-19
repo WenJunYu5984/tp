@@ -3,14 +3,11 @@ package seedu.duke.util;
 import seedu.duke.exception.DuplicateCategoryException;
 import seedu.duke.exception.DuplicateTaskException;
 import seedu.duke.exception.HighWorkloadException;
-import seedu.duke.exception.IllegalDateException;
 import seedu.duke.exception.OverlapEventException;
 import seedu.duke.task.Event;
-import seedu.duke.task.Task;
 import seedu.duke.tasklist.Category;
 import seedu.duke.tasklist.CategoryList;
 import seedu.duke.tasklist.EventList;
-import seedu.duke.tasklist.TaskList;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -75,7 +72,8 @@ public class TaskValidator {
         boolean existsAsEvent = targetCat.getEventList().contains(cleanDesc);
 
         if (existsAsTodo || existsAsDeadline || existsAsEvent) {
-            throw new DuplicateTaskException("Duplicate Error: Task '" + cleanDesc + "' already exists in this category.");
+            throw new DuplicateTaskException("Duplicate Error: Task '" + cleanDesc
+                    + "' already exists in this category.");
         }
     }
 
