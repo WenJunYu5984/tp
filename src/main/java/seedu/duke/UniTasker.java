@@ -439,11 +439,11 @@ public class UniTasker {
                 if (sentence.length <= 3) {
                     throw new UniTaskerException("Insufficient arguments.");
                 }
-                int categoryIndex1 = Integer.parseInt(sentence[2]) - 1;
-                int categoryIndex2 = Integer.parseInt(sentence[3]) - 1;
-                categories.reorderCategory(categoryIndex1, categoryIndex2);
+                int fromCategoryIndex = Integer.parseInt(sentence[2]) - 1;
+                int toCategoryIndex = Integer.parseInt(sentence[3]) - 1;
+                categories.reorderCategory(fromCategoryIndex, toCategoryIndex);
                 TaskUi.printReordered("Category",
-                        categories.getCategory(categoryIndex2).getName(), -1, categoryIndex2 + 1);
+                        categories.getCategory(toCategoryIndex).getName(), -1, toCategoryIndex + 1);
             } catch (UniTaskerException | NumberFormatException e) {
                 ErrorUi.printCommandFailed("reorder category", e.getMessage(),
                         "reorder category [index1] [index2]");
@@ -454,7 +454,7 @@ public class UniTasker {
                 if (sentence.length <= 4) {
                     throw new UniTaskerException("Insufficient arguments.");
                 }
-                int categoryIndex = Integer.parseInt(sentence[2]) - 1;
+                int categoryIndex = getCategoryIndex(sentence);
                 int todoIndex1 = Integer.parseInt(sentence[3]) - 1;
                 int todoIndex2 = Integer.parseInt(sentence[4]) - 1;
                 categories.reorderTodo(categoryIndex, todoIndex1, todoIndex2);
@@ -591,9 +591,9 @@ public class UniTasker {
                 if (sentence.length <= 2) {
                     throw new UniTaskerException("Insufficient arguments");
                 }
-                int categoryIndex1 = getCategoryIndex(sentence);
-                categories.getCategory(categoryIndex1).getTodoList().sortByPriority();
-                TaskUi.printSortedByPriority(categoryIndex1);
+                int categoryIndex = getCategoryIndex(sentence);
+                categories.getCategory(categoryIndex).getTodoList().sortByPriority();
+                TaskUi.printSortedByPriority(categoryIndex);
             } catch (Exception e) {
                 ErrorUi.printCommandFailed("sort todo", e.getMessage(), "sort todo [catIndex]");
             }
@@ -729,7 +729,6 @@ public class UniTasker {
         } catch (java.io.IOException e) {
             ErrorUi.printFileSaveError();
         } catch (Exception e) {
-            // This catches the NullPointerExceptions that are currently killing your JAR
             logger.log(Level.SEVERE, "Internal error during save", e);
         }
     }

@@ -167,6 +167,7 @@ public class Storage {
                 String dateString = parts[4].trim();
 
                 LocalDateTime by;
+
                 try {
                     by = DateUtils.parseDateTimeFromFile(dateString);
                 } catch (IllegalDateException e) {
@@ -187,7 +188,7 @@ public class Storage {
             }
             logger.info("Successfully loaded deadlines from file.");
         } catch (java.io.FileNotFoundException e) {
-            logger.log(Level.SEVERE, "Deadline file vanished during read process", e);
+            logger.log(Level.SEVERE, "Deadline file cannot be found", e);
         }
     }
 
@@ -226,7 +227,6 @@ public class Storage {
 
                 ensureCategoryExists(categoryList, catName);
                 int catIdx = getCategoryIndex(categoryList, catName);
-
                 if (!recurringId.isEmpty() && parts[1].equals("RE")) {
                     try {
                         int recurringGroupId = Integer.parseInt(recurringId);
@@ -239,7 +239,6 @@ public class Storage {
                 } else {
                     categoryList.addEvent(catIdx, desc, from, to);
                 }
-
                 if (isDone) {
                     categoryList.setEventStatus(catIdx,
                             categoryList.getCategory(catIdx).getEventList().getSize() - 1, true);
