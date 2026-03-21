@@ -694,15 +694,15 @@ public class UniTasker {
     public void run(boolean isTestMode) {
         logger.info("UniTasker session started.");
 
+        System.out.println("Welcome to UniTasker");
+
+
         if (!isTestMode) {
-            System.out.println(DOTTED_LINE);
-            System.out.println("Welcome to UniTasker");
             System.out.println("Current Year Range: " + startYear + " to " + endYear);
             System.out.println("Current Daily Task Limit: " + dailyTaskLimit);
             System.out.println("\nTo change these settings:");
             System.out.println("- Use 'limit task [number]' to update daily workload.");
             System.out.println("- Use 'limit year [number]' to extend the calendar range.");
-            System.out.println(DOTTED_LINE);
         }
 
         Scanner in = new Scanner(System.in);
