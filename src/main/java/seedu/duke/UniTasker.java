@@ -50,6 +50,10 @@ public class UniTasker {
     private static int startYear;
     private static int endYear;
 
+    private static final int DEFAULT_END_YEAR = 2030;
+    private static final int DEFAULT_DAILY_TASK_LIMIT = 8;
+
+
     public UniTasker() {
         try {
             storage.load(categories);
@@ -648,7 +652,7 @@ public class UniTasker {
     public static void handleLimit(String[] sentence) {
         try {
             if (sentence.length < 3 || !sentence[1].equalsIgnoreCase("task")) {
-                System.out.println("Error: Use format 'limit task [number]'");
+                System.out.println("Error: Use format 'limit task [number]' to change the daily limit");
                 return;
             }
 
@@ -662,13 +666,21 @@ public class UniTasker {
             setDailyTaskLimit(newLimit);
 
         } catch (NumberFormatException e) {
-            System.out.println("Error: Please provide a valid integer for the limit.");
+            System.out.println("Error: Please provide a valid integer. Example: 'limit task 5'");
         }
     }
 
     public void run() {
         logger.info("UniTasker session started.");
+        System.out.println(DOTTED_LINE);
         System.out.println("Welcome to UniTasker");
+        System.out.println("Current Year Range: " + startYear + " to " + endYear);
+        System.out.println("Current Daily Task Limit: " + dailyTaskLimit);
+        System.out.println("\nTo change these settings:");
+        System.out.println("- Use 'limit task [number]' to update daily workload.");
+        System.out.println("- (Admin) Use 'setEndYear(int)' in code to extend the calendar.");
+        System.out.println(DOTTED_LINE);
+        
         Scanner in = new Scanner(System.in);
         while (true) {
             if (!in.hasNextLine()) {  // Check if input is available
@@ -755,8 +767,8 @@ public class UniTasker {
         logger.info("UniTasker is launching...");
 
         startYear = LocalDate.now().getYear();
-        endYear = 2030;
-        dailyTaskLimit = 8;
+        endYear = DEFAULT_END_YEAR;
+        dailyTaskLimit = DEFAULT_DAILY_TASK_LIMIT;
 
         new UniTasker().run();
     }
