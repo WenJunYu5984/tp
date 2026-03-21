@@ -451,11 +451,11 @@ public class UniTasker {
                 if (sentence.length <= 3) {
                     throw new UniTaskerException("Insufficient arguments.");
                 }
-                int categoryIndex1 = Integer.parseInt(sentence[2]) - 1;
-                int categoryIndex2 = Integer.parseInt(sentence[3]) - 1;
-                categories.reorderCategory(categoryIndex1, categoryIndex2);
-                System.out.println("Category: " + categories.getCategory(categoryIndex2).getName() +
-                        " moved to index " + (categoryIndex2 + 1));
+                int fromCategoryIndex = Integer.parseInt(sentence[2]) - 1;
+                int toCategoryIndex = Integer.parseInt(sentence[3]) - 1;
+                categories.reorderCategory(fromCategoryIndex, toCategoryIndex);
+                System.out.println("Category: " + categories.getCategory(toCategoryIndex).getName() +
+                        " moved to index " + (toCategoryIndex + 1));
             } catch (UniTaskerException | NumberFormatException e) {
                 System.out.println("reorder category failed: " + e.getMessage());
                 System.out.println("Correct format: reorder category [index1] [index2]");
@@ -616,9 +616,9 @@ public class UniTasker {
                 if (sentence.length <= 2) {
                     throw new UniTaskerException("Insufficient arguments");
                 }
-                int categoryIndex1 = getCategoryIndex(sentence);
-                categories.getCategory(categoryIndex1).getTodoList().sortByPriority();
-                System.out.println("Todos in category " + (categoryIndex1 + 1) + " have been sorted by priority.");
+                int categoryIndex = getCategoryIndex(sentence);
+                categories.getCategory(categoryIndex).getTodoList().sortByPriority();
+                System.out.println("Todos in category " + (categoryIndex + 1) + " have been sorted by priority.");
             } catch (Exception e) {
                 System.out.println("sort todo failed: " + e.getMessage());
                 System.out.println("Correct format: sort todo [catIndex]");
@@ -767,7 +767,6 @@ public class UniTasker {
         } catch (java.io.IOException e) {
             System.out.println("Error: File write failed.");
         } catch (Exception e) {
-            // This catches the NullPointerExceptions that are currently killing your JAR
             logger.log(Level.SEVERE, "Internal error during save", e);
         }
     }
