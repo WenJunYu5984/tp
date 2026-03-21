@@ -12,18 +12,32 @@
 ## Product scope
 ### Target user profile
 
-{Describe the target user profile}
+University students who need to manage multiple courses, assignments, deadlines, and personal tasks simultaneously. 
+These users often juggle academic responsibilities across different modules, each with varying deadlines, 
+priorities, and schedules. They require a simple and efficient system to organise their tasks,
+keep track of coursework, and stay on top of deadlines.
 
 ### Value proposition
 
-{Describe the value proposition: what problem does it solve?}
+University students often struggle to keep track of tasks and course assessments across different 
+platforms such as learning portals, calendars and notes. This fragmented approach leads
+to missed deadlines, poor prioritisation, and unnecessary stress. UniTasker provides a centralized 
+task management solution that consolidates todos, deadlines, events and course information into a 
+single platform. Through a simple command-line interface, it allows students to efficiently organise, 
+update, and review their tasks and assessments. This helps students to stay on top of their workload
+and focus on completing their academic responsibilities.
 
 ## User Stories
 
-|Version| As a ... | I want to ... | So that I can ...|
-|--------|----------|---------------|------------------|
-|v1.0|new user|see usage instructions|refer to them when I forget how to use the application|
-|v2.0|user|find a to-do item by name|locate a to-do without having to go through the entire list|
+| Version | As a ...           | I want to ...                                 | So that I can ...                                           |
+|---------|--------------------|-----------------------------------------------|-------------------------------------------------------------|
+| v1.0    | University Student | create categories for each of my courses      | organise my tasks by module                                 |
+| v1.0    | University Student | view a specific category                      | focus on tasks related to a single course                   |
+| v1.0    | University Student | assign priority levels to todos in a category | identify important todos easily.                            |
+| v1.0    | University Student | sort todos within a category by priority      | focus on high-priority todos first                          |
+| v2.0    | University Student | delete all marked tasks                       | quickly clean up completed work across categories.          |
+| v2.0    | University Student | search for tasks across all categories        | quickly find relevant tasks                                 |
+
 
 ## Non-Functional Requirements
 
