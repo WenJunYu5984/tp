@@ -522,8 +522,13 @@ public class UniTasker {
             System.out.println(categories);
             break;
         case 3:
-            catIndex = Integer.parseInt(sentence[2]);
-            System.out.println(categories.getCategory(catIndex - 1));
+            try {
+                catIndex = getCategoryIndex(sentence);
+                System.out.println(categories.getCategory(catIndex));
+                break;
+            } catch (Exception e) {
+                System.out.println("list category [index] failed: " + e.getMessage());
+            }
             break;
         default:
             System.out.println("List command too many arguments");
