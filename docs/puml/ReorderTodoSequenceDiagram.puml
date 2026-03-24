@@ -1,0 +1,39 @@
+@startuml
+actor User
+participant UniTasker
+participant CategoryList
+participant Category
+participant TodoList
+participant Storage
+
+User -> UniTasker : reorder todo 1 1 2
+activate UniTasker
+
+UniTasker -> UniTasker : handleReorder(sentence)
+UniTasker -> CategoryList : reorderTodo(0, 0, 1)
+activate CategoryList
+
+CategoryList -> Category : reorderTodo(0, 1)
+activate Category
+
+Category -> TodoList : reorderToDo(0, 1)
+activate TodoList
+TodoList --> Category : success
+deactivate TodoList
+
+Category --> CategoryList : success
+deactivate Category
+
+CategoryList --> UniTasker : success
+deactivate CategoryList
+
+UniTasker -> UniTasker : saveData()
+UniTasker -> Storage : save(categories)
+activate Storage
+Storage --> UniTasker : saved
+deactivate Storage
+
+UniTasker --> User : Todo moved to new position
+deactivate UniTasker
+
+@enduml

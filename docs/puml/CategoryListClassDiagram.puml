@@ -1,0 +1,43 @@
+@startuml
+
+class CategoryList {
+    - categories : ArrayList<Category>
+}
+
+class Category {
+    - name : String
+    - todoList : TodoList
+    - deadlineList : DeadlineList
+    - eventList : EventList
+}
+
+class TodoList
+class DeadlineList
+class EventList
+
+class Todo
+class Deadline
+class Event
+
+' Relationships
+CategoryList *-- "*" Category
+Category *-- "1" TodoList
+Category *-- "1" DeadlineList
+Category *-- "1" EventList
+
+TodoList *-- "*" Todo
+DeadlineList *-- "*" Deadline
+EventList *-- "*" Event
+
+' Inheritance
+abstract class Task
+Task <|-- Todo
+Task <|-- Deadline
+Task <|-- Event
+
+abstract class TaskList
+TaskList <|-- TodoList
+TaskList <|-- DeadlineList
+TaskList <|-- EventList
+
+@enduml
