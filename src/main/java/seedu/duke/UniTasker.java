@@ -41,8 +41,6 @@ public class UniTasker {
 
     private static final int DEFAULT_END_YEAR = 2030;
     private static final int DEFAULT_DAILY_TASK_LIMIT = 8;
-    private static final DateTimeFormatter DATE_ONLY_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-
 
     public UniTasker() {
         try {
@@ -110,10 +108,12 @@ public class UniTasker {
         endYear = year;
     }
 
+    //@@author WenJunYu5984
     public static void setDailyTaskLimit(int newLimit) {
         dailyTaskLimit = newLimit;
         LimitUi.printDailyTaskLimitUpdated(dailyTaskLimit);
     }
+    //@@author
 
 
 }
