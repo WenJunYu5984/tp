@@ -1,5 +1,8 @@
 package seedu.duke.util;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import seedu.duke.exception.DuplicateCategoryException;
@@ -12,7 +15,6 @@ import seedu.duke.task.Event;
 
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 public class TaskValidatorTest {
 
