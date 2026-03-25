@@ -102,6 +102,7 @@ public class Category {
         eventList.clearAll();
     }
 
+    //@@author WenJunYu5984
     public void sortDeadlines() {
         deadlineList.sortByDate();
     }
@@ -131,6 +132,11 @@ public class Category {
     public void deleteAllDeadlines() {
         deadlineList.clearAll();
     }
+
+    public Deadline getDeadline(int index) {
+        return deadlineList.get(index);
+    }
+    //@@author
 
     public void deleteMarkedTasks() {
         todoList.deleteMarked();
@@ -173,10 +179,6 @@ public class Category {
         result += "Events:" + System.lineSeparator() + eventList.toString() + System.lineSeparator();
 
         return result;
-    }
-
-    public Deadline getDeadline(int index) {
-        return deadlineList.get(index);
     }
 
 }
