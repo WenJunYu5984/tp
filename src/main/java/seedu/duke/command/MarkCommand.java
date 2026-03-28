@@ -71,7 +71,8 @@ public class MarkCommand implements Command {
         try {
             Result result = getResult(container);
             container.getCategories().setDeadlineStatus(result.categoryIndex, result.taskIndex, isMark);
-            TaskUi.printStatusChanged(container.getCategories().getDeadline(result.categoryIndex, result.taskIndex), isMark);
+            TaskUi.printStatusChanged(container.getCategories()
+                    .getDeadline(result.categoryIndex, result.taskIndex), isMark);
         } catch (Exception e) {
             ErrorUi.printError(e.getMessage());
         }
@@ -82,7 +83,8 @@ public class MarkCommand implements Command {
         try {
             Result result = getResult(container);
             container.getCategories().setEventStatus(result.categoryIndex, result.taskIndex, isMark);
-            TaskUi.printStatusChanged(container.getCategories().getEvent(result.categoryIndex, result.taskIndex), isMark);
+            TaskUi.printStatusChanged(container.getCategories()
+                    .getEvent(result.categoryIndex, result.taskIndex), isMark);
         } catch (Exception e) {
             ErrorUi.printError(e.getMessage());
         }
