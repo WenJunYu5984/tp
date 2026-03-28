@@ -33,6 +33,7 @@ public class DeleteCommand implements Command {
             }
 
             switch (secondCommand) {
+            //@@author marken9
             case "marked":
                 container.getCategories().deleteMarkedTasks();
                 CategoryUi.printAllMarkedDeleted();

@@ -37,8 +37,12 @@ class DeadlineList {
     + getLatest() : Deadline
 }
 
-class "TaskList<T>" as TaskList {
+class "TaskList<T>" as TaskListT {
 }
+
+class "TaskList<Deadline>" as TaskListDeadline {
+}
+
 
 class DateUtils {
     - FULL_FORMATTER : DateTimeFormatter
@@ -63,7 +67,8 @@ class Calendar {
 
 Task <|-- Deadline
 Timed <|.. Deadline
-TaskList <|-- DeadlineList
+TaskListT <.. TaskListDeadline
+TaskListDeadline <|-- DeadlineList
 DeadlineList "1" o-- "0..*" Deadline : adds to
 Deadline ..> DateUtils : <<uses>>
 Calendar "1" o-- "0..*" Deadline : registers

@@ -64,6 +64,7 @@ public class AddCommand implements Command {
         CommandSupport.saveData(container);
     }
 
+    //@@author marken9
     private void handleAddCategory(AppContainer container) {
         try {
             if (sentence.length <= 2) {
@@ -80,7 +81,7 @@ public class AddCommand implements Command {
                     "add category [description]");
         }
     }
-
+    //@@author marken9
     private void handleAddTodo(AppContainer container) {
         try {
             int todoCatIdx = CommandSupport.getCategoryIndex(container, sentence);
@@ -139,7 +140,7 @@ public class AddCommand implements Command {
         }
     }
 
-    //@@author
+    //@@author sushmiithaa
     private void handleAddEvent(AppContainer container) {
         try {
             if (sentence.length < 9) {
@@ -202,7 +203,7 @@ public class AddCommand implements Command {
             ErrorUi.printError(e.getMessage());
         }
     }
-
+    //@@author sushmiithaa
     private void handleAddRecurring(AppContainer container) {
         try {
             int eventCategoryIndex = CommandSupport.getCategoryIndex(container, sentence);
@@ -308,7 +309,7 @@ public class AddCommand implements Command {
             ErrorUi.printAddRecurringEventFormatError();
         }
     }
-
+    //@@author sushmiithaa
     private String[] getToComponents(String[] eventTimeDetails) throws UniTaskerException {
         String[] toComponents = eventTimeDetails[1].split(" ");
         if (toComponents.length < 2) {

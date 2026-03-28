@@ -1,39 +1,42 @@
 @startuml
-actor User
-participant UniTasker
-participant CategoryList
-participant Category
-participant TodoList
-participant Storage
 
-User -> UniTasker : reorder todo 1 1 2
+actor User
+
+participant ":UniTasker" as UniTasker
+participant ":Command" as Command
+participant ":UI" as UI
+participant ":Storage" as Storage
+participant ":AppContainer" as AppContainer
+
+User -> UniTasker : "reorder todo 1 1 2"
 activate UniTasker
 
-UniTasker -> UniTasker : handleReorder(sentence)
-UniTasker -> CategoryList : reorderTodo(0, 0, 1)
-activate CategoryList
+UniTasker -> Command : parse(line)
+activate Command
 
-CategoryList -> Category : reorderTodo(0, 1)
-activate Category
+Command -> Command : execute(line)
 
-Category -> TodoList : reorderToDo(0, 1)
-activate TodoList
-TodoList --> Category : success
-deactivate TodoList
+Command -> AppContainer : getCategories()
+activate AppContainer
+Command -> AppContainer : reorderTodo(0, 0, 1)
+AppContainer --> Command :
+deactivate AppContainer
 
-Category --> CategoryList : success
-deactivate Category
-
-CategoryList --> UniTasker : success
-deactivate CategoryList
-
-UniTasker -> UniTasker : saveData()
-UniTasker -> Storage : save(categories)
+Command -> Command : saveData()
+Command -> Storage : save(categories)
 activate Storage
-Storage --> UniTasker : saved
+Storage --> Command :
 deactivate Storage
 
-UniTasker --> User : Todo moved to new position
+Command -> UI : printReordered(...)
+activate UI
+UI --> Command
+deactivate UI
+
+Command --> UniTasker :
+deactivate Command
+
+UniTasker --> User :
 deactivate UniTasker
 
 @enduml

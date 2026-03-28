@@ -3,6 +3,7 @@ package seedu.duke.command;
 import seedu.duke.appcontainer.AppContainer;
 import seedu.duke.ui.CommandHelp;
 
+//@@author benguy6
 public class HelpCommand implements Command {
     private final String[] sentence;
 

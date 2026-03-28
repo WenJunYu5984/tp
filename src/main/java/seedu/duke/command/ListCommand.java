@@ -29,6 +29,7 @@ public class ListCommand implements Command {
 
         String secondCommand = sentence[1];
         switch (secondCommand) {
+        //@@author marken9
         case "category":
             handleListCategory(container);
             break;
@@ -62,6 +63,7 @@ public class ListCommand implements Command {
         }
     }
 
+    //@@author marken9
     private void handleListCategory(AppContainer container) {
         int sentenceLength = sentence.length;
         switch (sentenceLength) {

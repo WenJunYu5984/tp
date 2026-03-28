@@ -1,0 +1,22 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+actor User
+
+rectangle ":UniTasker" as UniTasker
+rectangle ":UI" as UI
+rectangle ":Command" as Command
+rectangle ":Storage" as Storage
+rectangle ":AppContainer" as AppContainer
+rectangle ":CourseParser" as CourseParser
+
+User --> UniTasker
+UniTasker --> Storage
+UniTasker --> Command
+UniTasker --> AppContainer
+Command --> UI
+Command --> Storage
+Command --> AppContainer
+Command --> CourseParser
+
+@enduml

@@ -9,6 +9,98 @@ This project was built from scratch by the UniTasker team. The following thrid-p
 - JUnit 5
 - PlantUML
 - SE-EDU AddressBook-Level3
+{Describe the design and implementation of the product. Use UML diagrams and short code snippets where applicable.}
+
+## Design
+
+This section describes the design and implementation of the key components of UniTasker. UML diagrams are provided for highlighted classes and interaction flows
+
+### Architecture
+
+![MainArchitecture]()
+
+The **Architecture Diagram** given above explains the high-level design of the App
+
+Given below is a quick overview of the main components and how they interact with each other.
+
+**Main components of the architecture**
+
+UniTasker is in charge of the app launch and shut down
+- At app launch, it initializes the other components.
+- At shut down, it shuts down the other components.
+
+The bulk of the app's work is done by the following components:
+- Command: 
+- UI:
+- AppContainer:
+- Storage:
+
+**How the architecture components interact with each other:**
+
+![ReorderCommand](/docs/pictures/ReorderTodoSequenceDiagram.png)
+
+1. User enters command in terminal
+2. xx
+3. xx
+
+**AppContainer component**
+
+The `AppContainer` consists of the following:
+
+- `CategoryList categories` – stores all categories and their associated tasks (todos, deadlines, events)
+- `Calendar calendar` – Manages the mapping of dates to tasks with date information (deadlines and events) ???
+- `Storage storage` – handles saving and loading of data from local files
+- `CourseParser courseParser` – processes course-related commands
+- `int dailyTaskLimit` – defines the maximum number of tasks allowed per day
+- `int startYear` – lower bound for valid date ranges
+- `int endYear` – upper bound for valid date ranges
+
+The `AppContainer` component,
+- Stores all the information required for the application in a single object
+- Enables commands to operate without directly depending on global/static variables
+
+**Storage component**
+
+**UI component**
+
+**Command component**
+
+
+
+
+## Implementation
+
+**Deadline Class Diagram**
+
+The figure below explains how Deadlines are being added and subsequently retrieved from a list. 
+
+![Deadline Class Diagram](pictures/deadlineClassDiagram.png)
+*<div align="center"> Figure x - Deadline Class Diagram </div>*
+
+
+**Key Design Decisions**
+
+
+
+**DateUtils.parse()**
+
+The following sequence diagram illustrates how a date string entered by the user is parsed, validated, and return as a LocalDateTime. This flow is triggered whenever a timed task, a deadline or event, is added.
+
+![DateUtils Sequence Diagram](pictures/DateUtilsSequence.png)
+*<div align="center"> Figure x - DateUtils: parse() Sequence Diagram </div>*
+
+Parsing Flow Summary?
+
+**Implementation Note - isLoading Flag**
+
+The IsLoading parameter is set to true when DateUtils.parse() is called from the storage layer (file loading), and false during user input. This allows tasks saved in a previous session to be restored if their dates have now passed, while preventing the user form directly scheduling past tasks interactively.
+
+**TaskValidator**
+
+Before any task (Todo, Deadline, Event) is added to the system, the AddCommand invokes three sequential validation passes via TaskValidator. The diagram below shows the full interaction.
+
+![TaskValidator Sequence Diagram](pictures/TaskValidatorSequence.png)
+*<div align="center"> Figure x - Task Validator Sequence Diagram </div>*
 
 ## Product scope
 
@@ -33,45 +125,6 @@ single platform. Through a simple command-line interface, it allows students to 
 update, and review their tasks and assessments. This helps students to stay on top of their workload
 and focus on completing their academic responsibilities.
 
-## Design & implementation
-
-{Describe the design and implementation of the product. Use UML diagrams and short code snippets where applicable.}
-
-This section describes the design and implementation of the key components of UniTasker. UML diagrams are provided for highlighted classes and interaction flows
-
-{Add an architecture overview UML + description}
-
-### Deadline Class Diagram
-
-The diagram below shows the Deadline class and its relationships with the calendar, TaskList hierarchy, DeadlineList, and the DateUtils utility class.
-
-![Alt text for UML Diagram](images/deadlineClassDiagram.png)
- *<div align="center"> Figure x - Deadline Class Diagram </div>*
-
-
-**Key Design Decisions**
-
-### DateUtils.parse() - Sequence Diagram
-The following sequence diagram illustrates how a date string entered by the user is parsed, validated, and return as a LocalDateTime. This flow is triggered whenever a timed task, a deadline or event, is added.
-
-![Alt text for UML Diagram](images/DateUtilsSequence.png)
-*<div align="center"> Figure x - DateUtils: parse() Sequence Diagram </div>*
-
-Parsing Flow Summary?
-
-**Implementation Note - isLoading Flag**
-
-The IsLoading parameter is set to true when DateUtils.parse() is called from the storage layer (file loading), and false during user input. This allows tasks saved in a previous session to be restored if their dates have now passed, while preventing the user form directly scheduling past tasks interactively.
-
-### TaskValidator Sequence Diagram
-
-Before any task (Todo, Deadline, Event) is added to the system, the AddCommand invokes three sequential validation passes via TaskValidator. The diagram below shows the full interaction.
-
-![Alt text for UML Diagram](images/TaskValidatorSequence.png)
-*<div align="center"> Figure x - Task Validator Sequence Diagram </div>*
-
-
-
 ## User Stories
 
 | Version | As a ...           | I want to ...                                                              | So that I can ...                                                              |
@@ -87,6 +140,13 @@ Before any task (Todo, Deadline, Event) is added to the system, the AddCommand i
 | v1.0    | University Student | track all tasks with a start date and time and end date and time           | keep track of all my events                                                    |
 | v1.0    | University Student | have my events sorted by earliest date                                     | easily identify events that happen earliest                                    |
 | v1.0    | University Student | track all recurring tasks with a start date and time and end date and time | keep track of all my recurring events                                          |
+| v1.0    | University Student | add a course                                                               | keep track of all the modules I am taking                                      | 
+| v1.0    | University Student | delete a course                                                            | remove modules I am no longer taking                                           |
+| v1.0    | University Student | list all courses                                                           | see an overview of all my modules                                              |
+| v1.0    | University Student | add assessments to a course                                                | track the componenets that make up the grades                                  |
+| v1.0    | University Student | delete an assessment from a course                                         | remove an incorrect or irrelevant assessment from the tracker                  |
+| v1.0    | University Student | view all assessments within a course                                       | understand how my course grading is structured                                 |
+| v1.0    | University Student | record my score for an assessment                                          | keep track of my performance in each assessment                                |
 | v2.0    | University Student | delete all marked tasks                                                    | quickly clean up completed work across categories                              |
 | v2.0    | University Student | search for tasks across all categories                                     | quickly find relevant tasks                                                    |
 | v2.0    | University Student | customize the maximum tasks permitted per day                              | schedule my tasks without burning myself out                                   |

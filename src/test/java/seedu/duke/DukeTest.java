@@ -1,11 +1,17 @@
 package seedu.duke;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.duke.appcontainer.AppContainer;
+import seedu.duke.calender.Calendar;
+import seedu.duke.command.Command;
+import seedu.duke.command.CommandParser;
 import seedu.duke.exception.UniTaskerException;
+import seedu.duke.storage.Storage;
 import seedu.duke.tasklist.CategoryList;
 
 class DukeTest {
@@ -183,5 +189,106 @@ class DukeTest {
         assertTrue(output.contains("School"));
         assertTrue(output.contains("finish tutorial"));
     }
+
+    @Test
+    public void parseAndExecute_commandTodos_success() {
+        CategoryList categories = new CategoryList();
+
+        AppContainer container = new AppContainer(
+                categories,
+                new Calendar(),
+                new Storage("testTodo.txt", "testDeadline.txt", "testEvent.txt"),
+                null,
+                5,
+                2025,
+                2030
+        );
+
+        CommandParser parser = new CommandParser();
+        Command command;
+
+        // add category [name]
+        command = parser.parse("add category School");
+        command.execute(container);
+        assertEquals(1, categories.getAmount());
+        assertEquals("School", categories.getCategory(0).getName());
+
+        command = parser.parse("add category Work");
+        command.execute(container);
+        assertEquals(2, categories.getAmount());
+        assertEquals("Work", categories.getCategory(1).getName());
+
+        // add todo [categoryindex] [desc]
+        command = parser.parse("add todo 1 finish tutorial");
+        command.execute(container);
+        command = parser.parse("add todo 1 submit lab");
+        command.execute(container);
+        command = parser.parse("add todo 2 prepare slides");
+        command.execute(container);
+
+        assertEquals(2, categories.getCategory(0).getTodoList().getSize());
+        assertEquals("finish tutorial", categories.getCategory(0).getTodo(0).getDescription());
+        assertEquals("submit lab", categories.getCategory(0).getTodo(1).getDescription());
+        assertEquals(1, categories.getCategory(1).getTodoList().getSize());
+        assertEquals("prepare slides", categories.getCategory(1).getTodo(0).getDescription());
+
+        // mark todo [categoryindex] [todoindex]
+        command = parser.parse("mark todo 1 1");
+        command.execute(container);
+        assertTrue(categories.getCategory(0).getTodo(0).getIsDone());
+
+        // unmark todo [categoryindex] [todoindex]
+        command = parser.parse("unmark todo 1 1");
+        command.execute(container);
+        assertFalse(categories.getCategory(0).getTodo(0).getIsDone());
+
+        // priority todo [categoryindex] [todoindex] [priority level]
+        command = parser.parse("priority todo 1 1 2");
+        command.execute(container);
+        command = parser.parse("priority todo 1 2 5");
+        command.execute(container);
+
+        assertEquals(2, categories.getCategory(0).getTodo(0).getPriority());
+        assertEquals(5, categories.getCategory(0).getTodo(1).getPriority());
+
+        // sort todo [categoryindex]
+        command = parser.parse("sort todo 1");
+        command.execute(container);
+
+        assertEquals("submit lab", categories.getCategory(0).getTodo(0).getDescription());
+        assertEquals(5, categories.getCategory(0).getTodo(0).getPriority());
+        assertEquals("finish tutorial", categories.getCategory(0).getTodo(1).getDescription());
+        assertEquals(2, categories.getCategory(0).getTodo(1).getPriority());
+
+        // reorder todo [categoryindex] [todoindex1] [todoindex2]
+        command = parser.parse("reorder todo 1 1 2");
+        command.execute(container);
+
+        assertEquals("finish tutorial", categories.getCategory(0).getTodo(0).getDescription());
+        assertEquals("submit lab", categories.getCategory(0).getTodo(1).getDescription());
+
+        // reorder category [categoryindex1] [categoryindex2]
+        command = parser.parse("reorder category 1 2");
+        command.execute(container);
+
+        assertEquals("Work", categories.getCategory(0).getName());
+        assertEquals("School", categories.getCategory(1).getName());
+
+        // delete todo [categoryindex] [todoindex]
+        // after reorder category, School is now category 2
+        command = parser.parse("delete todo 2 1");
+        command.execute(container);
+
+        assertEquals(1, categories.getCategory(1).getTodoList().getSize());
+        assertEquals("submit lab", categories.getCategory(1).getTodo(0).getDescription());
+
+        // delete category [index]
+        command = parser.parse("delete category 1");
+        command.execute(container);
+
+        assertEquals(1, categories.getAmount());
+        assertEquals("School", categories.getCategory(0).getName());
+    }
 }
+
 
