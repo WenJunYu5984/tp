@@ -20,19 +20,26 @@ use the `java -jar UniTasker.jar` command to run the application
 
 {Give detailed description of each feature}
 
-### Adding a todo: `todo`
-Adds a new item to the list of todo items.
+[//]: # (### Adding a todo: `todo`)
 
-Format: `todo n/TODO_NAME d/DEADLINE`
+[//]: # (Adds a new item to the list of todo items.)
 
-* The `DEADLINE` can be in a natural language format.
-* The `TODO_NAME` cannot contain punctuation.  
+[//]: # ()
+[//]: # (Format: `todo n/TODO_NAME d/DEADLINE`)
 
-Example of usage: 
+[//]: # ()
+[//]: # (* The `DEADLINE` can be in a natural language format.)
 
-`todo n/Write the rest of the User Guide d/next week`
+[//]: # (* The `TODO_NAME` cannot contain punctuation.  )
 
-`todo n/Refactor the User Guide to remove passive voice d/13/04/2020`
+[//]: # ()
+[//]: # (Example of usage: )
+
+[//]: # ()
+[//]: # (`todo n/Write the rest of the User Guide d/next week`)
+
+[//]: # ()
+[//]: # (`todo n/Refactor the User Guide to remove passive voice d/13/04/2020`)
 
 **Add Command**: `add`
 
@@ -92,7 +99,7 @@ list [KEYWORD][CATEGORYINDEX][START][END][TASKTYPE]
 - CATEGORYINDEX: Integer value up to number of categories added
 - START: Start date
 - END: End date
-- TASKTYPE: `deadline`, `event`
+- TASKTYPE: `/deadline`, `/event`
 
 Examples:
 
@@ -105,6 +112,7 @@ Examples:
 
 *Note*: 
 
+- *CategoryIndex is not needed for limit*
 - *Start and End are only applicable for Deadline and Event*
 - *Add tasktype after end if you want to see only deadline or event*
 
