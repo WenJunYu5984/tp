@@ -133,11 +133,7 @@ public class CategoryList {
     }
 
     public void addEvent(int categoryIndex, String description, LocalDateTime from, LocalDateTime to) {
-        assert (description != null && !description.isEmpty()) : "Event description should not be empty";
-        assert (from != null && to != null) : "Start date and time and end date and time should not be null";
-        assert from.isBefore(to) || from.isEqual(to) : "The start date time must be before the end date time";
-
-        categories.get(categoryIndex).addEvent(new Event(description, from, to, false, -1));
+        categories.get(categoryIndex).addEvent(createEvent(description, from, to, false, -1));
         logger.info("Add event: " + description + " from " + from + " to " + to);
 
     }
@@ -145,33 +141,49 @@ public class CategoryList {
     public void addRecurringWeeklyEventFile(int categoryIndex, String description,
             LocalDateTime from, LocalDateTime to, int recurringGroupIndex) {
         assert (recurringGroupIndex > 0) : "Recurring Group Id must be greater than 0";
-        assert (description != null && !description.isEmpty()) : "Event description should not be empty";
-        assert (from != null && to != null) : "Start date and time and end date and time should not be null";
-        assert from.isBefore(to) || from.isEqual(to) : "The start date time must be before the end date time";
-
-
-        categories.get(categoryIndex).addEvent(new Event(description,
-                from, to, true, recurringGroupIndex));
-        if (recurringGroupIndex > recurringGroupId) {
-            recurringGroupId = recurringGroupIndex;
-        }
-        logger.info("Add recurring event from file : " + description + " from " + from + " to " + to +
-                " recurringGroupId " + recurringGroupIndex);
+        addRecurring(categoryIndex, description, from, to, recurringGroupIndex,
+                null,null, 0, true);
 
     }
 
     public void addRecurringWeeklyEvent(int categoryIndex, String description, LocalDateTime from,
             LocalDateTime to, Calendar calendar, LocalDateTime date, int months) {
+        assert (calendar != null) : "Calendar should exist";
+        recurringGroupId += 1;
+        addRecurring(categoryIndex, description, from, to, recurringGroupId,
+                calendar,date, months, false);
+    }
+
+    private void addRecurring(int categoryIndex, String description, LocalDateTime from, LocalDateTime to,
+            int groupId, Calendar calendar, LocalDateTime date, int months, boolean isFromFile) {
+
+        Event event = createEvent(description, from, to, true, groupId);
+
+        if (isFromFile) {
+            categories.get(categoryIndex).addEvent(event);
+            if (groupId > recurringGroupId) {
+                recurringGroupId = groupId;
+            }
+        } else {
+            categories.get(categoryIndex).addRecurringWeeklyEvent(
+                    event, calendar, date, months
+            );
+        }
+        logger.info((isFromFile ? "Add recurring event from file: " : "Add recurring event: ")
+                + description + " from " + from + " to " + to
+                + " recurringGroupId " + groupId);
+    }
+
+    private void eventAssertions(String description, LocalDateTime from, LocalDateTime to) {
         assert (description != null && !description.isEmpty()) : "Event description should not be empty";
         assert (from != null && to != null) : "Start date and time and end date and time should not be null";
         assert from.isBefore(to) || from.isEqual(to) : "The start date time must be before the end date time";
-        assert (calendar != null) : "Calendar should exist";
+    }
 
-        recurringGroupId += 1;
-        categories.get(categoryIndex).addRecurringWeeklyEvent(new Event(description,
-                from, to, true, recurringGroupId), calendar, date, months);
-        logger.info("Add recurring event : " + description + " from " + from + " to " + to +
-                " recurringGroupId " + recurringGroupId);
+    private Event createEvent(String description, LocalDateTime from,
+                              LocalDateTime to, boolean isRecurring, int groupId) {
+        eventAssertions(description, from, to);
+        return new Event(description, from, to, isRecurring, groupId);
     }
 
     public void deleteEvent(int categoryIndex, int eventIndex) {
