@@ -73,10 +73,6 @@ public class DeleteCommand implements Command {
                     int uiIndex = Integer.parseInt(sentence[3]) - 1;
                     String currentView = container.getCategories().getCurrentView();
                     List<EventReference> map = container.getCategories().getActiveDisplayMap();
-                    for (int i = 0; i < map.size(); i++) {
-                        System.out.println("catIndex: " + map.get(i).categoryIndex
-                                + "eventIndex: " + map.get(i).eventIndex);
-                    }
                     if (!(currentView.equals("EVENT") || currentView.equals("EVENT_EXPANDED") ||
                             currentView.equals("NORMAL_EVENT_ONLY"))) {
                         throw new UniTaskerException("To delete a specific event please use " +
@@ -107,10 +103,6 @@ public class DeleteCommand implements Command {
                 }
                 int uiIndex = Integer.parseInt(sentence[3]);
                 List<EventReference> displayMap = container.getCategories().getActiveDisplayMap();
-                for (int i = 0; i < displayMap.size(); i++) {
-                    System.out.println("catIndex: " + displayMap.get(i).categoryIndex
-                            + "eventIndex: " + displayMap.get(i).eventIndex);
-                }
                 EventReference eventReference = displayMap.get(uiIndex - 1);
                 Event event = container.getCategories().getEvent(eventReference.categoryIndex,
                         eventReference.eventIndex);
@@ -121,10 +113,6 @@ public class DeleteCommand implements Command {
             case "occurrence":
                 int uiIdx = Integer.parseInt(sentence[3]) - 1;
                 List<EventReference> map = container.getCategories().getActiveDisplayMap();
-                for (int i = 0; i < map.size(); i++) {
-                    System.out.println("catIndex: " + map.get(i).categoryIndex
-                            + "eventIndex: " + map.get(i).eventIndex);
-                }
                 if (!container.getCategories().getCurrentView().equals("OCCURRENCE_VIEW")) {
                     GeneralUi.printBordered("Please run 'list occurrence' first to see individual dates.");
                     break;

@@ -196,7 +196,7 @@ public class CategoryList {
                     if (!(event.getIsRecurring())) {
                         sb.append(newMap.size() + 1).append(". ")
                                 .append(event.toString()).append(System.lineSeparator());
-                        newMap.add(new EventReference(categoryIndex, eventIndex,event.getFrom()));
+                        newMap.add(new EventReference(categoryIndex, eventIndex));
                     }
                 } else {
                     if (event.getIsRecurring()) {
@@ -205,13 +205,13 @@ public class CategoryList {
                             sb.append(newMap.size() + 1).append(". ")
                                     .append(isExpanded ? event.toString() : event.toStringRecurring())
                                     .append(System.lineSeparator());
-                            newMap.add(new EventReference(categoryIndex, eventIndex, event.getFrom()));
+                            newMap.add(new EventReference(categoryIndex, eventIndex));
                             printedGroups.add(groupId);
                         }
                     } else {
                         sb.append(newMap.size() + 1).append(". ")
                                 .append(event.toString()).append(System.lineSeparator());
-                        newMap.add(new EventReference(categoryIndex, eventIndex, event.getFrom()));
+                        newMap.add(new EventReference(categoryIndex, eventIndex));
                     }
                 }
             }
@@ -242,7 +242,7 @@ public class CategoryList {
                     if (!printedGroups.contains(groupId)) {
                         sb.append(newMap.size() + 1).append(". ")
                                 .append(event.toStringRecurring()).append(System.lineSeparator());
-                        newMap.add(new EventReference(categoryIndex, eventIndex,event.getFrom()));
+                        newMap.add(new EventReference(categoryIndex, eventIndex));
                         printedGroups.add(groupId);
                     }
                 }
@@ -272,24 +272,13 @@ public class CategoryList {
             Event e = eventList.get(i);
             if (e.getIsRecurring() && e.getRecurringGroupId() == targetGroupId) {
                 sb.append(newMap.size() + 1).append(". ").append(e.toString()).append(System.lineSeparator());
-                newMap.add(new EventReference(categoryIndex, i, e.getFrom()));
+                newMap.add(new EventReference(categoryIndex, i));
             }
         }
 
         this.activeDisplayMap = newMap;
         this.currentView = "OCCURRENCE_VIEW";
         return sb.toString();
-    }
-
-    public boolean deleteEventByStartTime(int categoryIndex, LocalDateTime startTime) {
-        EventList eventList = categories.get(categoryIndex).getEventList();
-        for (int i = 0; i < eventList.getSize(); i++) {
-            if (eventList.get(i).getFrom().equals(startTime)) {
-                categories.get(categoryIndex).deleteEvent(i);
-                return true;
-            }
-        }
-        return false;
     }
 
     /**
