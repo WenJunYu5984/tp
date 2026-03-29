@@ -11,7 +11,7 @@ import seedu.duke.ui.ErrorUi;
  *
  * <p></>This class is a stateless utility class and cannot be instantiated.
  * It centralizes common operations such as persisting application data
- * and resolving validated category indices from user input.
+ * and resolving validated category indices from user input.</>
  */
 
 //@@author WenJunYu5984
