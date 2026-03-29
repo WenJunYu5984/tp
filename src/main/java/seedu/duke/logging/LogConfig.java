@@ -8,6 +8,21 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
+/**
+ * Configures the application-wide logging system.
+ *
+ * <p>Sets up two handlers on the root logger:
+ * File — appends all log records ({@link Level#ALL}) to
+ * {@code unitasker.log} in the working directory using
+ * {@link SimpleFormatter}
+ *
+ * Console - prints {@link Level#WARNING} and above to
+ * {@code stderr}
+ *
+ * <p>Call {@link #setup()} once at application startup before any
+ * other component obtains a {@link Logger} instance.
+ */
+
 public class LogConfig {
     public static void setup() {
         LogManager.getLogManager().reset();
@@ -21,6 +36,7 @@ public class LogConfig {
             fileHandler.setLevel(Level.ALL);
             rootLogger.addHandler(fileHandler);
 
+            // Console handler: surfaces warnings and above during runtime
             ConsoleHandler consoleHandler = new ConsoleHandler();
             consoleHandler.setLevel(Level.WARNING);
             rootLogger.addHandler(consoleHandler);
