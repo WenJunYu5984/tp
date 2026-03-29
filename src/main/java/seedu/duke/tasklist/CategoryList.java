@@ -22,6 +22,10 @@ import seedu.duke.exception.UniTaskerException;
 
 public class CategoryList {
     private static final Logger logger = Logger.getLogger(CategoryList.class.getName());
+    public static final String EQUALSIGN_LINE = "======================================================================";
+    public static final String DOTTED_LINE = "-------------------------------------------------------------------";
+
+
 
     private ArrayList<Category> categories;
     private int recurringGroupId = 0;
@@ -62,7 +66,8 @@ public class CategoryList {
 
     public String getAllTodos() {
         StringBuilder sb = new StringBuilder();
-        sb.append("=== ALL TODOS ===").append(System.lineSeparator());
+        sb.append("ALL TODOS").append(System.lineSeparator());
+        sb.append(DOTTED_LINE).append(System.lineSeparator());
         for (Category cat : categories) {
             sb.append(cat.getName()).append(":").append(System.lineSeparator());
             sb.append(cat.getTodoList().toString());
@@ -186,14 +191,15 @@ public class CategoryList {
 
     public String getAllEvents(boolean isExpanded,boolean isNormalEventOnly) {
         StringBuilder sb = new StringBuilder();
-        sb.append(isExpanded ? "=== ALL OCCURRENCES ===" : isNormalEventOnly ?
-                "=== ALL NON-RECURRING EVENTS ===" : "=== ALL EVENTS ===").append(System.lineSeparator());
+        sb.append(isExpanded ? "ALL OCCURRENCES" : isNormalEventOnly ?
+                "ALL NON-RECURRING EVENTS" : "ALL EVENTS").append(System.lineSeparator());
+        sb.append(DOTTED_LINE).append(System.lineSeparator());
         List<EventReference> newMap = new ArrayList<>();
         Set<Integer> printedGroups = new HashSet<>();
 
         for (int categoryIndex = 0; categoryIndex < categories.size(); categoryIndex++) {
             Category cat = categories.get(categoryIndex);
-            sb.append(cat.getName()).append(":").append(System.lineSeparator());
+            sb.append("[" + (categoryIndex + 1) + "]").append(cat.getName()).append(":").append(System.lineSeparator());
             EventList eventList = cat.getEventList();
             eventList.sortByDate();
 
@@ -235,11 +241,12 @@ public class CategoryList {
         int uiIndex = 1;
         List<EventReference> newMap = new ArrayList<>();
         Set<Integer> printedGroups = new HashSet<>();
-        sb.append("=== ALL RECURRING EVENTS ===").append(System.lineSeparator());
+        sb.append("ALL RECURRING EVENTS").append(System.lineSeparator());
+        sb.append(DOTTED_LINE).append(System.lineSeparator());
 
         for (int categoryIndex = 0; categoryIndex < categories.size(); categoryIndex++) {
             Category cat = categories.get(categoryIndex);
-            sb.append(cat.getName()).append(":").append(System.lineSeparator());
+            sb.append("[" + (categoryIndex + 1) + "]").append(cat.getName()).append(":").append(System.lineSeparator());
             EventList eventList = cat.getEventList();
             eventList.sortByDay();
             for (int eventIndex = 0; eventIndex < eventList.getSize(); eventIndex++) {
@@ -270,8 +277,8 @@ public class CategoryList {
         int targetGroupId = template.getRecurringGroupId();
 
         StringBuilder sb = new StringBuilder();
-        sb.append("=== OCCURRENCES FOR: ").append(template.getDescription()).append(" ===\n");
-
+        sb.append("OCCURRENCES FOR: ").append(template.getDescription()).append("\n");
+        sb.append(DOTTED_LINE).append(System.lineSeparator());
         List<EventReference> newMap = new ArrayList<>();
         EventList eventList = categories.get(categoryIndex).getEventList();
 
@@ -320,7 +327,8 @@ public class CategoryList {
 
     public String getAllDeadlines() {
         StringBuilder sb = new StringBuilder();
-        sb.append("=== ALL DEADLINES ===").append(System.lineSeparator());
+        sb.append("ALL DEADLINES").append(System.lineSeparator());
+        sb.append(DOTTED_LINE).append(System.lineSeparator());
         for (Category cat : categories) {
             sb.append(cat.getName().trim()).append(":").append(System.lineSeparator());
             DeadlineList deadlineList = cat.getDeadlineList();
@@ -360,9 +368,11 @@ public class CategoryList {
 
     public String toString() {
         String result = "";
+        result += EQUALSIGN_LINE + System.lineSeparator();
         for (int i = 0; i < categories.size(); i += 1) {
             result += "[" + (i + 1) + "]" + categories.get(i).toString() + System.lineSeparator();
         }
+        result += EQUALSIGN_LINE;
         return result;
     }
 
