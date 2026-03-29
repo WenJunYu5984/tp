@@ -77,7 +77,8 @@ public class DeleteCommand implements Command {
                         System.out.println("catIndex: " + map.get(i).categoryIndex
                                 + "eventIndex: " + map.get(i).eventIndex);
                     }
-                    if (!(currentView.equals("EVENT") || currentView.equals("EVENT_EXPANDED"))) {
+                    if (!(currentView.equals("EVENT") || currentView.equals("EVENT_EXPANDED") ||
+                            currentView.equals("NORMAL_EVENT_ONLY"))) {
                         throw new UniTaskerException("To delete a specific event please use " +
                                 "'list event' or 'list event /all' first");
                     }

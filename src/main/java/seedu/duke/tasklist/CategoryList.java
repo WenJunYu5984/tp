@@ -177,39 +177,47 @@ public class CategoryList {
         categories.get(categoryIndex).setEventStatus(eventIndex, isDone);
     }
 
-    public String getAllEvents(boolean isExpanded) {
+    public String getAllEvents(boolean isExpanded,boolean isNormalEventOnly) {
         StringBuilder sb = new StringBuilder();
-        sb.append(isExpanded ? "=== ALL OCCURRENCES ===" : "=== ALL EVENTS ===").append(System.lineSeparator());
-        // sb.append("=== ALL EVENTS ===").append(System.lineSeparator());
+        sb.append(isExpanded ? "=== ALL OCCURRENCES ===" : isNormalEventOnly ?
+                "=== ALL NON-RECURRING EVENTS ===" : "=== ALL EVENTS ===").append(System.lineSeparator());
         List<EventReference> newMap = new ArrayList<>();
         Set<Integer> printedGroups = new HashSet<>();
 
-        for (int categoryIndex = 0; categoryIndex<categories.size();categoryIndex++){
+        for (int categoryIndex = 0; categoryIndex < categories.size(); categoryIndex++) {
             Category cat = categories.get(categoryIndex);
             sb.append(cat.getName()).append(":").append(System.lineSeparator());
             EventList eventList = cat.getEventList();
             eventList.sortByDate();
 
-            for (int eventIndex = 0; eventIndex<eventList.getSize();eventIndex++){
+            for (int eventIndex = 0; eventIndex < eventList.getSize(); eventIndex++) {
                 Event event = eventList.get(eventIndex);
-                if (event.getIsRecurring()){
-                    int groupId = event.getRecurringGroupId();
-                    if (isExpanded||!printedGroups.contains(groupId)){
-                        sb.append(newMap.size()+1).append(". ")
-                                .append(isExpanded ? event.toString() : event.toStringRecurring())
-                                .append(System.lineSeparator());
-                        newMap.add(new EventReference(categoryIndex,eventIndex,event.getFrom()));
-                        printedGroups.add(groupId);
+                if (isNormalEventOnly) {
+                    if (!(event.getIsRecurring())) {
+                        sb.append(newMap.size() + 1).append(". ")
+                                .append(event.toString()).append(System.lineSeparator());
+                        newMap.add(new EventReference(categoryIndex, eventIndex,event.getFrom()));
                     }
                 } else {
-                    sb.append(newMap.size() + 1).append(". ")
-                            .append(event.toString()).append(System.lineSeparator());
-                    newMap.add(new EventReference(categoryIndex, eventIndex,event.getFrom()));
+                    if (event.getIsRecurring()) {
+                        int groupId = event.getRecurringGroupId();
+                        if (isExpanded || !printedGroups.contains(groupId)) {
+                            sb.append(newMap.size() + 1).append(". ")
+                                    .append(isExpanded ? event.toString() : event.toStringRecurring())
+                                    .append(System.lineSeparator());
+                            newMap.add(new EventReference(categoryIndex, eventIndex, event.getFrom()));
+                            printedGroups.add(groupId);
+                        }
+                    } else {
+                        sb.append(newMap.size() + 1).append(". ")
+                                .append(event.toString()).append(System.lineSeparator());
+                        newMap.add(new EventReference(categoryIndex, eventIndex, event.getFrom()));
+                    }
                 }
             }
         }
         this.activeDisplayMap = newMap;
-        this.currentView = isExpanded ? "EVENT_EXPANDED" : "EVENT";
+        this.currentView = isExpanded ? "EVENT_EXPANDED" : isNormalEventOnly ? "NORMAL_EVENT_ONLY" : "EVENT";
         return sb.toString();
 
     }

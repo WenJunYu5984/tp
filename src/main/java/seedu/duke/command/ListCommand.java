@@ -44,7 +44,8 @@ public class ListCommand implements Command {
         //@@author sushmiithaa
         case "event":
             boolean showAll = (sentence.length > 2 && sentence[2].equalsIgnoreCase("/all"));
-            GeneralUi.printWithBorder(null, container.getCategories().getAllEvents(showAll));
+            boolean showNormalEventsOnly = (sentence.length > 2 && sentence[2].equalsIgnoreCase("/normal"));
+            GeneralUi.printWithBorder(null, container.getCategories().getAllEvents(showAll,showNormalEventsOnly));
             break;
         //@@author WenJunYu5984
         case "range":
