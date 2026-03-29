@@ -26,10 +26,6 @@ public abstract class Task {
         isDone = false;
     }
 
-    public void changeDescription(String x) {
-        description = x;
-    }
-
     public String getDescription() {
         return description;
     }

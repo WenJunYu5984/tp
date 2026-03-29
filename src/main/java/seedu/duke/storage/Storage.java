@@ -257,6 +257,15 @@ public class Storage {
         }
     }
 
+    /**
+     * Loads application settings from the settings file into static state.
+     *
+     * <p>Recognised keys: {@code endYear}, {@code dailyTaskLimit}.
+     * Unknown keys are logged as warnings. If the settings file does not
+     * exist the method returns silently and leaves defaults unchanged.
+     *
+     * <p>Each line must follow the format {@code key=value}.
+     */
     public static void loadSettings() {
         java.io.File file = new java.io.File(SETTINGS_FILE);
         if (!file.exists()) {
@@ -283,6 +292,13 @@ public class Storage {
         }
     }
 
+    /**
+     * Persists the current application settings to the settings file.
+     *
+     * <p>Writes {@code endYear} and {@code dailyTaskLimit} as
+     * {@code key=value} lines, overwriting any previous content.
+     * Errors are reported via {@link ErrorUi} and do not propagate.
+     */
     public static void saveSettings() {
         try (java.io.PrintWriter writer = new java.io.PrintWriter(new java.io.FileWriter(SETTINGS_FILE))) {
             writer.println("endYear=" + getEndYear());
