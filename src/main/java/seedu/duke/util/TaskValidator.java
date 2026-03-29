@@ -32,6 +32,9 @@ public class TaskValidator {
         }
     }
 
+    /**
+     * Checks if existing number of tasks is equal to or greater than max tasks allowed per day
+     */
     public static void validateWorkload(CategoryList categories, LocalDateTime dateTime, int maxTasks)
             throws HighWorkloadException {
 
@@ -61,6 +64,9 @@ public class TaskValidator {
         }
     }
 
+    /**
+     * Checks for duplicate task in existing tasks in the list with the task being newly added
+     */
     public static void validateUniqueTask(CategoryList categories, int catIdx, String description)
             throws DuplicateTaskException {
 
@@ -77,6 +83,9 @@ public class TaskValidator {
         }
     }
 
+    /**
+     * Check for any duplicate categories with newly added category
+     */
     public static void validateUniqueCategory(CategoryList categories, String name)
             throws DuplicateCategoryException {
         for (int i = 0; i < categories.getAmount(); i++) {

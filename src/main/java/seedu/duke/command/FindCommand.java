@@ -20,6 +20,6 @@ public class FindCommand implements Command {
         }
         String[] split = Arrays.copyOfRange(sentence, 1, sentence.length);
         String input = String.join(" ", split);
-        TaskUi.printFindResults(container.getCategories().returnFoundTasks(input));
+        TaskUi.printFindResults(container.categories().returnFoundTasks(input));
     }
 }

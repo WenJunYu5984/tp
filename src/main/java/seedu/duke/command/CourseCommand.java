@@ -16,7 +16,7 @@ public class CourseCommand implements Command {
     public void execute(AppContainer container) {
         try {
             String courseCommand = line.substring("course".length()).trim();
-            String result = container.getCourseParser().parse(courseCommand);
+            String result = container.courseParser().parse(courseCommand);
             LimitUi.printCourseResult(result);
         } catch (CourseException e) {
             ErrorUi.printError(e.getMessage());

@@ -145,15 +145,23 @@ Examples:
 `delete deadline 1 1`
 `delete deadline 1 all`
 
+---
 
 ### Mark/Unmark Command: `mark` `unmark`
-Mark an existing item on the list. `mark` can be used to mark the following: `category`, `todo`, `deadline`, `event`, `recurring`
+Mark an existing item on the list. 
 
-Unmark an existing item on the list. `unmark` can be used to unmark the following: `category`, `todo`, `deadline`, `event`, `recurring`
+- `mark` can be used to mark the following: `category`, `todo`, `deadline`, `event`, `recurring`
 
+Unmark an existing item on the list. 
 
-**List Command**: `list`
-Creates a list of task. `list` can be used to crate a list on the following: `category`, `todo`, `deadline`, `event`, `recurring`, `range`
+- `unmark` can be used to unmark the following: `category`, `todo`, `deadline`, `event`, `recurring`
+
+---
+
+### List Command: `list`
+
+Creates a list of task. 
+- `list` can be used to crate a list on the following: `category`, `todo`, `deadline`, `event`, `recurring`, `range`
 
 List out all tasks based on key word
 
@@ -165,7 +173,7 @@ list [KEYWORD] [CATEGORYINDEX] [START] [END] [TASKTYPE]
 - CATEGORYINDEX: Integer value up to number of categories added
 - START: Start date
 - END: End date
-- TASKTYPE: `deadline`, `event`
+- TASKTYPE: `/deadline`, `/event`
 
 Examples:
 
@@ -178,6 +186,7 @@ Examples:
 
 *Note*: 
 
+- *CategoryIndex is not needed for limit*
 - *Start and End are only applicable for Deadline and Event*
 - *Add tasktype after end if you want to see only deadline or event*
 
@@ -243,6 +252,8 @@ Format: `find [SUBSTRING]`
 
 Example: `find assignment`
 
+---
+
 ### Limit Command: `limit` 
 Sets a limit on the following: task,year,...
 Allow user to set the limit for the following: `Task`, `Year`
@@ -273,16 +284,17 @@ is located in the other computer.
 
 ## Command Summary
 
-| Action      | Format, Examples | 
-|-------------|------------------|
-| help        | `help`           |
-| add         | `add [keyword]`  |
-| delete      | `add [keyword]`  |
-| list        | `add [keyword]`  |
-| mark/unmark | `add [keyword]`  |
-| reorder     | `add [keyword]`  |
-| priority    | `add [keyword]`  |
-| sort        | `add [keyword]`  |
-| find        | `add [keyword]`  |
-| course      | `add [keyword]`  |
+| Action      | Format, Examples  | 
+|-------------|-------------------|
+| help        | `help`            |
+| add         | `add [keyword]`   |
+| delete      | `add [keyword]`   |
+| list        | `add [keyword]`   |
+| mark/unmark | `add [keyword]`   |
+| reorder     | `add [keyword]`   |
+| priority    | `add [keyword]`   |
+| sort        | `add [keyword]`   |
+| find        | `add [keyword]`   |
+| course      | `add [keyword]`   |
+| limit       | `limit [keyword]` |
 

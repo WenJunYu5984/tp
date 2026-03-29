@@ -1,8 +1,14 @@
 package seedu.duke.storage;
 
 
+import static seedu.duke.UniTasker.getDailyTaskLimit;
+import static seedu.duke.UniTasker.setDailyTaskLimit;
+import static seedu.duke.UniTasker.getEndYear;
+import static seedu.duke.UniTasker.setEndYear;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
+import java.util.Scanner;
 import java.util.logging.Level;
 
 import seedu.duke.exception.UniTaskerException;
@@ -27,6 +33,7 @@ import seedu.duke.ui.ErrorUi;
  */
 public class Storage {
 
+    private static final String SETTINGS_FILE = "settings.txt";
     private static final Logger logger = Logger.getLogger(Storage.class.getName());
 
     private String todoFilePath;
@@ -247,6 +254,57 @@ public class Storage {
             logger.info("Successfully loaded events from file.");
         } catch (java.io.FileNotFoundException e) {
             logger.log(Level.SEVERE, "Event file cannot be found", e);
+        }
+    }
+
+    /**
+     * Loads application settings from the settings file into static state.
+     *
+     * <p>Recognised keys: {@code endYear}, {@code dailyTaskLimit}.
+     * Unknown keys are logged as warnings. If the settings file does not
+     * exist the method returns silently and leaves defaults unchanged.
+     *
+     * <p>Each line must follow the format {@code key=value}.
+     */
+    public static void loadSettings() {
+        java.io.File file = new java.io.File(SETTINGS_FILE);
+        if (!file.exists()) {
+            return; // use defaults if no settings file yet
+        }
+        try (Scanner sc = new Scanner(file)) {
+            while (sc.hasNextLine()) {
+                String[] parts = sc.nextLine().split("=");
+                if (parts.length == 2) {
+                    switch (parts[0]) {
+                    case "endYear":
+                        setEndYear(Integer.parseInt(parts[1]));
+                        break;
+                    case "dailyTaskLimit":
+                        setDailyTaskLimit(Integer.parseInt(parts[1]));
+                        break;
+                    default:
+                        logger.warning("Unknown setting key: " + parts[0]);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            ErrorUi.printError("Failed to load settings: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Persists the current application settings to the settings file.
+     *
+     * <p>Writes {@code endYear} and {@code dailyTaskLimit} as
+     * {@code key=value} lines, overwriting any previous content.
+     * Errors are reported via {@link ErrorUi} and do not propagate.
+     */
+    public static void saveSettings() {
+        try (java.io.PrintWriter writer = new java.io.PrintWriter(new java.io.FileWriter(SETTINGS_FILE))) {
+            writer.println("endYear=" + getEndYear());
+            writer.println("dailyTaskLimit=" + getDailyTaskLimit());
+        } catch (Exception e) {
+            ErrorUi.printError("Failed to save settings: " + e.getMessage());
         }
     }
 

@@ -11,12 +11,40 @@ import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAdjusters;
 import java.util.logging.Logger;
 
+
+/**
+ * Utility class for parsing and validating date-time strings used throughout the application.
+ *
+ * <p>Supports two input formats:
+ * {@code dd-MM-yyyy HHmm} — full date and time
+ * {@code dd-MM-yyyy} — date only; time defaults to {@code 23:59}
+ *
+ * <p>This class cannot be instantiated.
+ */
 public class DateUtils {
     private static final Logger logger = Logger.getLogger(DateUtils.class.getName());
     private static final DateTimeFormatter FULL_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy HHmm");
     private static final DateTimeFormatter DATE_ONLY_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     private static final DateTimeFormatter TIME_ONLY_FORMATTER = DateTimeFormatter.ofPattern("HHmm");
 
+    /**
+     * Parses a date-time string, with optional past-date validation.
+     *
+     * <p>Attempts to parse {@code input} as a full date-time first, then
+     * falls back to date-only (defaulting the time to {@code 23:59}).
+     * If {@code isLoading} is {@code false}, the parsed date is additionally
+     * validated to ensure it does not lie in the past.
+     * Year-range validation is always applied regardless of {@code isLoading}.
+     *
+     * @param input     the date string to parse; must not be {@code null} or blank
+     * @param isLoading {@code true} when reading from a saved file, which skips
+     *                  past-date validation to allow previously saved dates to load
+     *                  without error
+     * @return the parsed {@link LocalDateTime}
+     * @throws IllegalDateException if {@code input} is empty, does not match any
+     *                              supported format, fails past-date validation,
+     *                              or falls outside the allowed year range
+     */
     public static LocalDateTime parse(String input, boolean isLoading) throws IllegalDateException {
         if (input == null || input.trim().isEmpty()) {
             throw new IllegalDateException("Date input cannot be empty.");

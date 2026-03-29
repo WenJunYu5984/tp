@@ -47,7 +47,7 @@ public class Todo extends Task {
         if (isDone) {
             statusAsNumber = 1;
         }
-        return "T | " + statusAsNumber + " | " + String.valueOf(getPriority()) + " | " + description;
+        return "T | " + statusAsNumber + " | " + getPriority() + " | " + description;
     }
 
 }

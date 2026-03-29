@@ -198,10 +198,7 @@ class DukeTest {
                 categories,
                 new Calendar(),
                 new Storage("testTodo.txt", "testDeadline.txt", "testEvent.txt"),
-                null,
-                5,
-                2025,
-                2030
+                null
         );
 
         CommandParser parser = new CommandParser();

@@ -49,9 +49,7 @@ The `AppContainer` consists of the following:
 - `Calendar calendar` – Manages the mapping of dates to tasks with date information (deadlines and events) ???
 - `Storage storage` – handles saving and loading of data from local files
 - `CourseParser courseParser` – processes course-related commands
-- `int dailyTaskLimit` – defines the maximum number of tasks allowed per day
-- `int startYear` – lower bound for valid date ranges
-- `int endYear` – upper bound for valid date ranges
+
 
 The `AppContainer` component,
 - Stores all the information required for the application in a single object

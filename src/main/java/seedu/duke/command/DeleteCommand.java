@@ -35,52 +35,52 @@ public class DeleteCommand implements Command {
             switch (secondCommand) {
             //@@author marken9
             case "marked":
-                container.getCategories().deleteMarkedTasks();
+                container.categories().deleteMarkedTasks();
                 CategoryUi.printAllMarkedDeleted();
                 break;
             case "category":
                 int deleteIndex = Integer.parseInt(sentence[2]) - 1;
-                String catName = container.getCategories().getCategory(deleteIndex).getName();
-                container.getCategories().deleteCategory(deleteIndex);
+                String catName = container.categories().getCategory(deleteIndex).getName();
+                container.categories().deleteCategory(deleteIndex);
                 CategoryUi.printCategoryDeleted(catName);
                 break;
             case "todo":
                 int todoIndex = Integer.parseInt(sentence[3]) - 1;
-                String todoName = container.getCategories().getCategory(categoryIndex)
+                String todoName = container.categories().getCategory(categoryIndex)
                         .getTodo(todoIndex).getDescription();
-                container.getCategories().deleteTodo(categoryIndex, todoIndex);
+                container.categories().deleteTodo(categoryIndex, todoIndex);
                 TaskUi.printTaskAction("Deleted", "todo", todoName);
                 break;
             //@@author WenJunYu5984
             case "deadline":
                 if (sentence[3].equalsIgnoreCase("all")) {
-                    container.getCategories().deleteAllDeadlines(categoryIndex);
+                    container.categories().deleteAllDeadlines(categoryIndex);
                     DeadlineUi.printItemDeleted("deadline", null, categoryIndex);
                 } else {
                     int deadlineIndex = Integer.parseInt(sentence[3]) - 1;
-                    container.getCategories().deleteDeadline(categoryIndex, deadlineIndex);
+                    container.categories().deleteDeadline(categoryIndex, deadlineIndex);
                     DeadlineUi.printItemDeleted("deadline", deadlineIndex, categoryIndex);
                 }
                 break;
             //@@author sushmiithaa
             case "event":
                 if (sentence[3].equalsIgnoreCase("all")) {
-                    container.getCategories().deleteAllEvents(categoryIndex);
+                    container.categories().deleteAllEvents(categoryIndex);
                     DeadlineUi.printItemDeleted("event", null, categoryIndex);
                 } else {
                     int eventIndex = Integer.parseInt(sentence[3]) - 1;
-                    container.getCategories().deleteEvent(categoryIndex, eventIndex);
+                    container.categories().deleteEvent(categoryIndex, eventIndex);
                     DeadlineUi.printItemDeleted("event", eventIndex, categoryIndex);
                 }
                 break;
             case "recurring":
                 int groupIndex = Integer.parseInt(sentence[3]);
-                Event eventToDelete = container.getCategories().findRecurringEventToDelete(categoryIndex, groupIndex);
+                Event eventToDelete = container.categories().findRecurringEventToDelete(categoryIndex, groupIndex);
                 if (eventToDelete == null) {
                     throw new UniTaskerException("Choose a positive integer that represents" +
                             " the group number that belongs to the category");
                 }
-                container.getCategories().deleteRecurringEvent(categoryIndex, groupIndex);
+                container.categories().deleteRecurringEvent(categoryIndex, groupIndex);
                 EventUi.printRecurringEventDeleted(eventToDelete);
                 break;
             //@@author
@@ -91,7 +91,7 @@ public class DeleteCommand implements Command {
             }
 
             CommandSupport.saveData(container);
-            refreshCalendar(container.getCategories(), container.getCalendar());
+            refreshCalendar(container.categories(), container.calendar());
         } catch (ArrayIndexOutOfBoundsException e) {
             ErrorUi.printMissingArgs("Example: delete todo 1 1");
         } catch (NumberFormatException e) {

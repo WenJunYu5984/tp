@@ -53,6 +53,13 @@ public abstract class TaskList<T extends Task> {
     }
 
 
+    /**
+     * Returns {@code true} if any task in this list has a description
+     * that matches {@code description}, ignoring case and leading/trailing whitespace.
+     *
+     * @param description the description to search for
+     * @return {@code true} if a match is found, {@code false} otherwise
+     */
     public boolean contains(String description) {
         for (T task : tasks) {
             if (task.getDescription().equalsIgnoreCase(description.trim())) {
