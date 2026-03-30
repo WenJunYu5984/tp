@@ -55,8 +55,10 @@ public class ListCommand implements Command {
             break;
         //@@author sushmiithaa
         case "event":
-            boolean showAll = (sentence.length > LIST_MIN_LENGTH && sentence[INDEX_OF_ADDITIONAL_INFO].equalsIgnoreCase("/all"));
-            boolean showNormalEventsOnly = (sentence.length > LIST_MIN_LENGTH && sentence[INDEX_OF_ADDITIONAL_INFO].equalsIgnoreCase("/normal"));
+            boolean showAll = (sentence.length > LIST_MIN_LENGTH
+                    && sentence[INDEX_OF_ADDITIONAL_INFO].equalsIgnoreCase("/all"));
+            boolean showNormalEventsOnly = (sentence.length > LIST_MIN_LENGTH
+                    && sentence[INDEX_OF_ADDITIONAL_INFO].equalsIgnoreCase("/normal"));
             GeneralUi.printWithBorder(null, container.categories().getAllEvents(showAll,showNormalEventsOnly));
             break;
         //@@author WenJunYu5984
@@ -131,9 +133,11 @@ public class ListCommand implements Command {
                 throw new IllegalArgumentException("Start date must be earlier than End date");
             }
 
-            if (sentence.length > LIST_RANGE_MIN_LENGTH && sentence[INDEX_OF_LIST_RANGE_TASKTYPE].equalsIgnoreCase("/deadline")) {
+            if (sentence.length > LIST_RANGE_MIN_LENGTH
+                    && sentence[INDEX_OF_LIST_RANGE_TASKTYPE].equalsIgnoreCase("/deadline")) {
                 container.calendar().displaySpecificTypeInRange(start, end, Deadline.class);
-            } else if (sentence.length > LIST_RANGE_MIN_LENGTH && sentence[INDEX_OF_LIST_RANGE_TASKTYPE].equalsIgnoreCase("/event")) {
+            } else if (sentence.length > LIST_RANGE_MIN_LENGTH
+                    && sentence[INDEX_OF_LIST_RANGE_TASKTYPE].equalsIgnoreCase("/event")) {
                 container.calendar().displaySpecificTypeInRange(start, end, Event.class);
             } else {
                 container.calendar().displayRange(start, end);

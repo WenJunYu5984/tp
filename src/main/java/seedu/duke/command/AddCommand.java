@@ -221,8 +221,9 @@ public class AddCommand implements Command {
     private void handleAddRecurring(AppContainer container) {
         try {
             int eventCategoryIndex = CommandSupport.getCategoryIndex(container, sentence);
-
-            if (sentence.length < ADD_RECURRING_EVENT_MIN_LENGTH || !sentence[3].equals("weekly") || !sentence[4].equals("event")) {
+            boolean isMissingInvalidInfo = sentence.length < ADD_RECURRING_EVENT_MIN_LENGTH
+                    || !sentence[3].equals("weekly") || !sentence[4].equals("event");
+            if (isMissingInvalidInfo) {
                 throw new UniTaskerException("Missing or invalid info. "
                         + "Expected format: add recurring <categoryIndex> weekly event <description> "
                         + "/from <day> <time> /to <day> <time>");

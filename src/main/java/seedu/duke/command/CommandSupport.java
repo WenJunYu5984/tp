@@ -16,9 +16,10 @@ import seedu.duke.ui.ErrorUi;
 
 //@@author WenJunYu5984
 public final class CommandSupport {
-    private static final Logger logger = Logger.getLogger(CommandSupport.class.getName());
     public static final int INDEX_OF_CATEGORY = 2;
     public static final int CATEGORY_INDEX_LOWER_LIMIT = 0;
+
+    private static final Logger logger = Logger.getLogger(CommandSupport.class.getName());
 
     private CommandSupport() {}
 

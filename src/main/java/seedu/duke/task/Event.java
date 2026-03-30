@@ -9,7 +9,7 @@ public class Event extends Task implements Timed {
 
     private static final DateTimeFormatter STORAGE_FORMATTER =
             DateTimeFormatter.ofPattern("dd-MM-yyyy HHmm");
-    public static final DateTimeFormatter RECURRING_GROUP_FORMATTER = DateTimeFormatter.ofPattern("EEEE HHmm");
+    private static final DateTimeFormatter RECURRING_GROUP_FORMATTER = DateTimeFormatter.ofPattern("EEEE HHmm");
 
     protected LocalDateTime from;
     protected LocalDateTime to;
