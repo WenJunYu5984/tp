@@ -27,10 +27,6 @@ public class DeadlineList extends TaskList<Deadline> {
         tasks.sort(Comparator.comparing(Deadline::getBy));
     }
 
-    public void clearAll() {
-        tasks.clear();
-    }
-
     public Deadline getLatest() {
         if (tasks.isEmpty()) {
             return null;

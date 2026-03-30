@@ -57,11 +57,16 @@ public class DeleteCommand implements Command {
                 CategoryUi.printCategoryDeleted(catName);
                 break;
             case "todo":
-                int todoIndex = Integer.parseInt(sentence[INDEX_OF_TASK_TO_DELETE]) - 1;
-                String todoName = container.categories().getCategory(categoryIndex)
-                        .getTodo(todoIndex).getDescription();
-                container.categories().deleteTodo(categoryIndex, todoIndex);
-                TaskUi.printTaskAction("Deleted", "todo", todoName);
+                if (sentence[INDEX_OF_TASK_TO_DELETE].equalsIgnoreCase("all")) {
+                    container.categories().deleteAllTodos(categoryIndex);
+                    DeadlineUi.printItemDeleted("todo", null, categoryIndex);
+                } else {
+                    int todoIndex = Integer.parseInt(sentence[INDEX_OF_TASK_TO_DELETE]) - 1;
+                    String todoName = container.categories().getCategory(categoryIndex)
+                            .getTodo(todoIndex).getDescription();
+                    container.categories().deleteTodo(categoryIndex, todoIndex);
+                    TaskUi.printTaskAction("Deleted", "todo", todoName);
+                }
                 break;
             //@@author WenJunYu5984
             case "deadline":

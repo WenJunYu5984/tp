@@ -81,6 +81,10 @@ public class CategoryList {
         categories.get(categoryIndex).deleteTodo(todoIndex);
     }
 
+    public void deleteAllTodos(int categoryIndex) {
+        categories.get(categoryIndex).deleteAllTodos();
+    }
+
     /**
      * Marks a specific todo as completed within a given category.
      *

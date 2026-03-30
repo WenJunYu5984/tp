@@ -31,10 +31,6 @@ public class EventList extends TaskList<Event> {
         return result;
     }
 
-    public void clearAll() {
-        tasks.clear();
-    }
-
     public void sortByDate() {
         tasks.sort(Comparator
                 .comparing(Event::getFrom)
