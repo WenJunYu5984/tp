@@ -125,16 +125,19 @@ Event commands include adding non-recurring events,
 deleting events based on the index seen in the user interface of the list and
 adding recurring events for a user-specified interval (number of months or stop date).
 ####  Add Event Command
-1. User types `add event <categoryIndex> <description> from <startDateTime> to <endDateTime>` or `add recurring <categoryIndex> weekly event  <description> /from <day> <time> /to <day> <time> /(date or month) <dateOrMonth>` which is parsed by the CommandParser class to create an AddEventCommand object
-2. In `AddEventCommand`, the parameters are validated and used to create an Event object
-3. For non-recurring events, the `Event` is passed to `CategoryList` then to `Category`, which delegates to `EventList` to store the event under the correct category
-   and if the command is a recurring event, the `addRecurringWeeklyEvent` method in the `EventList` class is called
-4. For recurring events, `addRecurringWeeklyEvent` in `EventList` is called, which generates multiple `Event` objects at weekly intervals based on the start time and duration in months, and groups them as a recurring event
-5. The event(s) are then stored in `EventList` are persisted in the `Storage` class, and the `Calendar` object is updated accordingly
+1. User enters either:
+   - `add event <categoryIndex> <description> /from <startDateTime> /to <endDateTime>`
+   - `add recurring <categoryIndex> weekly event <description> /from <day> <time> /to <day> <time> /(date or month) <dateOrMonth>`
+2. Input is parsed and `AddEventCommand` is created.
+3. `AddEventCommand` calls `CategoryList` functions to add events.
+4. If non-recurring:
+   - `EventList` `add(Event)` is called
+5. If recurring:
+   - `EventList` `addRecurringWeeklyEvent(addRecurringWeeklyEvent(event, calendar, date, months)` is called to generate and group weekly events.
+6. Event(s) are stored in EventList, persisted by Storage, and reflected in the Calendar
 
 **Sequence Diagram for Add Event**
-![AddEvent Sequence Diagram](pictures/Add_Event.png)
-*<div align="center"> Figure x - Add Event Command Sequence Diagram </div>*
+![AddEvent Sequence Diagram](pictures/AddRecurringNonRecurringEvent.png)
 
 ####  Delete Event Command
 **Problem**
@@ -166,6 +169,7 @@ Example:
 
 
     `list event`
+
 | categoryIndex | uiIndex | EventReference (categoryIndex, eventIndex) |   Description   |
 |:-------------:|:-------:|:------------------------------------------:|:---------------:|
 |       0       |    1    |                   (0,0)                    |  consultation   |
@@ -176,6 +180,7 @@ Example:
 
 
     `list recurring`
+
 | categoryIndex | uiIndex | EventReference (categoryIndex, eventIndex) |   Description   |
 |:-------------:|:-------:|:------------------------------------------:|:---------------:|
 |       0       |    1    |                   (0,1)                    | CS2113 tutorial |
@@ -197,7 +202,6 @@ Example:
 **Sequence Diagram for `list event` command**
 
 ![ListEvent Sequence Diagram](pictures/ListEvent.png)
-*<div align="center"> Figure x - List Event Command Sequence Diagram </div>*
 
 **Sequence Diagram for `delete event <categoryIndex> <uiIndex>` command**
 
@@ -206,8 +210,7 @@ Note:
 - `delete occurrence <categoryIndex> <uiIndex>` and `delete recurring <categoryIndex> <uiIndex>` works the same
   except for deleting multiple events at once (all events in recurring group) for `delete recurring <categoryIndex> <uiIndex>`
 
-![DeleteEvent Sequence Diagram](pictures/DeleteEvent.png)
-*<div align="center"> Figure x - Delete Event Command Sequence Diagram </div>*
+![DeleteEvent Sequence Diagram](pictures/Delete_Event_Update.png)
 
 
 **Key Design Considerations**

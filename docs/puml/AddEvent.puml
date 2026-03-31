@@ -16,14 +16,24 @@ participant ":Calendar" as CAL
 activate AC
 
 
-alt Normal Event
+alt Normal event
     note right of AC
         validation and parsing has been omitted from this sequence diagram
     end note
-    alt invalid input / format
-    else else
         AC -> CL : addEvent(categoryIndex, desc, from, to)
         activate CL
+        CL -> CL : createEvent(categoryIndex, desc, from, to,false,-1)
+        activate CL
+        CL --> CL : Event
+        deactivate CL
+        CL -> CAT : addEvent(Event)
+        activate CAT
+        CAT -> EL : add(Event)
+        activate EL
+        EL --> CAT
+        deactivate EL
+        CAT --> CL
+        deactivate CAT
         CL --> AC
 
         AC -> CL : getLatestEvent()
@@ -38,20 +48,15 @@ alt Normal Event
         AC -> UI : printEventAdded(event,desc,totalEvents)
         activate UI
         UI --> AC : show added event
+        AC -->[ : show added event
         deactivate UI
-    end
 
 else Recurring Event
-'    AC -> AC : validate input + parse recurring details
 
-    alt invalid input / format
-    else else
         AC -> CL : addRecurringWeeklyEvent(eventCategoryIndex, desc, from, to,calendar, endDate, months)
         activate CL
 
         CL -> CL : increment recurringGroupId
-        CL -> CL : create base Event (with groupId)
-
         note right of CL
         recurringGroupId is incremented once
         and reused for all occurrences
@@ -85,7 +90,9 @@ else Recurring Event
         activate UI
         UI --> AC : show added recurring event
         deactivate UI
+        AC -->[ : show added recurring event
         deactivate AC
     end
 
 @enduml
+
