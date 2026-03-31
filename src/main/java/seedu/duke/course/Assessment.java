@@ -1,4 +1,4 @@
-package seedu.duke.coursestracker;
+package seedu.duke.course;
 /**
  * Represents one assessment component inside a course.
  * Example:

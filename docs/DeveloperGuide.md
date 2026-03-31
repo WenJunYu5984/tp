@@ -17,7 +17,7 @@ This section describes the design and implementation of the key components of Un
 
 ### Architecture
 
-![MainArchitecture](/docs/pictures/MainArchitecture.png)
+![MainArchitecture](pictures/MainArchitecture.png)
 
 The **Architecture Diagram** given above explains the high-level design of the App
 
@@ -35,7 +35,7 @@ The bulk of the app's work is done by the following components:
 
 **How the architecture components interact with each other:**
 
-![ReorderCommand](/docs/pictures/ReorderTodoSequenceDiagram.png)
+![ReorderCommand](pictures/ReorderTodoSequenceDiagram.png)
 
 1. User enters command in terminal
 2. UniTasker reads the input and passes it to CommandParser
@@ -60,7 +60,7 @@ The `AppContainer` component,
 
 **Storage component**
 
-![StorageClassDiagram](/docs/pictures/StorageClassDiagram.png)
+![StorageClassDiagram](pictures/StorageClassDiagram.png)
 
 The `Storage` consists of the following:
 - `String todoFilePath` - path to the local file storing todo tasks
@@ -75,7 +75,7 @@ The `Storage` component,
 
 **UI component**
 
-![UIClassDiagram](/docs/pictures/UIClassDiagram.png)
+![UIClassDiagram](pictures/UIClassDiagram.png)
 
 The UI package consists of the following classes:
 
@@ -94,7 +94,7 @@ The `UI` package,
 
 **Command component**
 
-![CommandClassDiagram](/docs/pictures/CommandClassDiagram.png)
+![CommandClassDiagram](pictures/CommandClassDiagram.png)
 
 The `Command` component handles the execution of user commands. Each supported command is represented by a separate command class implementing the common `Command` interface.
 
@@ -120,7 +120,7 @@ How the `Command` component works:
 
 The figure below illustrates the relationship between Deadline class and the following classes: Task, Timed, Calendar, DateUtils, DeadlineList, TaskList. 
 
-![Deadline Class Diagram](/docs/pictures/deadlineClassDiagram.png)
+![Deadline Class Diagram](pictures/deadlineClassDiagram.png)
 *<div align="center"> Figure x - Deadline Class Diagram </div>*
 
 
@@ -153,7 +153,7 @@ Example: `Add deadline 1 Homework /by 31-12-2025 1800` or `Add event 1 Homework 
 
 **Note: The command in the diagram has been generalized as a date since DateUtils validates dates only**
 
-![DateUtils Sequence Diagram](/docs/pictures/DateUtilsSequence.png)
+![DateUtils Sequence Diagram](pictures/DateUtilsSequence.png)
 *<div align="center"> Figure x - DateUtils: parse() Sequence Diagram </div>*
 
 **Parsing Flow Summary:**
@@ -179,7 +179,7 @@ TaskValidator ensures that there is a unique occurrence of a given task with no 
 
 Before any task (Todo, Deadline, Event) is added to the system, the AddCommand invokes three sequential validation passes via TaskValidator. These checks ensure that no Task have the same name, workload per day does not exceed set limit and there is no overlap in events. The diagram below shows the full interaction.
 
-![TaskValidator Sequence Diagram](/docs/pictures/TaskValidatorSequence.png)
+![TaskValidator Sequence Diagram](pictures/TaskValidatorSequence.png)
 *<div align="center"> Figure x - Task Validator Sequence Diagram </div>*
 
 **Parsing Flow Summary**

@@ -2,7 +2,7 @@ package seedu.duke.appcontainer;
 
 import seedu.duke.calender.Calendar;
 import seedu.duke.UniTasker;
-import seedu.duke.coursestracker.CourseParser;
+import seedu.duke.command.CourseParser;
 import seedu.duke.storage.Storage;
 import seedu.duke.tasklist.CategoryList;
 

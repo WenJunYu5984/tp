@@ -1,4 +1,8 @@
-package seedu.duke.coursestracker;
+package seedu.duke.ui;
+
+import seedu.duke.course.Assessment;
+import seedu.duke.course.Course;
+import seedu.duke.course.CourseList;
 
 public class CourseUi {
     //Formats the full list of courses for display.

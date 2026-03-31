@@ -12,6 +12,8 @@ participant ":CategoryList" as CL
 participant ":Category" as CAT
 participant ":EventList" as EL
 
+note over User, EL : This sequence diagram covers the happy path only.
+
 User -> AC : add task\n(description, dateTime, catIdx)
 activate AC
 
@@ -35,13 +37,8 @@ TV -> CAT : getEventList().contains(description)
 CAT --> TV : existsAsEvent
 deactivate CAT
 
-alt existsAsTodo OR existsAsDeadline OR existsAsEvent
-    TV --> AC : throw DuplicateTaskException
-    AC --> User : "Duplicate Error: Task already exists\nin this category."
-else no duplicate found
-    TV --> AC : validation passed
-    deactivate TV
-end
+TV --> AC : validation passed
+deactivate TV
 
 '─── Step 2: Workload ──────────────────────────────────────
 AC -> TV : validateWorkload(categories, dateTime, maxTasks)
@@ -65,13 +62,8 @@ loop for each Category in CategoryList
     deactivate CAT
 end
 
-alt totalTimedTasks >= maxTasks
-    TV --> AC : throw HighWorkloadException
-    AC --> User : "High Workload: You already have N\nscheduled tasks on [date]. Take a break!"
-else workload is acceptable
-    TV --> AC : validation passed
-    deactivate TV
-end
+TV --> AC : validation passed
+deactivate TV
 
 '─── Step 3: Overlap (Events only) ────────────────────────
 AC -> TV : validateNoOverlap(existingEvents, start, end)
@@ -84,11 +76,6 @@ loop for each Event in existingEvents
     deactivate EL
 
     TV -> TV : isOverlapping =\nstart.isBefore(existing.getTo())\nAND end.isAfter(existing.getFrom())
-
-    alt isOverlapping == true
-        TV --> AC : throw OverlapEventException
-        AC --> User : "Conflict: Overlaps with '[existing]'\n[from - to]"
-    end
 end
 
 TV --> AC : all validations passed

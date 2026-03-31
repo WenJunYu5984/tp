@@ -1,4 +1,8 @@
-package seedu.duke.coursestracker;
+package seedu.duke.course;
+
+import seedu.duke.exception.CourseException;
+import seedu.duke.storage.CourseStorage;
+import seedu.duke.ui.CourseUi;
 
 public class CourseManager {
     //stores all courses

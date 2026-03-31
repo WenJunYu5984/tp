@@ -1,4 +1,4 @@
-package seedu.duke.coursestracker;
+package seedu.duke.exception;
 
 /**
  * Represents an exception specific to the Course Tracker feature.

@@ -13,8 +13,8 @@ import static seedu.duke.storage.Storage.loadSettings;
 import static seedu.duke.storage.Storage.saveSettings;
 import static seedu.duke.tasklist.CategoryList.refreshCalendar;
 
-import seedu.duke.coursestracker.CourseManager;
-import seedu.duke.coursestracker.CourseParser;
+import seedu.duke.course.CourseManager;
+import seedu.duke.command.CourseParser;
 
 import seedu.duke.ui.ErrorUi;
 import seedu.duke.ui.GeneralUi;
