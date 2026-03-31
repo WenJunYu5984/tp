@@ -1,4 +1,9 @@
-package seedu.duke.coursestracker;
+package seedu.duke.storage;
+
+import seedu.duke.course.Assessment;
+import seedu.duke.course.Course;
+import seedu.duke.course.CourseList;
+import seedu.duke.exception.CourseException;
 
 import java.io.File;
 import java.io.FileWriter;

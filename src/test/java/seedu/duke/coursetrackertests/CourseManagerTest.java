@@ -1,9 +1,9 @@
 package seedu.duke.coursetrackertests;
 
 import org.junit.jupiter.api.Test;
-import seedu.duke.coursestracker.Assessment;
-import seedu.duke.coursestracker.Course;
-import seedu.duke.coursestracker.CourseManager;
+import seedu.duke.course.Assessment;
+import seedu.duke.course.Course;
+import seedu.duke.course.CourseManager;
 
 import java.nio.file.Files;
 import java.nio.file.Path;

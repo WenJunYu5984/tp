@@ -1,7 +1,7 @@
 package seedu.duke.command;
 
 import seedu.duke.appcontainer.AppContainer;
-import seedu.duke.coursestracker.CourseException;
+import seedu.duke.exception.CourseException;
 import seedu.duke.ui.ErrorUi;
 import seedu.duke.ui.LimitUi;
 

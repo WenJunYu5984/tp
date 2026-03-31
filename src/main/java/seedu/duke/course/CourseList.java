@@ -1,4 +1,4 @@
-package seedu.duke.coursestracker;
+package seedu.duke.course;
 
 import java.util.ArrayList;
 

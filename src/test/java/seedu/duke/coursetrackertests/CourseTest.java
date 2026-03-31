@@ -7,8 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.junit.jupiter.api.Test;
 
-import seedu.duke.coursestracker.Assessment;
-import seedu.duke.coursestracker.Course;
+import seedu.duke.course.Assessment;
+import seedu.duke.course.Course;
 
 public class CourseTest {
 

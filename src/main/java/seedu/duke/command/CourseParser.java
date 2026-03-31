@@ -1,4 +1,7 @@
-package seedu.duke.coursestracker;
+package seedu.duke.command;
+
+import seedu.duke.course.CourseManager;
+import seedu.duke.exception.CourseException;
 
 public class CourseParser {
 

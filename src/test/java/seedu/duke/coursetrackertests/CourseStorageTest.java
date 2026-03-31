@@ -10,11 +10,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import seedu.duke.coursestracker.Course;
-import seedu.duke.coursestracker.CourseStorage;
-import seedu.duke.coursestracker.Assessment;
-import seedu.duke.coursestracker.CourseList;
-import seedu.duke.coursestracker.CourseException;
+import seedu.duke.course.Course;
+import seedu.duke.storage.CourseStorage;
+import seedu.duke.course.Assessment;
+import seedu.duke.course.CourseList;
+import seedu.duke.exception.CourseException;
 
 public class CourseStorageTest {
 
