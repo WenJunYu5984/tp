@@ -1,0 +1,92 @@
+@startuml DeleteEvent
+
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 10
+
+title Delete Event (Mapping-Based Deletion)
+
+actor User
+participant ":UniTasker" as UT
+participant ":CommandParser" as CP
+participant ":DeleteCommand" as DC
+participant ":CategoryList" as CL
+participant ":Category" as CAT
+participant ":EventList" as EL
+participant ":GeneralUI" as UI
+participant ":CommandSupport" as CS
+participant ":Storage" as STORE
+
+User -> UT : delete event <categoryIndex> <uiIndex>
+activate UT
+
+UT -> CP : parse(line)
+activate CP
+CP -> DC : new DeleteCommand(sentence)
+CP --> UT : Command
+deactivate CP
+
+UT -> DC : execute()
+activate DC
+DC -> CL : getCurrentView()
+activate CL
+CL --> DC : return view
+alt incorrect view
+    DC -> UT: show error message
+    UT -> User: show error message
+else
+    DC -> CL : getActiveDisplayMap()
+    CL --> DC : Map<Integer, List<EventReference>>
+
+    note right of DC
+    Uses UI index to retrieve EventReference
+    from category-specific list
+    end note
+
+    DC -> DC : ref = categoryMap.get(uiIndex)
+
+    DC -> CL : getEvent(ref.categoryIndex, ref.eventIndex)
+    CL --> DC : Event
+
+    alt Event is recurring AND not expanded view
+        DC -> UI : print error message
+        activate UI
+        UI --> DC : show error message
+        deactivate UI
+        DC --> UT : show error message
+        UT --> User: show error message
+    else
+        DC -> CL : deleteEvent(ref.categoryIndex, ref.eventIndex)
+        CL -> CAT : deleteEvent(eventIndex)
+        activate CAT
+        CAT -> EL : remove(eventIndex)
+        activate EL
+        EL --> CAT
+        deactivate EL
+        CAT --> CL
+        deactivate CAT
+        CL --> DC
+
+        DC -> UI : print success message
+        activate UI
+        UI --> DC
+        deactivate UI
+        DC -> CS : saveData(container)
+        activate CS
+        CS -> STORE : save(categories)
+        activate STORE
+        STORE --> CS
+        deactivate STORE
+        CS --> DC
+        deactivate CS
+        DC -> CL : refreshCalendar(categories, calendar)
+        CL --> DC
+        deactivate CL
+        DC --> UT: show success message
+        deactivate DC
+        UT --> User : show success message
+        deactivate UT
+
+    end
+end
+
+@enduml

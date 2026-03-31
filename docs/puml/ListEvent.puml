@@ -1,0 +1,55 @@
+@startuml DeleteEvent
+
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 10
+
+title List Event (Populating map for deletion (Main List))
+
+actor User
+
+participant ":UniTasker" as UT
+participant ":CommandParser" as CP
+participant ":ListCommand" as LC
+participant ":CategoryList" as CL
+participant ":GeneralUI" as GU
+
+User -> UT : list event
+activate UT
+
+UT -> CP : parse(line)
+activate CP
+CP -> LC : new ListCommand(sentence)
+CP --> UT : Command
+deactivate CP
+
+UT -> LC : execute()
+activate LC
+
+LC -> CL : getAllEvents(showAll,showNormalEventsOnly)
+activate CL
+CL -> CL : build display string
+
+note right of CL
+Iterates through categories and events,
+filters based on view,
+and formats output
+end note
+
+CL -> CL : build activeDisplayMap
+
+note right of CL
+Maps UI index → EventReference
+(categoryIndex, eventIndex)
+end note
+
+CL -> CL : set currentView
+CL --> LC : String of formatted events
+deactivate CL
+LC -> GU : print list
+activate GU
+GU --> LC : show list
+deactivate GU
+LC --> UT : show list
+UT --> User: show list
+deactivate LC
+@enduml
