@@ -80,7 +80,7 @@ end
 TV --> AC : all validations passed
 deactivate TV
 
-AC --> User : task added successfully
+<-- AC : task added successfully
 deactivate AC
 
 @enduml

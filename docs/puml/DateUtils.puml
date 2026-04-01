@@ -67,9 +67,10 @@ DU --> AC : parsedDate (LocalDateTime)
 deactivate DU
 deactivate DU
 deactivate AC
-AC --> User : task scheduled and saved successfully
+AC --> CP: task scheduled and saved successfully
 deactivate AC
 deactivate AC
+<-- CP: wait for next command
 
 deactivate CP
 

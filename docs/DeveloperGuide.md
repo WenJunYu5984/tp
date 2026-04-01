@@ -60,7 +60,7 @@ The `AppContainer` component,
 
 ![StorageClassDiagram](pictures/StorageClassDiagram.png)
 
-The `Storage` consists of the following:
+The `Storage` component consists of the following:
 - `String todoFilePath` - path to the local file storing todo tasks
 - `String deadlineFilePath` - path to the  local file storing deadline tasks
 - `String eventFilePath` - path to the local file storing event tasks
@@ -119,6 +119,22 @@ How the `Command` component works:
 The figure below illustrates the relationship between Deadline class and the following classes: Task, Timed, Calendar, DateUtils, DeadlineList, TaskList. 
 
 ![Deadline Class Diagram](pictures/deadlineClassDiagram.png)
+
+The `Deadline` class consists of the following members:
+- `logger` - private logger instance used for fin-grained diagnostic logging on object creation
+- `by` stores the due date and time (LocalDateTime) by which the task must be completed
+- `Deadline (description, by)` - constructor that initializes the task with a description and deadline, delegating to the parent `Task`
+- `parseDateTime(input)` – static helper that delegates to DateUtils to parse a date/time string into a LocalDateTime 
+- `getBy()` – returns the raw deadline date/time 
+- `getDate()` – satisfies the Timed interface by delegating to getBy(), enabling calendar and sorting integrations 
+- `toFileFormat()` – serialises the task into pipe-delimited storage format (D | done | description | datetime)
+- `toString()` – produces a human-readable representation prefixed with [D]
+
+The `Deadline` class,
+
+- Extends `Task` to inherit description and completion state, adding only the `by` field to keep deadline-specific logic self-contained 
+- Implements the `Timed` interface so that `Calendar` can register and sort `Deadline` objects polymorphically without depending on the concrete type 
+- Delegates all date parsing to `DateUtils`, ensuring consistent validation and formatting rules are applied uniformly across task types
 
 ### Event commands
 Event commands include adding non-recurring events,
