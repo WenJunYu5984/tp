@@ -20,10 +20,10 @@ abstract class "{abstract}\nTask" as Task{
 }
 
 class Deadline {
-    - logger : Logger
+    - logger : Logger {static}
     # by : LocalDateTime
     + Deadline(description : String, by : LocalDateTime)
-    + parseDateTime(input : String) : LocalDateTime
+    + parseDateTime(input : String) : LocalDateTime {static}
     + getBy() : LocalDateTime
     + getDate() : LocalDateTime
     + toFileFormat() : String
@@ -46,15 +46,15 @@ class "TaskList<Deadline>" as TaskListDeadline {
 
 
 class DateUtils {
-    - FULL_FORMATTER : DateTimeFormatter
-    - DATE_ONLY_FORMATTER : DateTimeFormatter
-    - TIME_ONLY_FORMATTER : DateTimeFormatter
-    + parse(input : String, isLoading : boolean) : LocalDateTime
-    + parseDateTime(input : String) : LocalDateTime
-    + parseDateTimeFromFile(input : String) : LocalDateTime
-    + parseLocalDate(input : String) : LocalDate
-    - validateNotPast(parsedDate : LocalDateTime, originalInput : String) : void
-    - validateYearRange(parsedDate : LocalDateTime, originalInput : String) : void
+    - FULL_FORMATTER : DateTimeFormatter {static}
+    - DATE_ONLY_FORMATTER : DateTimeFormatter {static}
+    - TIME_ONLY_FORMATTER : DateTimeFormatter {static}
+    + parse(input : String, isLoading : boolean) : LocalDateTime {static}
+    + parseDateTime(input : String) : LocalDateTime {static}
+    + parseDateTimeFromFile(input : String) : LocalDateTime {static}
+    + parseLocalDate(input : String) : LocalDate {static}
+    - validateNotPast(parsedDate : LocalDateTime, originalInput : String) : void {static}
+    - validateYearRange(parsedDate : LocalDateTime, originalInput : String) : void {static}
 }
 
 class Calendar {
