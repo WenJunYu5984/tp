@@ -37,6 +37,8 @@ public class CommandParser {
             return new ReminderCommand();
         case "exit":
             return new ExitCommand();
+        case "undo":
+            return new UndoCommand();
         default:
             return new UnknownCommand(sentence[0]);
         }

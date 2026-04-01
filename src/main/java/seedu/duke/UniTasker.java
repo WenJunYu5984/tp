@@ -1,5 +1,6 @@
 package seedu.duke;
 
+import java.util.Stack;
 import java.time.LocalDate;
 
 import java.util.Scanner;
@@ -42,6 +43,9 @@ public class UniTasker {
     private static final int DEFAULT_END_YEAR = 2030;
     private static final int DEFAULT_DAILY_TASK_LIMIT = 8;
 
+    //keeps track of commands that can be undone
+    private static final Stack<Command> commandHistory = new Stack<>();
+
     public UniTasker() {
         try {
             storage.load(categories);
@@ -80,6 +84,10 @@ public class UniTasker {
             }
 
             command.execute(container);
+            //only push if command supports undo
+            if (command.isUndoable()) {
+                commandHistory.push(command);
+            }
         }
         in.close();
     }
@@ -120,6 +128,10 @@ public class UniTasker {
         dailyTaskLimit = newLimit;
         LimitUi.printDailyTaskLimitUpdated(dailyTaskLimit);
         saveSettings();
+    }
+
+    public static Stack<Command> getCommandHistory() {
+        return commandHistory;
     }
 
     public static int getDailyTaskLimit() {
