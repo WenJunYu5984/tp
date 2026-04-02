@@ -37,6 +37,15 @@ Command Line Interface (CLI).
   - [Set limit to number of tasks or year: `limit`](#limit-command-limit-)
   - [See reminders for tasks: `reminder`](#reminder-command-reminder)
   - [Exiting the program: `exit`](#exit-program-exit)
+  - [Course commands: `course`](#course-command-course)
+    - [Add course: `course add`](#add-course-course-add)
+    - [Delete course: `course delete`](#delete-course-course-delete)
+    - [List courses: `course list`](#list-courses-course-list)
+    - [View course: `course view`](#view-course-course-view)
+    - [Add assessment: `course add-assessment`](#add-assessment-course-add-assessment)
+    - [Record score: `course score`](#record-score-course-score)
+    - [Delete assessment: `course delete-assessment`](#delete-assessment-course-delete-assessment)
+  - [Undo: `undo`](#undo-command-undo)
 - [FAQ](#faq)
 - [Command Summary](#command-summary)
 
@@ -450,6 +459,111 @@ Format:
 
 ---
 
+### Course Command: `course`
+Manages your course grading structure. Supports adding/deleting courses and assessments,
+recording scores, and viewing weighted grades.
+
+---
+
+#### Add Course: `course add`
+Adds a new course to the tracker.
+
+Format: `course add [COURSE_CODE]`
+
+- `COURSE_CODE`: The course code (e.g. CS2113). Case-insensitive, stored in uppercase.
+
+**Example:**
+
+`course add CS2113`
+
+---
+
+#### Delete Course: `course delete`
+Deletes an existing course from the tracker.
+
+Format: `course delete [COURSE_CODE]`
+
+**Example:**
+
+`course delete CS2113`
+
+---
+
+#### List Courses: `course list`
+Lists all courses currently tracked.
+
+Format: `course list`
+
+---
+
+#### View Course: `course view`
+Displays all assessments and scores for a specific course.
+
+Format: `course view [COURSE_CODE]`
+
+**Example:**
+
+`course view CS2113`
+
+---
+
+#### Add Assessment: `course add-assessment`
+Adds an assessment component to a course.
+
+Format: `course add-assessment [COURSE_CODE] /n [NAME] /w [WEIGHTAGE] /ms [MAX_SCORE]`
+
+- `COURSE_CODE`: The course code
+- `/n`: Assessment name
+- `/w`: Weightage as a percentage (e.g. 40 for 40%). Total weightage across all assessments cannot exceed 100%.
+- `/ms`: Maximum score for the assessment
+
+**Example:**
+
+`course add-assessment CS2113 /n Finals /w 40 /ms 100`
+
+---
+
+#### Record Score: `course score`
+Records your score for an assessment.
+
+Format: `course score [COURSE_CODE] /n [NAME] /s [SCORE]`
+
+- `SCORE`: Must not exceed the maximum score of the assessment
+
+**Example:**
+
+`course score CS2113 /n Finals /s 85`
+
+---
+
+#### Delete Assessment: `course delete-assessment`
+Deletes an assessment from a course.
+
+Format: `course delete-assessment [COURSE_CODE] /n [NAME]`
+
+**Example:**
+
+`course delete-assessment CS2113 /n Finals`
+
+---
+
+### Undo Command: `undo`
+Undoes the most recent course command that modified data.
+
+Format: `undo`
+
+- Only course commands that modify data can be undone (`course add`, `course delete`, `course add-assessment`)
+- Commands that only view data (`course list`, `course view`) are not undoable
+- Undo history is cleared when the app exits
+
+**Example:**
+
+`course add CS2113` followed by `undo` will remove CS2113.
+
+*Note*: *Undo is currently supported for course commands only.*
+
+---
+
 ## FAQ
 
 **Q**: How do I transfer my data to another computer? 
@@ -459,19 +573,20 @@ is located in the other computer.
 
 ## Command Summary
 
-| Action      | Format, Examples                                                                                                             | 
-|-------------|------------------------------------------------------------------------------------------------------------------------------|
-| help        | `help`                                                                                                                       |
-| add         | `add category [DESC]`, `add todo [CATEGORYINDEX] [DESC]`, <br/> `add todo [categoryIndex] [description] /p [priorityValue]`, |
-| delete      | `delete [KEYWORD] [CATEGORYINDEX] [TASKINDEX]`, `delete [KEYWORD] [CATEGORYINDEX] all`                                       |
-| list        | `list [keyword] [CATEGORYINDEX] [TASKINDEX]`                                                                                 |
-| mark/unmark | `mark [TASKTYPE] [CATEGORYINDEX] [TASKINDEX]`, `unmark [TASKTYPE] [CATEGORYINDEX] [TASKINDEX]`                               |
-| reorder     | `reorder category [FROMINDEX] [TOINDEX]`, `reorder todo [CATEGORYINDEX] [FROMINDEX] [TOINDEX]`                               |
-| priority    | `priority todo [CATEGORYINDEX] [TODOINDEX] [PRIORITYVALUE]`                                                                  |
-| sort        | `sort todo [CATEGORYINDEX]`                                                                                                  |
-| find        | `find [SUBSTRING]`                                                                                                           |
-| limit       | `limit [keyword]`                                                                                                            |
-| reminder    | `reminder`                                                                                                                   |
-| course      | `add [keyword]`                                                                                                              |
-| exit        | `exit`                                                                                                                       |
+| Action      | Format, Examples                                                                                                                                                                                                                                                                             | 
+|-------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| help        | `help`                                                                                                                                                                                                                                                                                       |
+| add         | `add category [DESC]`, `add todo [CATEGORYINDEX] [DESC]`, <br/> `add todo [categoryIndex] [description] /p [priorityValue]`,                                                                                                                                                                 |
+| delete      | `delete [KEYWORD] [CATEGORYINDEX] [TASKINDEX]`, `delete [KEYWORD] [CATEGORYINDEX] all`                                                                                                                                                                                                       |
+| list        | `list [keyword] [CATEGORYINDEX] [TASKINDEX]`                                                                                                                                                                                                                                                 |
+| mark/unmark | `mark [TASKTYPE] [CATEGORYINDEX] [TASKINDEX]`, `unmark [TASKTYPE] [CATEGORYINDEX] [TASKINDEX]`                                                                                                                                                                                               |
+| reorder     | `reorder category [FROMINDEX] [TOINDEX]`, `reorder todo [CATEGORYINDEX] [FROMINDEX] [TOINDEX]`                                                                                                                                                                                               |
+| priority    | `priority todo [CATEGORYINDEX] [TODOINDEX] [PRIORITYVALUE]`                                                                                                                                                                                                                                  |
+| sort        | `sort todo [CATEGORYINDEX]`                                                                                                                                                                                                                                                                  |
+| find        | `find [SUBSTRING]`                                                                                                                                                                                                                                                                           |
+| limit       | `limit [keyword]`                                                                                                                                                                                                                                                                            |
+| reminder    | `reminder`                                                                                                                                                                                                                                                                                   |
+| course      | `course add [COURSE_CODE]`, `course delete [COURSE_CODE]`, `course list`, `course view [COURSE_CODE]`, `course add-assessment [COURSE_CODE] /n [NAME] /w [WEIGHTAGE] /ms [MAX_SCORE]`, `course score [COURSE_CODE] /n [NAME] /s [SCORE]`, `course delete-assessment [COURSE_CODE] /n [NAME]` |                                                                                                           |
+| undo        | `undo`                                                                                                                                                                                                                                                                                       |
+| exit        | `exit`                                                                                                                                                                                                                                                                                       |
 
