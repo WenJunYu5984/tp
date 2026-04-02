@@ -303,7 +303,7 @@ Note:
 - Java assertions are used throughout the codebase to validate preconditions and invariants, such as ensuring task descriptions and category names are non-empty.
 - The CategoryList acts as a central task management hub, interfacing with multiple specialized task lists (TodoList, DeadlineList, EventList) to maintain separation of concerns.
 
-### Feature: Task Validation ###
+### Helper functions: Task Validation ###
 
 There are two main types of validations for task. 
 
