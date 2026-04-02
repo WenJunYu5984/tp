@@ -1,6 +1,8 @@
 # Duke
 
-{Give product intro here}
+UniTasker manages tasks and courses for university students, 
+allowing them to organise todos, deadlines, and events 
+while keeping track of their academic courses in one place.
 
 Useful links:
 * [User Guide](UserGuide.md)

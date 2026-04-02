@@ -7,7 +7,6 @@ This project was built from scratch by the UniTasker team. The following third-p
 - JUnit 5
 - PlantUML
 - SE-EDU AddressBook-Level3
-{Describe the design and implementation of the product. Use UML diagrams and short code snippets where applicable.}
 
 ## Design
 
