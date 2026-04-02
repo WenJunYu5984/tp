@@ -342,9 +342,8 @@ Examples:
 ---
 
 #### List Event: `list event`
-Format: list [KEYWORD] [TYPE]
+Format: `list event [TYPE]`
 
-- KEYWORD: `event`
 - TYPE: `/normal`, `/all`
 
 `list event /normal` shows non-recurring events
@@ -363,9 +362,7 @@ Examples:
 #### List Recurring: `list recurring`
 List recurring shows groups of recurring events.
 
-Format : list [KEYWORD]
-
-- KEYWORD: `recurring`
+Format : `list recurring`
 
 Examples:
 
@@ -376,9 +373,8 @@ Examples:
 #### List Occurrence: `list occurrence`
 List occurrence shows all events within a recurring group.
 
-Format: list [KEYWORD] [CATEGORYINDEX] [UIINDEX]
+Format: `list occurence [CATEGORYINDEX] [UIINDEX]`
 
-- KEYWORD: `occurrence`
 - CATEGORYINDEX: Integer value up to number of categories added
 - UIINDEX: Positive integer displayed in `list event` or `list event /all`
 
@@ -612,7 +608,7 @@ is located in the other computer.
 | help        | `help`                                                                                                                                                                                                                                                                                                                                                              |
 | add         | `add category [DESC]`, `add todo [CATEGORYINDEX] [DESC]`, <br/> `add todo [CATEGORYINDEX] [DESCRIPTION] /p [PRIORITYVALUE]`, `add deadline [CATEGORYINDEX] [DESCRIPTION] /by [DATE TIME]`, <br/> `add event [CATEGORYINDEX] [DESCRIPTION] /from [START] /to [END]`, <br/> `add recurring [CATEGORYINDEX] weekly event [DESCRIPTION] /from [DAY TIME /to [DAY TIME]` |
 | delete      | `delete [KEYWORD] [CATEGORYINDEX] [TASKINDEX]`, `delete [KEYWORD] [CATEGORYINDEX] all`                                                                                                                                                                                                                                                                              |
-| list        | `list [keyword] [CATEGORYINDEX] [TASKINDEX]`                                                                                                                                                                                                                                                                                                                        |
+| list        | `list category [CATEGORYINDEX]`, `list todo`, `list deadline`, `list limit`, `list range [START] [END] [FLAG]`, <br/> `list event [TYPE]`, `list recurring`, `list occurence [CATEGORYINDEX] [UIINDEX]`                                                                                                                                                                                                       |
 | mark/unmark | `mark [TASKTYPE] [CATEGORYINDEX] [TASKINDEX]`, `unmark [TASKTYPE] [CATEGORYINDEX] [TASKINDEX]`                                                                                                                                                                                                                                                                      |
 | reorder     | `reorder category [FROMINDEX] [TOINDEX]`, `reorder todo [CATEGORYINDEX] [FROMINDEX] [TOINDEX]`                                                                                                                                                                                                                                                                      |
 | priority    | `priority todo [CATEGORYINDEX] [TODOINDEX] [PRIORITYVALUE]`                                                                                                                                                                                                                                                                                                         |
