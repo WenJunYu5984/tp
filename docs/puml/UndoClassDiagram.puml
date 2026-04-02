@@ -1,0 +1,46 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam CircledCharacterFontSize 0
+skinparam CircledCharacterRadius 0
+skinparam class {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor Black
+}
+
+package "command" {
+
+interface Command <<interface>> {
+    + execute(container: AppContainer)
+    + undo(container: AppContainer)
+    + isUndoable(): boolean
+}
+
+class "UndoCommand" as UndoCommand {
+    + execute(container: AppContainer)
+}
+
+class "CourseCommand" as CourseCommand {
+    - line: String
+    - undoAction: String
+    - undoArgument: String
+    + execute(container: AppContainer)
+    + undo(container: AppContainer)
+    + isUndoable(): boolean
+}
+
+}
+
+class "UniTasker" as UniTasker {
+    - commandHistory: Stack<Command>
+    + getCommandHistory(): Stack<Command>
+}
+
+class "AppContainer" as AppContainer
+
+Command <|.. UndoCommand
+Command <|.. CourseCommand
+UndoCommand ..> UniTasker : getCommandHistory()
+Command .right.> AppContainer : execute(container)
+
+@enduml

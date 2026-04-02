@@ -1,0 +1,59 @@
+@startuml
+
+actor User
+
+participant ":UniTasker" as UniTasker
+participant ":CommandParser" as CommandParser
+participant ":UndoCommand" as UndoCommand
+participant ":CourseCommand" as CourseCommand
+participant ":CourseParser" as CourseParser
+participant ":CourseManager" as CourseManager
+
+User -> UniTasker : "undo"
+activate UniTasker
+
+UniTasker -> CommandParser : parse(line)
+activate CommandParser
+CommandParser --> UniTasker : UndoCommand
+deactivate CommandParser
+
+UniTasker -> UndoCommand : execute(container)
+activate UndoCommand
+
+UndoCommand -> UniTasker : getCommandHistory()
+UniTasker --> UndoCommand : commandHistory
+
+UndoCommand -> UndoCommand : commandHistory.pop()
+
+UndoCommand -> CourseCommand : undo(container)
+activate CourseCommand
+
+CourseCommand -> CourseParser : parse(reverseCommand)
+activate CourseParser
+
+note right of CourseParser
+    Reverse operation depends on
+    original command:
+    - "add" -> "delete"
+    - "delete" -> "add"
+    - "add-assessment" -> "delete-assessment"
+end note
+
+CourseParser -> CourseManager : execute reverse operation(...)
+activate CourseManager
+CourseManager --> CourseParser :
+deactivate CourseManager
+
+CourseParser --> CourseCommand :
+deactivate CourseParser
+
+CourseCommand --> UndoCommand :
+deactivate CourseCommand
+
+UndoCommand --> UniTasker :
+deactivate UndoCommand
+
+UniTasker --> User :
+deactivate UniTasker
+
+@enduml
