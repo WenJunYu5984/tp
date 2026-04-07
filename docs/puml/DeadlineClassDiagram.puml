@@ -4,6 +4,9 @@ left to right direction
 skinparam classAttributeIconSize 0
 skinparam CircledCharacterFontSize 0
 skinparam CircledCharacterRadius 0
+skinparam DefaultFontSize 30
+skinparam ArrowFontSize 30
+
 skinparam class {
     BackgroundColor White
     BorderColor Black

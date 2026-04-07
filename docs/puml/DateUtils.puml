@@ -18,7 +18,7 @@ note over CP, LDT : This sequence diagram covers the happy path only.
 activate CP
 
 CP -> CP : parse(line)
-activate CP #lightgray
+activate CP #gray
 CP -> AC : new AddCommand(sentence)
 deactivate CP
 
@@ -31,10 +31,10 @@ activate AC #lightblue
 note over AC : generalised — represents both in code
 
 AC -> DU : parseDateTime(input)
-activate DU #gray
+activate DU #white
 
 DU -> DU : parse(input, isLoading=false)
-activate DU #white
+activate DU #grey
 
 alt input matches FULL_FORMATTER
     DU -> LDT : LocalDateTime.parse(trimmedInput, FULL_FORMATTER)
@@ -61,7 +61,7 @@ else isLoading == true
 end
 
 DU -> DU : validateYearRange(parsedDate, trimmedInput)
-activate DU #lightyellow
+activate DU #lightblue
 note over DU : startYear = LocalDate.now().getYear()\nendYear = UniTasker.getEndYear()
 deactivate DU
 
