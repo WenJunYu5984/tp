@@ -1,0 +1,38 @@
+@startuml
+
+skinparam classAttributeIconSize 0
+skinparam CircledCharacterFontSize 0
+skinparam CircledCharacterRadius 0
+skinparam class {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor Black
+}
+
+class AppContainer {
+    - categories : CategoryList
+    - calendar : Calendar
+    - storage : Storage
+    - courseParser : CourseParser
+    --
+    + getDailyTaskLimit() : int
+    + setDailyTaskLimit(dailyTaskLimit : int)
+    + getStartYear() : int
+    + getEndYear() : int
+    + setEndYear(endYear : int)
+}
+
+class CategoryList
+class Calendar
+class Storage
+class CourseParser
+class UniTasker
+
+AppContainer *-- CategoryList
+AppContainer *-- Calendar
+AppContainer *-- Storage
+AppContainer *-- CourseParser
+
+AppContainer ..> UniTasker : access settings
+
+@enduml

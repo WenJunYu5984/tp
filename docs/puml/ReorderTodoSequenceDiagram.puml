@@ -1,42 +1,63 @@
 @startuml
 
+
 actor User
 
 participant ":UniTasker" as UniTasker
-participant ":Command" as Command
-participant ":UI" as UI
-participant ":Storage" as Storage
-participant ":AppContainer" as AppContainer
+
+box command
+participant ":CommandParser" as CommandParser
 
 User -> UniTasker : "reorder todo 1 1 2"
 activate UniTasker
 
-UniTasker -> Command : parse(line)
-activate Command
+UniTasker -> CommandParser : parse(line)
+activate CommandParser
 
-Command -> Command : execute(line)
+create "command:ReorderCommand" as command
+CommandParser -> command : create
+activate command
+command --> CommandParser
+deactivate command
 
-Command -> AppContainer : getCategories()
+end box
+
+CommandParser --> UniTasker :
+deactivate CommandParser
+
+UniTasker -> command : execute(container)
+activate command
+
+command -> AppContainer : reorderTodo(...)
 activate AppContainer
-Command -> AppContainer : reorderTodo(0, 0, 1)
-AppContainer --> Command :
+AppContainer --> command :
 deactivate AppContainer
 
-Command -> Command : saveData()
-Command -> Storage : save(categories)
+command -> command : saveData()
+activate command
+command -> Storage : save(categories)
 activate Storage
-Storage --> Command :
+Storage --> command :
 deactivate Storage
+deactivate command
 
-Command -> UI : printReordered(...)
+command -> UI : printReordered(...)
 activate UI
-UI --> Command
+UI --> command
 deactivate UI
 
-Command --> UniTasker :
-deactivate Command
+command --> UniTasker :
+deactivate command
+destroy command
 
 UniTasker --> User :
 deactivate UniTasker
+
+participant ":UI" as UI
+
+note over UI
+UI represents any class within the UI package
+(e.g. TaskUi, ErrorUi)
+end note
 
 @enduml
