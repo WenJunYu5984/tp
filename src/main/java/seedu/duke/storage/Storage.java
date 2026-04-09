@@ -35,6 +35,7 @@ public class Storage {
 
     private static final String SETTINGS_FILE = "settings.txt";
     private static final Logger logger = Logger.getLogger(Storage.class.getName());
+    private static final String WRITE_DELIMITER = " | ";
 
     private String todoFilePath;
     private String deadlineFilePath;
@@ -56,6 +57,9 @@ public class Storage {
     public void save(CategoryList categoryList) throws IOException {
         assert categoryList != null : "CategoryList should not be null when saving";
         logger.info("Starting save process...");
+        ensureParentDirExists(todoFilePath);
+        ensureParentDirExists(deadlineFilePath);
+        ensureParentDirExists(eventFilePath);
         try (FileWriter todoWriter = new FileWriter(todoFilePath);
              FileWriter deadlineWriter = new FileWriter(deadlineFilePath);
              FileWriter eventWriter = new FileWriter(eventFilePath)) {
@@ -63,21 +67,44 @@ public class Storage {
             for (int i = 0; i < categoryList.getAmount(); i++) {
                 Category cat = categoryList.getCategory(i);
 
-                todoWriter.write(cat.getName() + " | "
+                if (cat == null) {
+                    logger.severe("Null category at index " + i + ", skipping.");
+                    continue;
+                }
+
+                todoWriter.write(cat.getName() + WRITE_DELIMITER
                         + "C" + System.lineSeparator());
 
                 for (int j = 0; j < cat.getTodoList().getSize(); j++) {
-                    todoWriter.write(cat.getName() + " | "
+                    String formatted = cat.getTodoList().get(j).toFileFormat();
+                    if (formatted == null) {
+                        logger.severe("Todo at index " + j + " in category '"
+                                + cat.getName() + "' returned null toFileFormat(), skipping.");
+                        continue;
+                    }
+                    todoWriter.write(cat.getName() + WRITE_DELIMITER
                             + cat.getTodoList().get(j).toFileFormat() + System.lineSeparator());
                 }
 
                 for (int j = 0; j < cat.getDeadlineList().getSize(); j++) {
-                    deadlineWriter.write(cat.getName() + " | "
+                    String formatted = cat.getDeadlineList().get(j).toFileFormat();
+                    if (formatted == null) {
+                        logger.severe("Deadline at index " + j + " in category '"
+                                + cat.getName() + "' returned null toFileFormat(), skipping.");
+                        continue;
+                    }
+                    deadlineWriter.write(cat.getName() + WRITE_DELIMITER
                             + cat.getDeadlineList().get(j).toFileFormat() + System.lineSeparator());
                 }
 
                 for (int j = 0; j < cat.getEventList().getSize(); j++) {
-                    eventWriter.write(cat.getName() + " | "
+                    String formatted = cat.getEventList().get(j).toFileFormat();
+                    if (formatted == null) {
+                        logger.severe("Event at index " + j + " in category '"
+                                + cat.getName() + "' returned null toFileFormat(), skipping.");
+                        continue;
+                    }
+                    eventWriter.write(cat.getName() + WRITE_DELIMITER
                             + cat.getEventList().get(j).toFileFormat() + System.lineSeparator());
                 }
             }
@@ -119,36 +146,57 @@ public class Storage {
 
     private void loadTodos(CategoryList categoryList, File todoFile) {
         try (java.util.Scanner s = new java.util.Scanner(todoFile)) {
+            int lineNumber = 0;
             while (s.hasNextLine()) {
-                String[] parts = s.nextLine().split(" \\| ");
+                lineNumber++;
+                String line = s.nextLine();
+                if (line.isBlank() || line.startsWith("#")) {
+                    continue;
+                }
 
-                if (parts.length == 2 && parts[1].equals("C")) {
+                //split on bare "|" then trim every field; tolerates missing/extra spaces.
+                String[] parts = splitAndTrim(line);
+
+                // Strip BOM from the first field (present when file saved on Windows with Notepad).
+                parts[0] = stripBom(parts[0]);
+
+                if (parts.length == 2 && parts[1].equalsIgnoreCase("C")) {
                     categoryList.addCategory(parts[0].trim());
                     continue;
                 }
 
                 if (parts.length < 5) {
+                    logger.warning("Skipping malformed line " + lineNumber + " in todos.txt: " + line);
                     continue;
                 }
 
                 String catName = parts[0];
-                boolean isDone = parts[2].equals("1");
+                boolean isDone = parts[2].equals("1") || parts[2].equalsIgnoreCase("true");
                 String priority = parts[3];
                 String desc = parts[4];
 
                 ensureCategoryExists(categoryList, catName);
                 int catIdx = getCategoryIndex(categoryList, catName);
+                if (catIdx == -1) {
+                    logger.severe("Could not find or create category '" + catName + "', skipping todo.");
+                    continue;
+                }
                 categoryList.addTodo(catIdx, desc);
                 if (isDone) {
                     categoryList.markTodo(catIdx,
                             categoryList.getCategory(catIdx).getTodoList().getSize() - 1);
                 }
-                categoryList.setTodoPriority(catIdx,
-                        categoryList.getCategory(catIdx).getTodoList().getSize() - 1,
-                        Integer.parseInt(priority));
+                try {
+                    categoryList.setTodoPriority(catIdx,
+                            categoryList.getCategory(catIdx).getTodoList().getSize() - 1,
+                            Integer.parseInt(priority));
+                } catch (NumberFormatException e) {
+                    logger.severe("Invalid priority value '" + priority + "' for todo '"
+                            + desc + "', skipping priority assignment.");
+                }
             }
         } catch (java.io.FileNotFoundException e) {
-            logger.warning("Todo file not found during load.");
+            logger.severe("Todo file not found during load.");
         } catch (UniTaskerException e) {
             ErrorUi.printError("Load error", e.getMessage());
         }
@@ -161,7 +209,12 @@ public class Storage {
             while (s.hasNextLine()) {
                 lineCount++;
                 String line = s.nextLine();
-                String[] parts = line.split(" \\| ");
+
+                if (line.isBlank() || line.startsWith("#")) {
+                    continue;
+                }
+                String[] parts = splitAndTrim(line);
+                parts[0] = stripBom(parts[0]);
 
                 if (parts.length < 5) {
                     logger.log(Level.SEVERE, "Skipping malformed line " + lineCount + " in deadlines.txt");
@@ -169,7 +222,7 @@ public class Storage {
                 }
 
                 String catName = parts[0].trim();
-                boolean isDone = parts[2].trim().equals("1");
+                boolean isDone = parts[2].trim().equals("1") || parts[2].equalsIgnoreCase("true");
                 String desc = parts[3].trim();
                 String dateString = parts[4].trim();
 
@@ -178,12 +231,20 @@ public class Storage {
                 try {
                     by = DateUtils.parseDateTimeFromFile(dateString);
                 } catch (IllegalDateException e) {
-                    logger.severe("Skipping line " + lineCount + " - Reason:" + e.getMessage());
+                    String msg = "Deadline on line " + lineCount + " skipped — bad date format: '"
+                            + dateString + "'. Expected dd-MM-yyyy HHmm.";
+                    logger.severe(msg);
+                    ErrorUi.printError("Warning", msg);
                     continue;
                 }
 
                 ensureCategoryExists(categoryList, catName);
                 int catIdx = getCategoryIndex(categoryList, catName);
+                if (catIdx == -1) {
+                    logger.severe("Could not find or create category '" + catName
+                            + "', skipping deadline on line " + lineCount + ".");
+                    continue;
+                }
                 assert catIdx >= 0 : "Category index should be valid for " + catName;
 
                 categoryList.addDeadline(catIdx, desc, by);
@@ -206,7 +267,14 @@ public class Storage {
         try (java.util.Scanner s = new java.util.Scanner(eventFile)) {
             while (s.hasNextLine()) {
                 lineNumber++;
-                String[] parts = s.nextLine().split(" \\| ");
+                String line = s.nextLine();
+
+                if (line.isBlank() || line.startsWith("#")) {
+                    continue;
+                }
+
+                String[] parts = splitAndTrim(line);
+                parts[0] = stripBom(parts[0]);
 
                 if (parts.length < 6) {
                     logger.log(Level.SEVERE, "Skipping malformed line " + lineNumber + " in events.txt");
@@ -215,7 +283,7 @@ public class Storage {
 
                 // Format: Category | E | Status | Description | Date (from) | Date (to) [| recurringId]
                 String catName = parts[0];
-                boolean isDone = parts[2].equals("1");
+                boolean isDone = parts[2].equals("1") || parts[2].equalsIgnoreCase("true");
                 String desc = parts[3];
                 String stringFrom = parts[4];
                 String stringTo = parts[5];
@@ -227,14 +295,23 @@ public class Storage {
                     from = LocalDateTime.parse(stringFrom, storageFormatter);
                     to = LocalDateTime.parse(stringTo, storageFormatter);
                 } catch (DateTimeParseException e) {
-                    logger.severe("Could not parse date time in events.txt from line: "
-                            + lineNumber + " " + e.getMessage());
+                    String msg = "Event on line " + lineNumber + " skipped — bad date format. "
+                            + "Expected dd-MM-yyyy HHmm. Got: from='" + stringFrom
+                            + "' to='" + stringTo + "'.";
+                    logger.severe(msg + " " + e.getMessage());
+                    ErrorUi.printError("Warning", msg);
+
                     continue;
                 }
 
                 ensureCategoryExists(categoryList, catName);
                 int catIdx = getCategoryIndex(categoryList, catName);
-                if (!recurringId.isEmpty() && parts[1].equals("RE")) {
+                if (catIdx == -1) {
+                    logger.severe("Could not find or create category '" + catName
+                            + "', skipping event on line " + lineNumber + ".");
+                    continue;
+                }
+                if (!recurringId.isEmpty() && parts[1].equalsIgnoreCase("RE")) {
                     try {
                         int recurringGroupId = Integer.parseInt(recurringId);
                         categoryList.addRecurringWeeklyEventFile(catIdx, desc, from, to, recurringGroupId);
@@ -273,22 +350,69 @@ public class Storage {
         }
         try (Scanner sc = new Scanner(file)) {
             while (sc.hasNextLine()) {
-                String[] parts = sc.nextLine().split("=");
-                if (parts.length == 2) {
-                    switch (parts[0]) {
-                    case "endYear":
-                        setEndYear(Integer.parseInt(parts[1]));
-                        break;
-                    case "dailyTaskLimit":
-                        setDailyTaskLimit(Integer.parseInt(parts[1]));
-                        break;
-                    default:
-                        logger.severe("Unknown setting key: " + parts[0]);
-                    }
+                String line = sc.nextLine().trim();
+
+                if (line.isEmpty() || line.startsWith("#")) {
+                    continue;
                 }
+
+                String[] parts = line.split("=", 2);
+
+                if (parts.length != 2 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty()) {
+                    logger.severe("Skipping malformed settings line: '" + line + "'");
+                    continue;
+                }
+
+                String key = parts[0].trim();
+                String value = parts[1].trim();
+
+                switch (key) {
+                case "endYear":
+                    try {
+                        setEndYear(Integer.parseInt(value));
+                    } catch (NumberFormatException e) {
+                        logger.severe("Invalid value for endYear: '" + value + "', keeping default.");
+                    }
+                    break;
+                case "dailyTaskLimit":
+                    try {
+                        setDailyTaskLimit(Integer.parseInt(value));
+                    } catch (NumberFormatException e) {
+                        logger.severe("Invalid value for dailyTaskLimit: '" + value + "', keeping default.");
+                    }
+                    break;
+                default:
+                    logger.severe("Unknown setting key: " + key);
+                }
+
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             ErrorUi.printError("Failed to load settings: " + e.getMessage());
+        }
+    }
+
+    private static String[] splitAndTrim(String line) {
+        String[] parts = line.split("\\|");
+        for (int i = 0; i < parts.length; i++) {
+            parts[i] = parts[i].trim();
+        }
+        return parts;
+    }
+
+    private static String stripBom(String s) {
+        if (s != null && s.startsWith("\uFEFF")) {
+            return s.substring(1);
+        }
+        return s;
+    }
+
+    private static void ensureParentDirExists(String filePath) {
+        File parent = new File(filePath).getParentFile();
+        if (parent != null && !parent.exists()) {
+            boolean created = parent.mkdirs();
+            if (!created) {
+                logger.severe("Could not create parent directory for: " + filePath);
+            }
         }
     }
 
@@ -303,7 +427,7 @@ public class Storage {
         try (java.io.PrintWriter writer = new java.io.PrintWriter(new java.io.FileWriter(SETTINGS_FILE))) {
             writer.println("endYear=" + getEndYear());
             writer.println("dailyTaskLimit=" + getDailyTaskLimit());
-        } catch (Exception e) {
+        } catch (IOException e) {
             ErrorUi.printError("Failed to save settings: " + e.getMessage());
         }
     }
@@ -315,8 +439,9 @@ public class Storage {
     }
 
     private boolean categoryExists(CategoryList list, String name) {
+        String trimmed = name.trim();
         for (int i = 0; i < list.getAmount(); i++) {
-            if (list.getCategory(i).getName().equals(name)) {
+            if (list.getCategory(i).getName().trim().equals(trimmed)) {
                 return true;
             }
         }
@@ -324,8 +449,9 @@ public class Storage {
     }
 
     private int getCategoryIndex(CategoryList list, String name) {
+        String trimmed = name.trim();
         for (int i = 0; i < list.getAmount(); i++) {
-            if (list.getCategory(i).getName().equals(name)) {
+            if (list.getCategory(i).getName().trim().equals(trimmed)) {
                 return i;
             }
         }
