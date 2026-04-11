@@ -11,6 +11,8 @@ import seedu.duke.ui.TaskUi;
 import seedu.duke.ui.GeneralUi;
 
 import seedu.duke.tasklist.EventReference;
+
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -36,6 +38,8 @@ public class DeleteCommand implements Command {
             ErrorUi.printMissingArgs("Use: delete [type] [index]");
             return;
         }
+
+        LocalDate relevantDate = null;
 
         try {
             String secondCommand = sentence[INDEX_OF_DELETE_TYPE];
@@ -75,6 +79,8 @@ public class DeleteCommand implements Command {
                     DeadlineUi.printItemDeleted("deadline", null, categoryIndex);
                 } else {
                     int deadlineIndex = Integer.parseInt(sentence[INDEX_OF_TASK_TO_DELETE]) - 1;
+                    relevantDate = container.categories().getCategory(categoryIndex)
+                            .getDeadline(deadlineIndex).getBy().toLocalDate();
                     container.categories().deleteDeadline(categoryIndex, deadlineIndex);
                     DeadlineUi.printItemDeleted("deadline", deadlineIndex, categoryIndex);
                 }
@@ -103,6 +109,7 @@ public class DeleteCommand implements Command {
                                 + "use 'list event /all' or 'list occurrence " +
                                 (categoryIndex + 1) + " " + (uiIndex + 1) + "' first");
                     } else {
+                        relevantDate = eventToDelete.getFrom().toLocalDate();
                         container.categories().deleteEvent(ref.categoryIndex, ref.eventIndex);
                         EventUi.printNormalEventDeleted(eventToDelete);
                     }
@@ -138,6 +145,7 @@ public class DeleteCommand implements Command {
                 }
                 EventReference target = categoryMapOccurrence.get(uiIdx);
                 Event eventToDel = container.categories().getEvent(target.categoryIndex, target.eventIndex);
+                relevantDate = eventToDel.getFrom().toLocalDate();
                 container.categories().deleteEvent(target.categoryIndex, target.eventIndex);
                 EventUi.printRecurringEventDeleted(eventToDel);
                 container.categories().setCurrentView("NO_VIEW");
@@ -150,7 +158,7 @@ public class DeleteCommand implements Command {
                 break;
             }
 
-            CommandSupport.saveData(container);
+            CommandSupport.saveData(container, relevantDate);
             refreshCalendar(container.categories(), container.calendar());
         } catch (ArrayIndexOutOfBoundsException e) {
             ErrorUi.printMissingArgs("Example: delete todo 1 1");
