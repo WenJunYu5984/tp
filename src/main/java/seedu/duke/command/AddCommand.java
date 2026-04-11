@@ -60,6 +60,7 @@ public class AddCommand implements Command {
             return;
         }
 
+        LocalDate relevantDate = null;
         String secondCommand = sentence[INDEX_OF_ADD_TYPE];
         switch (secondCommand) {
         case "category":
@@ -69,20 +70,19 @@ public class AddCommand implements Command {
             handleAddTodo(container);
             break;
         case "deadline":
-            handleAddDeadline(container);
+            relevantDate = handleAddDeadline(container);
             break;
         case "event":
-            handleAddEvent(container);
+            relevantDate = handleAddEvent(container);
             break;
         case "recurring":
-            handleAddRecurring(container);
+            relevantDate = handleAddRecurring(container);
             break;
         default:
             ErrorUi.printUnknownCommand("add", "category, todo, deadline or event");
             break;
         }
-
-        CommandSupport.saveData(container);
+        CommandSupport.saveData(container, relevantDate);
     }
 
     //@@author marken9
@@ -187,14 +187,14 @@ public class AddCommand implements Command {
     }
 
     //@@author WenJunYu5984
-    private void handleAddDeadline(AppContainer container) {
+    private LocalDate handleAddDeadline(AppContainer container) {
         try {
             int deadlineCatIdx = CommandSupport.getCategoryIndex(container, sentence);
             String raw = String.join(" ", Arrays.copyOfRange(sentence, INDEX_OF_TASK_INFO, sentence.length));
 
             if (!raw.contains(" /by ")) {
                 ErrorUi.printMissingByKeyword();
-                return;
+                 return null;
             }
 
             String[] parts = raw.split(" /by ");
@@ -217,15 +217,19 @@ public class AddCommand implements Command {
                         container.categories().getCategory(deadlineCatIdx).getDeadlineList().getSize()
                 );
             }
+            return by.toLocalDate();
+
         } catch (IllegalDateException | DuplicateTaskException | DuplicateCategoryException | HighWorkloadException e) {
             ErrorUi.printError(e.getMessage());
+            return null;
         } catch (Exception e) {
             ErrorUi.printError("System Error", e.getMessage());
+            return null;
         }
     }
 
     //@@author sushmiithaa
-    private void handleAddEvent(AppContainer container) {
+    private LocalDate handleAddEvent(AppContainer container) {
         try {
             if (sentence.length < ADD_EVENT_MIN_LENGTH) {
                 throw new UniTaskerException("Missing or invalid info. "
@@ -276,14 +280,17 @@ public class AddCommand implements Command {
                     container.categories().getCategory(eventCategoryIndex).getName(),
                     container.categories().getCategory(eventCategoryIndex).getEventList().getSize()
             );
+            return from.toLocalDate();
         } catch (DateTimeParseException | ArrayIndexOutOfBoundsException e) {
             ErrorUi.printAddEventFormatError();
+            return null;
         } catch (Exception e) {
             ErrorUi.printError(e.getMessage());
+            return null;
         }
     }
     //@@author sushmiithaa
-    private void handleAddRecurring(AppContainer container) {
+    private LocalDate handleAddRecurring(AppContainer container) {
         try {
             int eventCategoryIndex = CommandSupport.getCategoryIndex(container, sentence);
             boolean isMissingInvalidInfo = sentence.length < ADD_RECURRING_EVENT_MIN_LENGTH
@@ -379,14 +386,19 @@ public class AddCommand implements Command {
                     container.calendar(), (months == 0 ? endDate : null), months);
 
             EventUi.printRecurringEventAdded(container.categories().getLatestEvent(eventCategoryIndex));
+            return from.toLocalDate();
         } catch (IllegalDateException e) {
             ErrorUi.printError(e.getMessage());
+            return null;
         } catch (UniTaskerException e) {
             ErrorUi.printError(e.getMessage());
+            return null;
         } catch (HighWorkloadException | DuplicateTaskException e) {
             ErrorUi.printError(e.getMessage());
+            return null;
         } catch (Exception e) {
             ErrorUi.printAddRecurringEventFormatError();
+            return null;
         }
     }
 
