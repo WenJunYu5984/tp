@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 import java.time.temporal.TemporalAdjusters;
 import java.util.logging.Logger;
 
@@ -23,8 +24,19 @@ import java.util.logging.Logger;
  */
 public class DateUtils {
     private static final Logger logger = Logger.getLogger(DateUtils.class.getName());
-    private static final DateTimeFormatter FULL_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy HHmm");
-    private static final DateTimeFormatter DATE_ONLY_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    private static final DateTimeFormatter FULL_FORMATTER = DateTimeFormatter
+            .ofPattern("dd-MM-uuuu HHmm")
+            .withResolverStyle(ResolverStyle.STRICT);
+    private static final DateTimeFormatter DATE_ONLY_FORMATTER = DateTimeFormatter
+            .ofPattern("dd-MM-uuuu")
+            .withResolverStyle(ResolverStyle.STRICT);
+    private static final DateTimeFormatter FULL_FORMATTER_LENIENT = DateTimeFormatter
+            .ofPattern("dd-MM-uuuu HHmm")
+            .withResolverStyle(ResolverStyle.LENIENT);
+
+    private static final DateTimeFormatter DATE_ONLY_FORMATTER_LENIENT = DateTimeFormatter
+            .ofPattern("dd-MM-uuuu")
+            .withResolverStyle(ResolverStyle.LENIENT);
     private static final DateTimeFormatter TIME_ONLY_FORMATTER = DateTimeFormatter.ofPattern("HHmm");
 
     /**
@@ -60,17 +72,35 @@ public class DateUtils {
                 LocalDate date = LocalDate.parse(trimmedInput, DATE_ONLY_FORMATTER);
                 parsedDate = date.atTime(23, 59);
             } catch (DateTimeParseException e2) {
+                if (isValidFormat(trimmedInput)) {
+                    throw new IllegalDateException("Invalid date! That date does not exist (e.g. Nov has 30 days, " +
+                            "check leap years for Feb 29).");
+                }
                 throw new IllegalDateException("Invalid format! Use dd-MM-yyyy HHmm or dd-MM-yyyy");
             }
         }
 
         if (!isLoading) {
-            validateNotPast(parsedDate,trimmedInput);
+            validateNotPast(parsedDate, trimmedInput);
         }
 
         validateYearRange(parsedDate, trimmedInput);
 
         return parsedDate;
+    }
+
+    private static boolean isValidFormat(String input) {
+        try {
+            LocalDateTime.parse(input, FULL_FORMATTER_LENIENT);
+            return true;
+        } catch (DateTimeParseException e) {
+            try {
+                LocalDate.parse(input, DATE_ONLY_FORMATTER_LENIENT);
+                return true;
+            } catch (DateTimeParseException e2) {
+                return false;
+            }
+        }
     }
 
     public static LocalDateTime parseDateTime(String input) throws IllegalDateException {
@@ -104,8 +134,29 @@ public class DateUtils {
         return parseDateTime(input).toLocalDate();
     }
 
+    public static LocalDate parseLocalDateNoValidation(String input) throws IllegalDateException {
+        if (input == null || input.trim().isEmpty()) {
+            throw new IllegalDateException("Date input cannot be empty.");
+        }
+        String trimmed = input.trim();
+        try {
+            return LocalDateTime.parse(trimmed, FULL_FORMATTER).toLocalDate();
+        } catch (DateTimeParseException e) {
+            try {
+                return LocalDate.parse(trimmed, DATE_ONLY_FORMATTER);
+            } catch (DateTimeParseException e2) {
+                if (isValidFormat(trimmed)) {
+                    throw new IllegalDateException("Invalid date! That date does not exist " +
+                            "(e.g. Nov has 30 days, check leap years for Feb 29).");
+                }
+                throw new IllegalDateException("Invalid format! Use dd-MM-yyyy HHmm or dd-MM-yyyy");
+            }
+        }
+    }
+
+    //@author sushmiithaa
     private static LocalDateTime parseRecurringTime(LocalDate today, String dayOfWeek,
-            String time, boolean isStart) throws IllegalDateException {
+                                                    String time, boolean isStart) throws IllegalDateException {
 
         LocalDateTime dateTime;
         LocalDate date = today.with(TemporalAdjusters.nextOrSame(
@@ -119,6 +170,10 @@ public class DateUtils {
         try {
             dateTime = LocalDateTime.of(date, LocalTime.parse(time, TIME_ONLY_FORMATTER));
         } catch (DateTimeParseException e) {
+            if (time.matches("\\d{4}")) {
+                throw new IllegalDateException("Invalid" + (isStart ? " start " : " end ") + "time '" + time
+                        + "'. That time does not exist (hours 00-23, minutes 00-59).");
+            }
             throw new IllegalDateException("Invalid" + (isStart ? " start " : " end ") + "time '" + time + "'. " +
                     "Use 4-digit format e.g. 1600");
         }
@@ -127,16 +182,16 @@ public class DateUtils {
     }
 
     public static LocalDateTime parseRecurringTimeFrom(LocalDate today,
-            String dayOfWeek, String time) throws IllegalDateException {
-        return parseRecurringTime(today, dayOfWeek, time,true);
+                                                       String dayOfWeek, String time) throws IllegalDateException {
+        return parseRecurringTime(today, dayOfWeek, time, true);
     }
 
     public static LocalDateTime parseRecurringTimeTo(LocalDate today,
-            String dayOfWeek, String time) throws IllegalDateException {
-        return parseRecurringTime(today, dayOfWeek, time,false);
+                                                     String dayOfWeek, String time) throws IllegalDateException {
+        return parseRecurringTime(today, dayOfWeek, time, false);
     }
 
-    private static void parseDay(String dayOfWeek,boolean isStart) throws IllegalDateException {
+    private static void parseDay(String dayOfWeek, boolean isStart) throws IllegalDateException {
         try {
             DayOfWeek.valueOf(dayOfWeek.toUpperCase());
         } catch (IllegalArgumentException e) {
@@ -147,10 +202,10 @@ public class DateUtils {
     }
 
     public static void parseRecurringDayFrom(String dayOfWeek) throws IllegalDateException {
-        parseDay(dayOfWeek,true);
+        parseDay(dayOfWeek, true);
     }
 
     public static void parseRecurringDayTo(String dayOfWeek) throws IllegalDateException {
-        parseDay(dayOfWeek,false);
+        parseDay(dayOfWeek, false);
     }
 }
