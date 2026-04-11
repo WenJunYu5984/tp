@@ -75,6 +75,7 @@ public class MarkCommand implements Command {
         }
 
         ArrayList<String> invalidIndexes = new ArrayList<>();
+        ArrayList<String> validDuplicateIndexes = new ArrayList<>();
         int successCount = 0;
 
         for (int i = INDEX_OF_FIRST_TASK_TO_MARK; i < sentence.length; i++) {
@@ -89,14 +90,14 @@ public class MarkCommand implements Command {
                     }
                     successCount++;
                 } else {
-                    invalidIndexes.add(sentence[i]);
+                    validDuplicateIndexes.add(sentence[i]);
                 }
             } catch (Exception e) {
                 invalidIndexes.add(sentence[i]);
             }
         }
 
-        TaskUi.printBatchResult("todo", successCount, invalidIndexes, isMark);
+        TaskUi.printBatchResult("todo", successCount, invalidIndexes, validDuplicateIndexes, isMark);
     }
 
     private boolean checkMarkedTodo(AppContainer container, int categoryIndex, int todoIndex, boolean isMark) {
@@ -114,6 +115,7 @@ public class MarkCommand implements Command {
         }
 
         ArrayList<String> invalidIndexes = new ArrayList<>();
+        ArrayList<String> validDuplicateIndexes = new ArrayList<>();
         int successCount = 0;
         Set<LocalDate> dates = new LinkedHashSet<>();
 
@@ -126,14 +128,14 @@ public class MarkCommand implements Command {
                             .getDeadline(taskIndex).getBy().toLocalDate());
                     successCount++;
                 } else {
-                    invalidIndexes.add(sentence[i]);
+                    validDuplicateIndexes.add(sentence[i]);
                 }
             } catch (Exception e) {
                 invalidIndexes.add(sentence[i]);
             }
         }
 
-        TaskUi.printBatchResult("deadline", successCount, invalidIndexes, isMark);
+        TaskUi.printBatchResult("deadline", successCount, invalidIndexes, validDuplicateIndexes, isMark);
         return new ArrayList<>(dates);
     }
 
@@ -156,6 +158,7 @@ public class MarkCommand implements Command {
         }
 
         ArrayList<String> invalidIndexes = new ArrayList<>();
+        ArrayList<String> validDuplicateIndexes = new ArrayList<>();
         int successCount = 0;
         Set<LocalDate> dates = new LinkedHashSet<>();
         for (int i = INDEX_OF_FIRST_TASK_TO_MARK; i < sentence.length; i++) {
@@ -175,14 +178,14 @@ public class MarkCommand implements Command {
                         setStatusAndPrintMessage(container, ref, event);
                         dates.add(event.getFrom().toLocalDate());
                     } else {
-                        invalidIndexes.add(sentence[i]);
+                        validDuplicateIndexes.add(sentence[i]);
                     }
                 }
             } catch (Exception e) {
                 invalidIndexes.add(sentence[i]);
             }
         }
-        TaskUi.printBatchResult("event", successCount, invalidIndexes, isMark);
+        TaskUi.printBatchResult("event", successCount, invalidIndexes, validDuplicateIndexes, isMark);
         return new ArrayList<>(dates);
     }
 
@@ -203,6 +206,7 @@ public class MarkCommand implements Command {
             return new ArrayList<>();
         }
         ArrayList<String> invalidIndexes = new ArrayList<>();
+        ArrayList<String> validDuplicateIndexes = new ArrayList<>();
         int successCount = 0;
         Set<LocalDate> dates = new LinkedHashSet<>();
 
@@ -216,14 +220,14 @@ public class MarkCommand implements Command {
                     dates.add(event.getFrom().toLocalDate());
                     successCount++;
                 } else {
-                    invalidIndexes.add(sentence[i]);
+                    validDuplicateIndexes.add(sentence[i]);
                 }
             } catch (Exception e) {
                 invalidIndexes.add(sentence[i]);
             }
         }
 
-        TaskUi.printBatchResult("event", successCount, invalidIndexes, isMark);
+        TaskUi.printBatchResult("event", successCount, invalidIndexes, validDuplicateIndexes, isMark);
         return new ArrayList<>(dates);
     }
 
