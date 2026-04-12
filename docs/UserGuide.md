@@ -146,7 +146,7 @@ Format: `add event [CATEGORYINDEX] [DESCRIPTION] /from [START] /to [END]`
 
 `add event 1 meeting /from 25-05-2026 1400 /to 25-05-2026 1600`
 
-*Note*: *Adding an event will increase total incomplete task on particular date. This is also applicable to recurring*
+*Note*: *Adding an event will increase total incomplete task on particular (/from) date. This is also applicable to recurring*
 
 ---
 
@@ -406,7 +406,7 @@ Marked 1 event(s) successfully.
 *Note*: 
 - *For marking events always use its respective list views first before using its mark operations to match the index to mark (shown above under UIINDEX description)*
 - *For multiple marking of events e.g. `mark event 1 1 3` if 3/1 is a recurring group it will not be marked*
-- *Marking an event will increase total complete task and decrease total incomplete task on particular date*
+- *Marking an event will increase total complete task and decrease total incomplete task on particular (/from) date*
 
 
 ### Unmark Command: `unmark`
@@ -494,7 +494,7 @@ Example:
 *Note*: 
 - *For unmarking events always use its respective list views first before using its unmark operations to match the index to unmark (shown above under UIINDEX description)*
 - *For multiple unmarking of events e.g. `unmark event 1 1 3` if 3/1 is a recurring group it will not be unmarked*
-- *Unmarking an event or occurrence will increase total incomplete task and decrease total complete task on particular date*
+- *Unmarking an event or occurrence will increase total incomplete task and decrease total complete task on particular (/from) date*
 
 
 ---
