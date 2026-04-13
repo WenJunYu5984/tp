@@ -382,7 +382,7 @@ Example: `Add deadline 1 Homework /by 31-12-2025 1800` or `Add event 1 Homework 
 
 **Implementation Note - isLoading Flag**
 
-The IsLoading parameter is set to true when DateUtils.parse() is called from the storage layer (file loading), and false during user input. This allows tasks saved in a previous session to be restored if their dates have now passed, while preventing the user form directly scheduling past tasks interactively.
+The isLoading parameter is set to true when DateUtils.parse() is called from the storage layer (file loading), and false during user input. This allows tasks saved in a previous session to be restored if their dates have now passed, while preventing the user form directly scheduling past tasks interactively.
 
 **TaskValidator**
 
