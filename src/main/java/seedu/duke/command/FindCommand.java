@@ -20,7 +20,7 @@ public class FindCommand implements Command {
     @Override
     public void execute(AppContainer container) {
         if (sentence.length < FIND_MIN_LENGTH) {
-            ErrorUi.printError("Find command failed: missing string input.");
+            ErrorUi.printCommandFailed("find", "Insufficient arguments.", "find [substring]");
             return;
         }
         String[] split = Arrays.copyOfRange(sentence, INDEX_OF_FIND_INFO, sentence.length);
