@@ -52,7 +52,7 @@ public class AddCommand implements Command {
 
     public static final String ADD_TODO_FORMAT = "add todo [categoryIndex] [description] /p [priority]";
     public static final String ADD_TODO = "add todo";
-    public static final String MISSING_CATEGORY_INDEX = "Category index is missing.";
+    public static final String MISSING_CATEGORY_INDEX = "Category index is missing or invalid.";
     public static final String EMPTY_DESCRIPTION = "Empty description.";
     public static final String MISSING_PRIORITY_AFTER_P_FLAG = "Missing priority after /p.";
     public static final String PRIORITY_MUST_BE_AN_INTEGER = "Priority must be an integer.";

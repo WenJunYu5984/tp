@@ -32,7 +32,9 @@ public class ErrorUi {
     }
 
     public static void printIndexNotFound() {
-        GeneralUi.printBordered("Error: That index does not exist in the list.");
+        GeneralUi.printBordered("Error: One or more indexes does not exist in the list.\n" +
+                "       " +
+                "Use list command to check valid indexes.");
     }
 
     public static void printMarkTaskError() {

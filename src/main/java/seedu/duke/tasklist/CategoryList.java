@@ -50,6 +50,10 @@ public class CategoryList {
         return categories.size();
     }
 
+    public ArrayList<Category> getCategories() {
+        return categories;
+    }
+
     public Category getCategory(int index) {
         return categories.get(index);
     }
