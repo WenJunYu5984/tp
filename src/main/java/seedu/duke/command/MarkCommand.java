@@ -23,6 +23,10 @@ public class MarkCommand implements Command {
     public static final int INDEX_OF_MARK_TYPE = 1;
     public static final int INDEX_OF_FIRST_TASK_TO_MARK = 3;
     public static final String INSUFFICIENT_ARG_SPACES_FORMATTING = "                ";
+    public static final String EVENT_EXPANDED_VIEW = "EVENT_EXPANDED";
+    public static final String COLLAPSED_EVENT_VIEW = "EVENT";
+    public static final String NON_RECURRING_EVENTS_VIEW = "NORMAL_EVENT_ONLY";
+    public static final int INVALID_INDEX = -2;
 
     private final String[] sentence;
     private final boolean isMark;
@@ -155,8 +159,9 @@ public class MarkCommand implements Command {
             categoryIndex = CommandSupport.getCategoryIndex(container, sentence);
             String[] validViews = {"EVENT", "EVENT_EXPANDED", "NORMAL_EVENT_ONLY"};
             validateView(container, validViews, "To mark/unmark a specific event please " +
-                    "use 'list event' or 'list event /all' first. " +
-                    "To mark/unmark a occurrence use 'list occurrence' then 'mark/unmark occurrence'");
+                    "use 'list event' or 'list event /all' or 'list event /normal' first. " +
+                    "To mark/unmark a occurrence use `list event' then 'list occurrence' then " +
+                    "'mark/unmark occurrence [cat_idx] [event_idx]'");
         } catch (Exception e) {
             ErrorUi.printError(e.getMessage());
             return new ArrayList<>();
@@ -191,6 +196,9 @@ public class MarkCommand implements Command {
             }
         }
         TaskUi.printBatchResult("event", successCount, invalidIndexes, validDuplicateIndexes, isMark);
+        String currentView = container.categories().getCurrentView();
+        displayUpdatedView(container, currentView, categoryIndex);
+        
         return new ArrayList<>(dates);
     }
 
@@ -200,12 +208,14 @@ public class MarkCommand implements Command {
 
     private List<LocalDate> handleOccurrence(AppContainer container) {
         int categoryIndex;
+        int groupId = INVALID_INDEX;
         try {
             categoryIndex = CommandSupport.getCategoryIndex(container, sentence);
             String[] validViews = {"OCCURRENCE_VIEW"};
             validateView(container, validViews, "To mark/unmark a specific event please " +
-                    "use 'list event' or 'list event /all' first. " +
-                    "To mark/unmark a occurrence use 'list occurrence' then 'mark/unmark occurrence'");
+                    "use 'list event' first. " +
+                    "To mark/unmark a occurrence use 'list occurrence' then " +
+                    "'mark/unmark occurrence [cat_idx] [event_idx]'");
         } catch (Exception e) {
             ErrorUi.printError(e.getMessage());
             return new ArrayList<>();
@@ -220,6 +230,7 @@ public class MarkCommand implements Command {
                 int uiIndex = Integer.parseInt(sentence[i]) - 1;
                 EventReference ref = getEventReference(container, categoryIndex, uiIndex);
                 Event event = container.categories().getEvent(ref.categoryIndex, ref.eventIndex);
+                groupId = event.getRecurringGroupId();
                 if (checkMarkedEvent(container, ref, isMark)) {
                     setStatusAndPrintMessage(container, ref, event);
                     dates.add(event.getFrom().toLocalDate());
@@ -233,6 +244,15 @@ public class MarkCommand implements Command {
         }
 
         TaskUi.printBatchResult("event", successCount, invalidIndexes, validDuplicateIndexes, isMark);
+        String updatedList = container.categories()
+                .getOccurrencesByGroupId(categoryIndex, groupId);
+        if (updatedList == null || updatedList.isEmpty()) {
+            GeneralUi.printMessage("No more occurrences for this recurring event.");
+            GeneralUi.printMessage(container.categories()
+                    .getAllEvents(false, false));
+        } else {
+            GeneralUi.printMessage(updatedList);
+        }
         return new ArrayList<>(dates);
     }
 
@@ -254,5 +274,37 @@ public class MarkCommand implements Command {
         Map<Integer, List<EventReference>> map = container.categories().getActiveDisplayMap();
         List<EventReference> categoryMap = map.get(categoryIndex);
         return categoryMap.get(uiIndex);
+    }
+
+    private static void displayUpdatedView(AppContainer container, String currentView, int categoryIndex) {
+        switch (currentView) {
+        case COLLAPSED_EVENT_VIEW:
+            if (container.categories().hasEvents(categoryIndex)) {
+                GeneralUi.printMessage(container.categories()
+                        .getAllEvents(false, false));
+            } else {
+                GeneralUi.printMessage("No more events.");
+            }
+            break;
+        case EVENT_EXPANDED_VIEW:
+            if (container.categories().hasEvents(categoryIndex)) {
+                GeneralUi.printMessage(container.categories()
+                        .getAllEvents(true, false));
+            } else {
+                GeneralUi.printMessage("No more events.");
+            }
+            break;
+        case NON_RECURRING_EVENTS_VIEW:
+            if (container.categories().hasNonRecurringEvents(categoryIndex)) {
+                GeneralUi.printMessage(container.categories()
+                        .getAllEvents(false, true));
+            } else {
+                GeneralUi.printMessage("No more non-recurring events.");
+            }
+            break;
+        default:
+            GeneralUi.printMessage("");
+            break;
+        }
     }
 }

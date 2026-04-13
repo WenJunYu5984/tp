@@ -402,6 +402,30 @@ public class CategoryList {
         return sb.toString();
     }
 
+    public boolean hasRecurringEvents(int categoryIndex) {
+        Category cat = categories.get(categoryIndex);
+        for (int i = 0; i < cat.getEventList().getSize(); i++) {
+            if (cat.getEventList().get(i).getIsRecurring()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasEvents(int categoryIndex) {
+        return categories.get(categoryIndex).getEventList().getSize() > 0 ;
+    }
+
+    public boolean hasNonRecurringEvents(int categoryIndex) {
+        Category cat = categories.get(categoryIndex);
+        for (int i = 0; i < cat.getEventList().getSize(); i++) {
+            if (!(cat.getEventList().get(i).getIsRecurring())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private boolean shouldDisplayEvent(Event event, boolean isExpanded,
                                        boolean isNormalEventOnly, Set<Integer> printedGroups) {
         if (isNormalEventOnly) {
@@ -424,7 +448,6 @@ public class CategoryList {
      *
      */
     public String getOccurrencesOfRecurringEvent(int categoryIndex, int groupUiIndex) throws UniTaskerException {
-
         List<EventReference> categoryMap = activeDisplayMap.get(categoryIndex);
 
         if (categoryMap == null || groupUiIndex - 1 >= categoryMap.size()) {
@@ -437,31 +460,52 @@ public class CategoryList {
             throw new UniTaskerException("This is not a recurring event, list occurrence or " +
                     "other occurrence operations are only for recurring event");
         }
-        int targetGroupId = template.getRecurringGroupId();
 
+        int targetGroupId = template.getRecurringGroupId();
+        return buildOccurrencesFromGroupIdString(categoryIndex,targetGroupId);
+    }
+
+    public String getOccurrencesByGroupId(int categoryIndex, int groupId) {
+        return buildOccurrencesFromGroupIdString(categoryIndex, groupId);
+    }
+
+    private String buildOccurrencesFromGroupIdString(int categoryIndex, int groupId) {
         StringBuilder sb = new StringBuilder();
-        sb.append("OCCURRENCES FOR: ").append(template.getDescription()).append("\n");
-        sb.append(DOTTED_LINE).append(System.lineSeparator());
-        sb.append("[" + (categoryIndex + 1) + "]").append(categories.get(categoryIndex).getName())
-                .append(":").append(System.lineSeparator());
         List<EventReference> newCategoryMap = new ArrayList<>();
         EventList eventList = categories.get(categoryIndex).getEventList();
-
+        String description = "";
         int uiIndex = 0;
+
         for (int i = 0; i < eventList.getSize(); i++) {
             Event e = eventList.get(i);
-            if (e.getIsRecurring() && e.getRecurringGroupId() == targetGroupId) {
+
+            if (e.getIsRecurring() && e.getRecurringGroupId() == groupId) {
+                if (description.isEmpty()) {
+                    description = e.getDescription();
+                }
                 sb.append(uiIndex + 1).append(". ").append(e.toString()).append(System.lineSeparator());
                 newCategoryMap.add(new EventReference(categoryIndex, i));
                 uiIndex++;
             }
         }
+
+        if (uiIndex == 0) {
+            return "";
+        }
+
+        StringBuilder finalOutput = new StringBuilder();
+        finalOutput.append("OCCURRENCES FOR: ").append(description).append(System.lineSeparator());
+        finalOutput.append(DOTTED_LINE).append(System.lineSeparator());
+        finalOutput.append("[").append(categoryIndex + 1).append("]").append(categories.get(categoryIndex).getName())
+                .append(":").append(System.lineSeparator());
+
+        finalOutput.append(sb);
         Map<Integer, List<EventReference>> newMap = new HashMap<>();
         newMap.put(categoryIndex, newCategoryMap);
 
         this.activeDisplayMap = newMap;
         this.currentView = "OCCURRENCE_VIEW";
-        return sb.toString();
+        return finalOutput.toString();
     }
 
     /**

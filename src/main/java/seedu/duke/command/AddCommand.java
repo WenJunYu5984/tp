@@ -33,7 +33,7 @@ public class AddCommand implements Command {
     public static final int ADD_CATEGORY_MIN_LENGTH = 3;
     public static final int ADD_TODO_MIN_LENGTH = 4;
     public static final int ADD_EVENT_MIN_LENGTH = 9;
-    public static final int ADD_RECURRING_EVENT_MIN_LENGTH = 5;
+    public static final int ADD_RECURRING_EVENT_MIN_LENGTH = 3;
     public static final int MIN_LENGTH_OF_TOFROM_COMPONENTS = 2;
 
     public static final int INDEX_OF_ADD_TYPE = 1;
@@ -41,11 +41,9 @@ public class AddCommand implements Command {
     public static final int INDEX_OF_TIME_EVENTS = 1;
     public static final int INDEX_OF_CATEGORY_INFO = 2;
     public static final int INDEX_OF_TASK_INFO = 3;
-    public static final int INDEX_OF_RECURRING_EVENT_INFO = 5;
+    public static final int INDEX_OF_RECURRING_EVENT_INFO = 3;
     public static final int INDEX_OF_DEADLINE_EVENT_DESCRIPTION = 0;
     public static final int INDEX_OF_DEADLINE_EVENT_DATETIME = 1;
-    public static final int INDEX_OF_WORD_WEEKLY = 3;
-    public static final int INDEX_OF_WORD_EVENT = 4;
 
     public static final String ADD_CATEGORY_FORMAT = "add category [description]";
     public static final String ADD_CATEGORY = "add category";
@@ -57,6 +55,9 @@ public class AddCommand implements Command {
     public static final String MISSING_PRIORITY_AFTER_P_FLAG = "Missing priority after /p.";
     public static final String PRIORITY_MUST_BE_AN_INTEGER = "Priority must be an integer.";
     public static final String PRIORITY_OUT_OF_RANGE = "Priority must be between 0 and 5.";
+    public static final String REGEX_FROMTO = "(?s).*\\S+.*\\s+/from\\s+\\S+.*\\s+/to\\s+\\S+.*";
+    public static final String REGEX_FROM = "\\s+/from\\s+";
+    public static final String REGEX_TO = "\\s+/to\\s+";
 
     private final String[] sentence;
 
@@ -266,21 +267,21 @@ public class AddCommand implements Command {
 
 
             if (raw.stripLeading().startsWith("/from")) {
-                throw new UniTaskerException("Empty description! Include the event description");
+                throw new UniTaskerException(EMPTY_DESCRIPTION);
             }
 
             String[] preValidationSplit = raw.split("/from");
             if (preValidationSplit.length > 0 && preValidationSplit[0].trim().isEmpty()) {
-                throw new UniTaskerException("Event description should not be empty");
+                throw new UniTaskerException(EMPTY_DESCRIPTION);
             }
 
-            if (!raw.matches("(?s).*\\S+.*\\s+/from\\s+\\S+.*\\s+/to\\s+\\S+.*")) {
+            if (!raw.matches(REGEX_FROMTO)) {
                 throw new UniTaskerException("Missing or invalid format. "
                         + "Expected: add event [index] [desc] /from dd-MM-yyyy HHmm /to dd-MM-yyyy HHmm");
             }
 
-            String[] eventDetails = raw.split("\\s+/from\\s+");
-            String[] eventTimeDetails = eventDetails[INDEX_OF_DEADLINE_EVENT_DATETIME].split("\\s+/to\\s+");
+            String[] eventDetails = raw.split(REGEX_FROM);
+            String[] eventTimeDetails = eventDetails[INDEX_OF_DEADLINE_EVENT_DATETIME].split(REGEX_TO);
 
             LocalDateTime from = DateUtils.parseDateTime(eventTimeDetails[INDEX_OF_DAY_EVENTS]);
             LocalDateTime to = DateUtils.parseDateTime(eventTimeDetails[INDEX_OF_TIME_EVENTS]);
@@ -319,12 +320,10 @@ public class AddCommand implements Command {
     private LocalDate handleAddRecurring(AppContainer container) {
         try {
             int eventCategoryIndex = CommandSupport.getCategoryIndex(container, sentence);
-            boolean isMissingInvalidInfo = sentence.length < ADD_RECURRING_EVENT_MIN_LENGTH
-                    || !sentence[INDEX_OF_WORD_WEEKLY].equals("weekly")
-                    || !sentence[INDEX_OF_WORD_EVENT].equals("event");
+            boolean isMissingInvalidInfo = sentence.length < ADD_RECURRING_EVENT_MIN_LENGTH;
             if (isMissingInvalidInfo) {
                 throw new UniTaskerException("Missing or invalid info. "
-                        + "Expected format: add recurring <categoryIndex> weekly event <description> "
+                        + "Expected format: add recurring <categoryIndex> <description> "
                         + "/from <day> <time> /to <day> <time>");
             }
 
@@ -332,22 +331,22 @@ public class AddCommand implements Command {
 
             String[] preValidationSplit = raw.split("/from");
             if (preValidationSplit.length > 0 && preValidationSplit[0].trim().isEmpty()) {
-                throw new UniTaskerException("Event description should not be empty");
+                throw new UniTaskerException(EMPTY_DESCRIPTION);
             }
 
             if (raw.stripLeading().startsWith("/from")) {
-                throw new UniTaskerException("Empty description! Include the event description");
+                throw new UniTaskerException(EMPTY_DESCRIPTION);
             }
             if (!raw.contains(" /from ")) {
                 throw new UniTaskerException("Missing '/from'. "
-                        + "Expected format: add recurring 1 weekly event CS2113 lecture "
+                        + "Expected format: add recurring 1 CS2113 lecture "
                         + "/from Friday 1600 /to Friday 1800");
             }
 
             String[] eventDetails = raw.split(" /from ");
             if (!(eventDetails[INDEX_OF_DEADLINE_EVENT_DATETIME].contains(" /to "))) {
                 throw new UniTaskerException("Missing '/to' or wrong format for '/to'. "
-                        + "Expected format: add recurring 1 weekly event CS2113 lecture "
+                        + "Expected format: add recurring 1 CS2113 lecture "
                         + "/from Friday 1600 /to Friday 1800");
             }
             String[] eventTimeDetails = eventDetails[INDEX_OF_DEADLINE_EVENT_DATETIME].split(" /to ");
@@ -365,7 +364,7 @@ public class AddCommand implements Command {
 
             if (!fromDayOfWeek.equals(toDayOfWeek)) {
                 throw new UniTaskerException("Recurring events must start and end on the same day "
-                        + "(e.g., add recurring 1 weekly event CS2113 lecture /from Friday 1600 /to Friday 1800)");
+                        + "(e.g., add recurring 1 CS2113 lecture /from Friday 1600 /to Friday 1800)");
             }
 
             LocalDate today = LocalDate.now();
@@ -374,7 +373,7 @@ public class AddCommand implements Command {
 
             if (!from.isBefore(to)) {
                 throw new UniTaskerException("Start date and time must be earlier than End date and time "
-                        + "(e.g., add recurring 1 weekly event CS2113 lecture /from Friday 1600 /to Friday 1800)");
+                        + "(e.g., add recurring 1 CS2113 lecture /from Friday 1600 /to Friday 1800)");
             }
 
             LocalDateTime endDate = null;
