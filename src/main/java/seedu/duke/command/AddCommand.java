@@ -47,6 +47,9 @@ public class AddCommand implements Command {
     public static final int INDEX_OF_WORD_WEEKLY = 3;
     public static final int INDEX_OF_WORD_EVENT = 4;
 
+    public static final String ADD_CATEGORY_FORMAT = "add category [description]";
+    public static final String ADD_CATEGORY = "add category";
+
     public static final String ADD_TODO_FORMAT = "add todo [categoryIndex] [description] /p [priority]";
     public static final String ADD_TODO = "add todo";
     public static final String MISSING_CATEGORY_INDEX = "Category index is missing.";
@@ -54,8 +57,6 @@ public class AddCommand implements Command {
     public static final String MISSING_PRIORITY_AFTER_P_FLAG = "Missing priority after /p.";
     public static final String PRIORITY_MUST_BE_AN_INTEGER = "Priority must be an integer.";
     public static final String PRIORITY_OUT_OF_RANGE = "Priority must be between 0 and 5.";
-    public static final String ADD_CATEGORY_FORMAT = "add category [description]";
-    public static final String ADD_CATEGORY = "add category";
 
     private final String[] sentence;
 

@@ -42,9 +42,9 @@ public class ReorderCommand implements Command {
                 container.categories().reorderCategory(fromCategoryIndex, toCategoryIndex);
                 TaskUi.printReordered("Category",
                         container.categories().getCategory(toCategoryIndex).getName(), -1, toCategoryIndex + 1);
-            } catch (UniTaskerException | NumberFormatException e) {
+            } catch (Exception e) {
                 ErrorUi.printCommandFailed("reorder category", e.getMessage(),
-                        "reorder category [index1] [index2]");
+                        "reorder category [fromIndex] [toIndex]");
             }
             break;
         case "todo":
@@ -59,9 +59,9 @@ public class ReorderCommand implements Command {
                 TaskUi.printReordered("Todo",
                         container.categories().getCategory(categoryIndex).getTodo(todoIndex2).getDescription(),
                         categoryIndex + 1, todoIndex2 + 1);
-            } catch (UniTaskerException | NumberFormatException e) {
+            } catch (Exception e) {
                 ErrorUi.printCommandFailed("reorder todo", e.getMessage(),
-                        "reorder todo [catIndex] [todoIndex1] [todoIndex2]");
+                        "reorder todo [catIndex] [fromIndex] [toIndex]");
             }
             break;
         default:
