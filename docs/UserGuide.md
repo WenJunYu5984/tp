@@ -54,6 +54,7 @@ Command Line Interface (CLI).
   - [Exiting the program: `exit`](#exit-program-exit)
   - [Saving and loading the data](#saving-and-loading-the-data)
   - [Editing the data file](#editing-the-data-file)
+  - [Additional Notes](#additional-notes)
 
 - [FAQ](#faq)
 - [Command Summary](#command-summary)
@@ -865,6 +866,7 @@ Advanced users may edit these files directly, but should copy and edit existing 
 *Note*: *If changes to the data file makes its format invalid, data loading can behave unexpectedly.
 For example, invalid lines may result in wrong information loaded or the entire line being skipped completely.*
 
+---
 ### Additional Notes
 Additional characters behind a correct complete command will almost always be ignored, allowing most command to succeed without error message. This gives user some "additional room" for accidental error.
 
