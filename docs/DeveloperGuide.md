@@ -318,7 +318,7 @@ Example:
 |       1       |    1    |                   (1,0)                    |   yoga lesson   |
 
 
-
+<!--@@authorWenJunYu5984-->
 **2. Polymorphism and Time-Based Tasks**
 
 UniTasker treats deadlines and events differently from todos to enable advanced scheduling features:
@@ -386,7 +386,7 @@ Before any task (Todo, Deadline, Event) is added to the system, the AddCommand i
 - If totalTimedTask is greater than or equal to maxTask, throw a HighWorkloadException error
 - Otherwise, check for any overlap in timing with existing events
 - If yes throw an OverlapEventException, otherwise all validators have been passed and task is added successfully
-
+<!--@@author-->
 
 ### Feature: Course Tracker
 
@@ -581,6 +581,25 @@ The following steps can be used to manually test category and todo management in
 
 23. Verify final state:
     `list category`
+
+### Testing Deadline and limits
+
+1. Add deadlines to a category: `add deadline 1 Homework /by 23-05-2026 2245` 
+`add deadline 1 Project /by 23-05-2026`
+`add deadline 1 Revision /by 23-05-2026 1200`
+2. Marking deadline(s): `mark deadline 1 1` `mark deadline 1 2 3`
+3. List deadline to verify all deadlines are marked: `list deadline`
+4. Unmarking deadline(s): `unmark deadline 1 1``unmark deadline 1 2 3`
+5. List deadline to verify all deadlines are unmarked: `list deadline`
+6. Delete deadline: `delete deadline 1 1``delete deadline 1 all`
+7. List deadline to verify all deadlines in that category are deleted: `list deadline`
+8. List limit to check current bounds for task limit and year limit: `list limit`
+9. Change year limit: `limit year 2040`
+10. Change timed task limit: `limit task 10`
+11. Check current limits: `list limit`
+12. Exit program: `exit`
+13. Re-enter program: `java -jar UniTasker.jar`
+14. Check if limit bounds are saved: `list limit` or check welcome message stating current limits
 
 
 ### Testing Course Tracker
