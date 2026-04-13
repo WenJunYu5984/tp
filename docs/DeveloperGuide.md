@@ -402,6 +402,7 @@ Before any task (Todo, Deadline, Event) is added to the system, the AddCommand i
 - If yes throw an OverlapEventException, otherwise all validators have been passed and task is added successfully
 <!-- @@author -->
 
+<!-- @@author michaelshyam1 -->
 ### Feature: Course Tracker
 
 The Course Tracker feature allows students to manage their courses and track their assessment scores and weightages.
@@ -447,7 +448,7 @@ Undo is currently supported for course commands only. Other commands such as `ad
 `add deadline` and `add event` are not undoable. This is a known limitation planned as a future enhancement.
 
 ---
-
+<!-- @@author -->
 ## Product scope
 
 ### Target user profile
@@ -616,7 +617,7 @@ The following steps can be used to manually test category and todo management in
 14. Re-enter program: `java -jar UniTasker.jar`
 15. Check if limit bounds are saved: `list limit` or check welcome message stating current limits
 
-
+<!-- @@author michaelshyam1 -->
 ### Testing Course Tracker
 
 1. Launch the application.
@@ -645,3 +646,4 @@ The following steps can be used to manually test category and todo management in
    - Expected: Undo: removed course CS2113
 3. `course add-assessment CS2113 /n Finals /w 40 /ms 100` then `undo`
    - Expected: Undo: removed assessment Finals
+<!-- @@author -->

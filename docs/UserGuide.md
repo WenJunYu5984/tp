@@ -735,7 +735,7 @@ Format:
 *Note*: *Anything after 'reminder' will be ignored*
 
 ---
-
+<!-- @@author michaelshyam1-->
 ### Course Command: `course`
 Manages your course grading structure. Supports adding/deleting courses and assessments,
 recording scores, and viewing weighted grades.
@@ -840,7 +840,7 @@ Format: `undo`
 *Note*: *Undo is currently supported for course commands only.*
 
 ---
-
+<!-- @@author ->
 ### Exit program: `exit`
 Exits the program
 
