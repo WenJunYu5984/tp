@@ -226,7 +226,7 @@ Examples:
 
 *Note*: *Use `delete todo/deadline categoryIndex all` to delete all todos/deadlines in specific category*
 
-*Note*: *Deleting a deadline will affect the total number of incomplete task and complete task on particular date. This is applicable to `delete deadline categoryIndex all` but total complete and incomplete task per date will not be shown*
+*Note*: *Deleting a deadline will affect the total number of incomplete task and completed task on particular date. This is applicable to `delete deadline categoryIndex all` but total completed and incomplete task per date will not be shown*
 
 
 
@@ -324,7 +324,7 @@ Examples:
 *Note*:
 - *Use `delete event categoryIndex all` to delete all events in specific category*
 - *For deleting events always use its respective list views first before using its delete operations to match the index to delete (shown above under UIINDEX description)*
-- *Deleting an event will affect the total number of complete task incomplete task on particular date. This is applicable to `delete event categoryIndex all` but total incomplete and complete task per date will not be shown*
+- *Deleting an event will affect the total number of completed task and incomplete task on particular date. This is applicable to `delete event categoryIndex all` but total incomplete and completed task per date will not be shown*
 
 ---
 ### Mark Command: `mark`
@@ -341,7 +341,7 @@ Format: `mark [TASKTYPE] [CATEGORYINDEX] [TASKINDEX]...`
 - `mark todo 1 1`
 - `mark todo 1 1 2 3 4`
 
-*Note*: *Marking a deadline will increase total complete task and decrease total incomplete task on particular date*
+*Note*: *Marking a deadline will increase total completed task and decrease total incomplete task on particular date*
 
 #### Mark Events `mark [EVENTTYPE]`
 Mark existing event(s) in the category.
@@ -415,7 +415,7 @@ Marked 1 event(s) successfully.
 *Note*: 
 - *For marking events always use its respective list views first before using its mark operations to match the index to mark (shown above under UIINDEX description)*
 - *For multiple marking of events e.g. `mark event 1 1 3` if 3/1 is a recurring group it will not be marked*
-- *Marking an event will increase total complete task and decrease total incomplete task on particular (/from) date*
+- *Marking an event will increase total completed task and decrease total incomplete task on particular (/from) date*
 
 
 ### Unmark Command: `unmark`
@@ -432,7 +432,7 @@ Format: `unmark [TASKTYPE] [CATEGORYINDEX] [TASKINDEX]...`
 - `unmark deadline 1 1`
 - `unmark deadline 1 1 2 3 4`
 
-*Note*: *Unmarking a deadline will increase total incomplete task and decrease total complete task on particular date*
+*Note*: *Unmarking a deadline will increase total incomplete task and decrease total completed task on particular date*
 
 #### Unmark Events `unmark [EVENTTYPE]`
 Unmark existing event(s) in the category.
@@ -503,7 +503,7 @@ Example:
 *Note*: 
 - *For unmarking events always use its respective list views first before using its unmark operations to match the index to unmark (shown above under UIINDEX description)*
 - *For multiple unmarking of events e.g. `unmark event 1 1 3` if 3/1 is a recurring group it will not be unmarked*
-- *Unmarking an event or occurrence will increase total incomplete task and decrease total complete task on particular (/from) date*
+- *Unmarking an event or occurrence will increase total incomplete task and decrease total completed task on particular (/from) date*
 
 
 ---
