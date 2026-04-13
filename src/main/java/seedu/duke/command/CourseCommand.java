@@ -133,7 +133,7 @@ public class CourseCommand implements Command {
                 LimitUi.printCourseResult("Cannot undo delete-assessment: assessment data not stored.");
                 break;
             case "score":
-            if (previousScore == UNGRADED_SCORE) {
+                if (previousScore == UNGRADED_SCORE) {
                     // was not graded before, reset to ungraded
                     Course course = container.courseParser()
                             .getCourseManager()
