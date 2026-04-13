@@ -2,7 +2,7 @@
 
 ## Introduction
 
-UniTasker is a desktop app for managing tasks and courses, optimized for use via a
+UniTasker is a desktop app for students managing tasks and courses, optimized for use via a
 Command Line Interface (CLI).
 
 - [Quick Start](#quick-start)
@@ -107,7 +107,7 @@ Format: `add todo [CATEGORYINDEX] [DESCRIPTION] /p [PRIORITYVALUE]`
 `add todo 1 reply email /p 5`
 
 ---
-
+<!-- @@author WenJunYu5984 -->
 #### Add Deadline: `add deadline`
 
 Adds a deadline with a specified due date and time (optional). If no time is given, time is defaulted to 2359.
@@ -122,7 +122,11 @@ Format: `add deadline [CATEGORYINDEX] [DESCRIPTION] /by [DATE TIME]`
 **Example:**
 
 `add deadline 1 Homework /by 25-05-2026 1800`
+
 `add deadline 1 Homework /by 25-05-2026`
+
+*Note*: *Adding a deadline will increase total incomplete task on particular date*
+<!-- @@author -->
 
 ---
 
@@ -142,6 +146,8 @@ Format: `add event [CATEGORYINDEX] [DESCRIPTION] /from [START] /to [END]`
 **Example:**
 
 `add event 1 meeting /from 25-05-2026 1400 /to 25-05-2026 1600`
+
+*Note*: *Adding an event will increase total incomplete task on particular (/from) date. This is also applicable to recurring*
 
 ---
 
@@ -211,6 +217,8 @@ Examples:
 `delete deadline 1 all`
 
 *Note*: *Use `delete todo/deadline categoryIndex all` to delete all todos/deadlines in specific category*
+
+*Note*: *Deleting a deadline will affect the total number of incomplete task and complete task on particular date. This is applicable to `delete deadline categoryIndex all` but total complete and incomplete task per date will not be shown*
 
 
 
@@ -308,6 +316,7 @@ Examples:
 *Note*:
 - *Use `delete event categoryIndex all` to delete all events in specific category*
 - *For deleting events always use its respective list views first before using its delete operations to match the index to delete (shown above under UIINDEX description)*
+- *Deleting an event will affect the total number of complete task incomplete task on particular date. This is applicable to `delete event categoryIndex all` but total incomplete and complete task per date will not be shown*
 
 ---
 ### Mark Command: `mark`
@@ -324,6 +333,7 @@ Format: `mark [TASKTYPE] [CATEGORYINDEX] [TASKINDEX]...`
 - `mark todo 1 1`
 - `mark todo 1 1 2 3 4`
 
+*Note*: *Marking a deadline will increase total complete task and decrease total incomplete task on particular date*
 
 #### Mark Events `mark [EVENTTYPE]`
 Mark existing event(s) in the category.
@@ -397,6 +407,7 @@ Marked 1 event(s) successfully.
 *Note*: 
 - *For marking events always use its respective list views first before using its mark operations to match the index to mark (shown above under UIINDEX description)*
 - *For multiple marking of events e.g. `mark event 1 1 3` if 3/1 is a recurring group it will not be marked*
+- *Marking an event will increase total complete task and decrease total incomplete task on particular (/from) date*
 
 
 ### Unmark Command: `unmark`
@@ -412,6 +423,8 @@ Format: `unmark [TASKTYPE] [CATEGORYINDEX] [TASKINDEX]...`
 **Examples:**
 - `unmark deadline 1 1`
 - `unmark deadline 1 1 2 3 4`
+
+*Note*: *Unmarking a deadline will increase total incomplete task and decrease total complete task on particular date*
 
 #### Unmark Events `unmark [EVENTTYPE]`
 Unmark existing event(s) in the category.
@@ -482,6 +495,7 @@ Example:
 *Note*: 
 - *For unmarking events always use its respective list views first before using its unmark operations to match the index to unmark (shown above under UIINDEX description)*
 - *For multiple unmarking of events e.g. `unmark event 1 1 3` if 3/1 is a recurring group it will not be unmarked*
+- *Unmarking an event or occurrence will increase total incomplete task and decrease total complete task on particular (/from) date*
 
 
 ---
@@ -520,14 +534,13 @@ Format: `list deadline`
 Example: `list deadline`
 
 ---
-
+<!-- @@author WenJunYu5984 -->
 #### List Limit: `list limit`
 Shows the current year range and daily task limit.
 
 Format: `list limit`
 
 Example: `list limit`
-
 ---
 
 #### List Range: `list range`
@@ -543,6 +556,7 @@ Examples:
 `list range 25-06-2026 27-06-2026`
 `list range 25-06-2026 27-06-2026 /deadline`
 `list range 25-06-2026 27-06-2026 /event`
+<!-- @@author -->
 
 ---
 
@@ -676,6 +690,7 @@ Example: `find assignment`
 
 ---
 
+<!-- @@author WenJunYu5984 -->
 ### Limit Command: `limit`
 Sets a limit on the following: task, year
 
@@ -694,11 +709,12 @@ Examples:
 
 *Note 1*: *Year refers to the furthest year that can be accessed/added to from the list*
 
-*Note 2*: *Cannot further reduce year **x** if there is a task in **x** year*
+*Note 2*: *Cannot further reduce year **x** if there is a task in the year **x***
 
 *Note 3*: *Latest Year is set to 2100 and Max task is set to 24*
 
 *Note 4*: *Task refers to timed task: `deadline`, `event`*
+<!--@@author-->
 
 ---
 
