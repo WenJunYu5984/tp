@@ -105,16 +105,15 @@ public class ListCommand implements Command {
         case LIST_MIN_LENGTH:
             CategoryUi.printList(container.categories().toString());
             break;
-        case LIST_WITH_INDEX_LENGTH:
+        default:
             try {
                 int catIndex = CommandSupport.getCategoryIndex(container, sentence);
                 CategoryUi.printList(container.categories().getCategory(catIndex).toString());
             } catch (Exception e) {
-                ErrorUi.printCommandFailed("list category [index]", e.getMessage(), null);
+                ErrorUi.printCommandFailed("list category",
+                        e.getMessage(),
+                        "list category [index]");
             }
-            break;
-        default:
-            ErrorUi.printMissingArgs("List command has too many arguments");
             break;
         }
     }

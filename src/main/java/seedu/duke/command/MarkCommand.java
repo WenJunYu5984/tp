@@ -35,7 +35,7 @@ public class MarkCommand implements Command {
     @Override
     public void execute(AppContainer container) {
         if (sentence.length < MARK_MIN_LENGTH) {
-            ErrorUi.printCommandFailed("mark/unmark",
+            ErrorUi.printCommandFailed("mark/unmark command",
                     "Insufficient arguments.",
                     "mark [taskType] [categoryIndex] [taskIndex]...\n"
                             + INSUFFICIENT_ARG_SPACES_FORMATTING
