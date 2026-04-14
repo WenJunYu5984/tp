@@ -222,6 +222,7 @@ The `Deadline` class,
 <!-- @@author sushmiithaa -->
 
 ### Event management
+
 The event commands manages one-time occurrences and automated recurring schedules, utilising a mapping layer to ensure UI actions correctly modify the underlying data.
 
 *Note: The relationship between `Event` class with `EventList`, `Tasked`, `Timed`, `Calendar`, `DateUtils` and `TaskList` classes is similar to the relationship between `Deadline` class and the classes mentioned above under the Deadline Class Diagram section.*
