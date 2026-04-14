@@ -14,6 +14,9 @@ import java.util.logging.Logger;
 //@@author sushmiithaa
 public class Event extends Task implements Timed {
     private static final Logger logger = Logger.getLogger(Event.class.getName());
+    private static final int NO_RECURRING_GROUP = -1;
+    private static final int TASK_DONE = 1;
+    private static final int TASK_NOT_DONE = 0;
 
     private static final DateTimeFormatter STORAGE_FORMATTER =
             DateTimeFormatter
@@ -29,8 +32,8 @@ public class Event extends Task implements Timed {
     public Event(String description, LocalDateTime from, LocalDateTime to, boolean isRecurring, int recurringGroupId) {
         super(description);
         assert from.isBefore(to) || from.isEqual(to) : "The start date time must be before the end date time";
-        assert (recurringGroupId > 0 || recurringGroupId == -1) : "Recurring event must have a group ID > 0 " +
-                "or if it is not recurring its group id must be -1";
+        boolean validGroupId = recurringGroupId > 0 || recurringGroupId == NO_RECURRING_GROUP;
+        assert validGroupId : "Recurring event must have a group ID > 0 or id must be " + NO_RECURRING_GROUP;
         assert (from != null) : "Start date time cannot be null";
         assert (to != null) : "End date time cannot be null";
 
@@ -107,10 +110,10 @@ public class Event extends Task implements Timed {
         String fromFormatted = from.format(STORAGE_FORMATTER);
         String toFormatted = to.format(STORAGE_FORMATTER);
         if (isRecurring) {
-            return String.format("RE | %d | %s | %s | %s | %d", (isDone ? 1 : 0), description,
+            return String.format("RE | %d | %s | %s | %s | %d", (isDone ? TASK_DONE : TASK_NOT_DONE), description,
                     fromFormatted, toFormatted, recurringGroupId);
         }
-        return String.format("E | %d | %s | %s | %s", (isDone ? 1 : 0), description,
+        return String.format("E | %d | %s | %s | %s", (isDone ? TASK_DONE : TASK_NOT_DONE), description,
                 fromFormatted, toFormatted);
     }
 

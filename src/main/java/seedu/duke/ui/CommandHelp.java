@@ -27,6 +27,7 @@ public class CommandHelp {
                 "  limit year <num>      - Set end year for dates (default: 2030)\n" +
                 "  list limit            - Show current limits\n" +
                 "  reminder              - Show all pending tasks for the day\n" +
+                "  undo                  - Undo the last undoable command\n" +
                 "  exit                  - Quit UniTasker\n" +
                 "\n" +
                 "GETTING HELP:\n" +
@@ -38,6 +39,7 @@ public class CommandHelp {
                 "  help add              - Show all 'add' command variants\n" +
                 "  help delete           - Show all 'delete' command variants\n" +
                 "  help list             - Show all 'list' command variants\n" +
+                "  help commands         - Show the full command summary\n" +
                 "\n" +
                 "COMMAND ALIASES: a=add, d=delete, l=list, m=mark, u=unmark, p=priority, s=sort, f=find\n" +
                 DOTTED_LINE;
@@ -52,12 +54,12 @@ public class CommandHelp {
                 "Manage todos with priority levels (0-5) within categories.\n" +
                 "\n" +
                 "ADD TODOS:\n" +
-                "  add todo <cat_idx> <description>\n" +
+                "  add todo <cat_idx> <description> [/p <priority>]\n" +
                 "  Example: add todo 1 Review CS2113 notes\n" +
                 "\n" +
                 "MARK/UNMARK:\n" +
-                "  mark todo <cat_idx> <idx>\n" +
-                "  unmark todo <cat_idx> <idx>\n" +
+                "  mark todo <cat_idx> <idx> [<idx> ...]\n" +
+                "  unmark todo <cat_idx> <idx> [<idx> ...]\n" +
                 "  Example: mark todo 1 1\n" +
                 "\n" +
                 "SET PRIORITY (0=low, 5=high):\n" +
@@ -65,11 +67,13 @@ public class CommandHelp {
                 "  Example: priority todo 1 2 4\n" +
                 "\n" +
                 "REORDER/SORT:\n" +
+                "  reorder category <idx1> <idx2>\n" +
                 "  reorder todo <cat_idx> <idx1> <idx2>\n" +
                 "  sort todo <cat_idx>          - Sort by priority\n" +
                 "\n" +
                 "DELETE:\n" +
                 "  delete todo <cat_idx> <idx>\n" +
+                "  delete todo <cat_idx> all\n" +
                 "\n" +
                 "LIST:\n" +
                 "  list todo                    - List all todos\n" +
@@ -92,8 +96,8 @@ public class CommandHelp {
                 "  Example: add deadline 1 Submit essay /by 25-03-2026 2359\n" +
                 "\n" +
                 "MARK/UNMARK:\n" +
-                "  mark deadline <cat_idx> <idx>\n" +
-                "  unmark deadline <cat_idx> <idx>\n" +
+                "  mark deadline <cat_idx> <idx> [<idx> ...]\n" +
+                "  unmark deadline <cat_idx> <idx> [<idx> ...]\n" +
                 "\n" +
                 "DELETE:\n" +
                 "  delete deadline <cat_idx> <idx>\n" +
@@ -128,10 +132,10 @@ public class CommandHelp {
                 "  - /date END : Repeat until END date (format: dd-MM-yyyy)\n" +
                 "\n" +
                 "MARK/UNMARK:\n" +
-                "  mark event <cat_idx> <idx>\n" +
-                "  unmark event <cat_idx> <idx>\n" +
-                "  mark occurrence <cat_idx> <idx>\n" +
-                "  unmark occurrence <cat_idx> <idx>\n" +
+                "  mark event <cat_idx> <idx> [<idx> ...]\n" +
+                "  unmark event <cat_idx> <idx> [<idx> ...]\n" +
+                "  mark occurrence <cat_idx> <idx> [<idx> ...]\n" +
+                "  unmark occurrence <cat_idx> <idx> [<idx> ...]\n" +
                 "\n" +
                 "DELETE:\n" +
                 "  delete event <cat_idx> <idx>\n" +
@@ -176,7 +180,7 @@ public class CommandHelp {
                 "\n" +
                 "DELETE:\n" +
                 "  course delete <code>\n" +
-                "  course delete-assessment <code> <assessment_name>\n" +
+                "  course delete-assessment <code> /n <assessment_name>\n" +
                 DOTTED_LINE;
     }
 
@@ -192,8 +196,8 @@ public class CommandHelp {
                 "  Example: add category CS2113\n" +
                 "\n" +
                 "TODOS:\n" +
-                "  add todo <cat_idx> <description>\n" +
-                "  Example: add todo 1 Review notes\n" +
+                "  add todo <cat_idx> <description> [/p <priority>]\n" +
+                "  Example: add todo 1 Review notes /p 3\n" +
                 "\n" +
                 "DEADLINES:\n" +
                 "  add deadline <cat_idx> <desc> /by <date> <time>\n" +
@@ -204,8 +208,8 @@ public class CommandHelp {
                 "  Example: add event 1 Meeting /from 25-03-2026 1400 /to 25-03-2026 1500\n" +
                 "\n" +
                 "RECURRING EVENTS:\n" +
-                "  add recurring <cat_idx> <desc> /from <day> <time> /to <day> <time>\n" +
-                "  Example: add recurring 1 Lecture /from Monday 1400 /to Monday 1530\n" +
+                "  add recurring <cat_idx> <desc> /from <day> <time> /to <day> <time> [/month <num> | /date <date>]\n" +
+                "  Example: add recurring 1 Lecture /from Monday 1400 /to Monday 1530 /month 3\n" +
                 "\n" +
                 "COURSES:\n" +
                 "  course add <code>\n" +
@@ -229,6 +233,7 @@ public class CommandHelp {
                 "\n" +
                 "TODOS:\n" +
                 "  delete todo <cat_idx> <idx>\n" +
+                "  delete todo <cat_idx> all\n" +
                 "\n" +
                 "DEADLINES:\n" +
                 "  delete deadline <cat_idx> <idx>\n" +
@@ -244,11 +249,14 @@ public class CommandHelp {
                 "OCCURRENCE:\n" +
                 "  delete occurrence <cat_idx> <idx>\n" +
                 "\n" +
+                "SYSTEM:\n" +
+                "  delete marked\n" +
+                "\n" +
                 "COURSES:\n" +
                 "  course delete <code>\n" +
                 "\n" +
                 "ASSESSMENTS:\n" +
-                "  course delete-assessment <code> <assessment_name>\n" +
+                "  course delete-assessment <code> /n <assessment_name>\n" +
                 DOTTED_LINE;
     }
 
@@ -292,6 +300,70 @@ public class CommandHelp {
     }
 
     /**
+     * Get the complete command summary table (from User Guide).
+     */
+    public static String getCommandSummary() {
+        return DOTTED_LINE + "\n" +
+                "COMMAND SUMMARY\n" +
+                "\n" +
+                "TASK MANAGEMENT:\n" +
+                "  add todo <CAT_IDX> <DESC> [/p <PRIORITY>]\n" +
+                "    Example: add todo 1 Review notes\n" +
+                "  add deadline <CAT_IDX> <DESC> /by <DATE> [<TIME>]\n" +
+                "    Example: add deadline 1 Submit essay /by 25-05-2026 1800\n" +
+                "  add event <CAT_IDX> <DESC> /from <DATE> <TIME> /to <DATE> <TIME>\n" +
+                "    Example: add event 1 Meeting /from 25-05-2026 1400 /to 25-05-2026 1600\n" +
+                "  add recurring <CAT_IDX> <DESC> /from <DAY> <TIME> /to <DAY> <TIME> [/month <NUM> | /date <DATE>]\n" +
+                "    Example: add recurring 1 Lecture /from Monday 1400 /to Monday 1530 /month 3\n" +
+                "  mark/unmark <TASKTYPE> <CAT_IDX> <IDX> [<IDX> ...]\n" +
+                "    Example: mark todo 1 1\n" +
+                "  priority todo <CAT_IDX> <IDX> <PRIORITY>\n" +
+                "    Example: priority todo 1 2 4\n" +
+                "  sort todo <CAT_IDX>              - Sort by priority\n" +
+                "  reorder category <FROM> <TO>\n" +
+                "  reorder <TYPE> <CAT_IDX> <FROM> <TO>\n" +
+                "    Example: reorder todo 1 1 3\n" +
+                "\n" +
+                "LISTING:\n" +
+                "  list category [<IDX>]\n" +
+                "  list todo                        - List all todos\n" +
+                "  list deadline                    - List all deadlines\n" +
+                "  list event [/all | /normal]      - List events\n" +
+                "  list recurring                   - List recurring events\n" +
+                "  list occurrence <CAT_IDX> <IDX>  - List occurrences\n" +
+                "  list range <START> <END> [/TYPE] - List by date range\n" +
+                "  list limit                       - Show current limits\n" +
+                "\n" +
+                "DELETION:\n" +
+                "  delete category <IDX>\n" +
+                "  delete <TASKTYPE> <CAT_IDX> <IDX>\n" +
+                "  delete <TASKTYPE> <CAT_IDX> all  - Delete all of type\n" +
+                "  delete marked\n" +
+                "\n" +
+                "COURSE TRACKER:\n" +
+                "  course add <CODE>\n" +
+                "  course delete <CODE>\n" +
+                "  course list                      - List all courses\n" +
+                "  course view <CODE>               - View assessments\n" +
+                "  course add-assessment <CODE> /n <NAME> /w <WEIGHTAGE> /ms <MAX_SCORE>\n" +
+                "    Example: course add-assessment CS2113 /n Finals /w 40 /ms 100\n" +
+                "  course score <CODE> /n <NAME> /s <SCORE>\n" +
+                "  course delete-assessment <CODE> /n <NAME>\n" +
+                "\n" +
+                "SYSTEM:\n" +
+                "  find <KEYWORD>                   - Search tasks\n" +
+                "  limit task <NUM>                 - Set daily task limit (default: 8)\n" +
+                "  limit year <NUM>                 - Set end year (default: 2030)\n" +
+                "  reminder                         - Show pending tasks\n" +
+                "  undo                             - Undo last command\n" +
+                "  exit                             - Quit UniTasker\n" +
+                "\n" +
+                "ALIASES: a=add, d=delete, l=list, m=mark, u=unmark, p=priority, s=sort, f=find\n" +
+                "DATE FORMAT: dd-MM-yyyy | TIME FORMAT: HHmm (24-hour) | DAYS: Monday-Sunday\n" +
+                DOTTED_LINE;
+    }
+
+    /**
      * Route help requests to appropriate method.
      */
     public static String getHelp(String topic) {
@@ -307,9 +379,10 @@ public class CommandHelp {
         case "add" -> getAddCommandHelp();
         case "delete" -> getDeleteCommandHelp();
         case "list" -> getListCommandHelp();
+        case "summary", "commands", "cheatsheet" -> getCommandSummary();
         default -> "Unknown help topic: '" + topic + "'\n" +
                 "Try: help, help task, help deadline, help event," +
-                " help course, help add, help delete, help list\n" +
+                " help course, help add, help delete, help list, help commands\n" +
                 DOTTED_LINE;
         };
     }

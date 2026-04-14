@@ -16,6 +16,8 @@ import seedu.duke.util.DateUtils;
  */
 public class Deadline extends Task implements Timed {
     private static final Logger logger = Logger.getLogger(Deadline.class.getName());
+    private static final int TASK_DONE = 1;
+    private static final int TASK_NOT_DONE = 0;
     private static final DateTimeFormatter DATE_FORMATTER =
             DateTimeFormatter
                     .ofPattern("dd-MM-uuuu HHmm")
@@ -41,7 +43,8 @@ public class Deadline extends Task implements Timed {
 
     @Override
     public String toFileFormat() {
-        return String.format("D | %d | %s | %s", (isDone ? 1 : 0), description, by.format(DATE_FORMATTER));
+        int status = isDone ? TASK_DONE : TASK_NOT_DONE;
+        return String.format("D | %d | %s | %s", status, description, by.format(DATE_FORMATTER));
     }
 
     @Override

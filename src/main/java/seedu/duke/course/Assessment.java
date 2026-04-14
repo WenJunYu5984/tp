@@ -12,6 +12,9 @@ package seedu.duke.course;
 
 public class Assessment {
 
+    private static final double NOT_GRADED = -1;
+    private static final double ZERO_SCORE = 0;
+
     private final String name;
     private final double weightage;
     private double scoreObtained;
@@ -22,10 +25,10 @@ public class Assessment {
         this.name = name;
         this.weightage = weightage;
         this.maxScore = maxScore;
-        this.scoreObtained = -1;
+        this.scoreObtained = NOT_GRADED;
     }
     //Creates an assessment that has not been graded yet.
-    //scoreObtained = -1 means "not graded".
+    //scoreObtained = NOT_GRADED means "not graded".
 
     public Assessment(String name, double weightage, double scoreObtained, double maxScore) {
         this.name = name;
@@ -69,17 +72,18 @@ public class Assessment {
 
     //@@author michaelshyam1
     public void resetScore() {
-        this.scoreObtained = -1;
+        this.scoreObtained = NOT_GRADED;
     }
+    //@@author
 
     public double getWeightedScore() {
         if (!isGraded() || maxScore == 0) {
-            return 0;
+            return ZERO_SCORE;
         }
         return (scoreObtained / maxScore) * weightage;
     }
     //Computes this assessment's weighted contribution to the final grade.
-    //Returns 0 if not graded yet.
+    //Returns ZERO_SCORE if not graded yet.
 
 
     public String encode() {

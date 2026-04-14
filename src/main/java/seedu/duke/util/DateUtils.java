@@ -25,6 +25,8 @@ import java.util.logging.Logger;
  * <p>This class cannot be instantiated.
  */
 public class DateUtils {
+    private static final int END_OF_DAY_HOUR = 23;
+    private static final int END_OF_DAY_MINUTE = 59;
     private static final Logger logger = Logger.getLogger(DateUtils.class.getName());
     private static final DateTimeFormatter FULL_FORMATTER = DateTimeFormatter
             .ofPattern("dd-MM-uuuu HHmm")
@@ -72,7 +74,7 @@ public class DateUtils {
         } catch (DateTimeParseException e) {
             try {
                 LocalDate date = LocalDate.parse(trimmedInput, DATE_ONLY_FORMATTER);
-                parsedDate = date.atTime(23, 59);
+                parsedDate = date.atTime(END_OF_DAY_HOUR, END_OF_DAY_MINUTE);
             } catch (DateTimeParseException e2) {
                 if (isValidFormat(trimmedInput)) {
                     throw new IllegalDateException("Invalid date! That date does not exist (e.g. Nov has 30 days, " +
@@ -197,7 +199,7 @@ public class DateUtils {
                 DayOfWeek.valueOf(dayOfWeek.toUpperCase())));
 
         if (!isStart && (time == null || time.isBlank())) {
-            LocalDateTime addEndTime = LocalDateTime.of(date, LocalTime.of(23, 59));
+            LocalDateTime addEndTime = LocalDateTime.of(date, LocalTime.of(END_OF_DAY_HOUR, END_OF_DAY_MINUTE));
             validateYearRange(addEndTime, addEndTime.format(FULL_FORMATTER));
             return addEndTime;
         }
