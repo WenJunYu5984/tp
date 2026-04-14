@@ -218,7 +218,7 @@ The `Deadline` class,
 - Implements the `Timed` interface so that `Calendar` can register and sort `Deadline` objects polymorphically without depending on the concrete type 
 - Delegates all date parsing to `DateUtils`, ensuring consistent validation and formatting rules are applied uniformly across task types
 <!-- @@author -->
-
+<!-- @@author sushmiithaa -->
 ### Event management
 The event commands manages one-time occurrences and automated recurring schedules, utilising a mapping layer to ensure UI actions correctly modify the underlying data.
 
@@ -331,13 +331,13 @@ Example:
 |       0       |    2    |                   (0,3)                    | CS2113 lecture  |
 |       1       |    1    |                   (1,0)                    |   yoga lesson   |
 
-
+<!-- @@author -->
 <!-- @@author WenJunYu5984 -->
 **2. Polymorphism and Time-Based Tasks**
 
 UniTasker treats deadlines and events differently from todos to enable advanced scheduling features:
 - **Inheritance**: A shared interface allows the `Calendar` class to store and query deadlines and events polymorphically. This enables range queries (e.g., "show all tasks this week") without the `Calendar` needing to know the specific task type.
-- **Efficient Lookups**: The `Calendar` uses a `TreeMap<LocalDate, List<Task>>`. This structure provides $O(\log n)$ lookup times for specific dates and efficient range-based sub-maps, avoiding the need to iterate through the entire global task list.
+- **Efficient Lookups**: The `Calendar` uses a `TreeMap<LocalDate, List<Task>>`. This structure provides O(log n) lookup times for specific dates and efficient range-based sub-maps, avoiding the need to iterate through the entire global task list.
 - **Formatting Flexibility**: `DateUtils` encapsulates three `DateTimeFormatter` constants, to store deadlines and events in different formats.
 
 **3. System Integrity and Hierarchy**
@@ -616,6 +616,40 @@ The following steps can be used to manually test category and todo management in
 13. Exit program: `exit`
 14. Re-enter program: `java -jar UniTasker.jar`
 15. Check if limit bounds are saved: `list limit` or check welcome message stating current limits
+
+### Testing Events
+#### Testing Non-Recurring Events
+1. Add non-recurring events to a category: `add event 1 consultation /from 20-05-2026 1800 /to 20-05-2026 1900`
+`add event 1 meeting /from 20-05-2026 2000 /to 20-05-2026` 
+`add event 1 workshop /from 21-05-2026 0800 /to 21-05-2026 1000`
+2. Marking non-recurring events(s): `mark event 1 1` `mark event 1 2 3`
+3. List event to verify all non-recurring events are marked: `list event`
+4. Unmarking events(s): `unmark event 1 1``unmark event 1 2 3`
+5. List event to verify all non-recurring events are unmarked: `list event`
+6. List range of dates to view event: `list range 19-05-2026 25-05-2026 /event`
+7. Delete deadline: `delete event 1 1``delete event 1 all`
+8. List deadline to verify all events in that category are deleted: `list event`
+
+#### Testing Recurring Events
+1. Add recurring events to a category: `add recurring 1 CS2113 lecture /from Friday 1600 /to Friday 1800`
+   `add recurring 1 CS2113 tutorial /from Thursday 1400 /to Thursday 1500 /date 24-05-2026`
+   `add recurring 1 CG2023 lecture /from Tuesday 1600 /to Tuesday 1800 /month 2`
+2. Marking recurring event occurrence(s): `list event` → then `list occurrence 1 1` → then `mark occurrence 1 1` `mark occurrence 1 2 3`
+3. List occurrence to verify the occurrence(s) are marked: `list event` → then `list occurrence 1 1`
+4. Unmarking recurring event occurrence(s): `unmark occurrence 1 1``unmark occurrence 1 2 3`
+5. List event to verify all non-recurring events are unmarked: `list event` → then `list occurrence 1 1`
+6. Delete whole recurring group: `list recurring` → then `delete recurring 1 1`
+7. List recurring to verify that the recurring group has been deleted: `list recurring`
+8. Delete recurring event occurrence: `list event` → then `list occurrence 1 1` → then `delete occurrence 1 1`
+9. List occurrence to verify the occurrence has been deleted: `list event` → then `list occurrence 1 1`
+10. Delete all events (including recurring event): `delete event 1 all`
+
+#### Other list options for Events
+1. Add recurring events to a category: `add recurring 1 CS2113 lecture /from Friday 1600 /to Friday 1800`
+2. Add non-recurring events to a category: `add event 1 consultation /from 20-05-2026 1800 /to 20-05-2026 1900`
+3. List event to show the collapsed view for the recurring event: `list event`
+4. List only non-recurring events: `list event /normal`
+5. List all events (expanded view of recurring events): `list event /all`
 
 <!-- @@author michaelshyam1 -->
 ### Testing Course Tracker
