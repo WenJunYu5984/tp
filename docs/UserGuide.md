@@ -62,7 +62,7 @@ Command Line Interface (CLI).
 ## Quick Start
 
 1. Ensure that you have Java 17 or above installed.
-2. Down the latest version of `UniTasker` from [here](https://github.com/AY2526S2-CS2113-T14-3/tp/releases).
+2. Down the latest version of `UniTasker` from [here](https://github.com/AY2526S2-CS2113-T14-3/tp/releases/tag/v2.1).
 3. Copy the file to the folder you want to use as the home folder for your UniTasker
 4. Open a command terminal, `cd` into the folder you put the jar file in, and
 use the `java -jar UniTasker.jar` command to run the application
