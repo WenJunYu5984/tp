@@ -185,7 +185,7 @@ ______________________________________________________________________
 
 **Examples:**
 
-`add recurring 1 weekly event CS2113 lecture /from Friday 1600 /to Friday 1800`
+`add recurring 1 CS2113 lecture /from Friday 1600 /to Friday 1800`
 
 *Note*: 
 - start day and time specified after `/from` must be earlier than end day and time specified after `/to`
