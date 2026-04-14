@@ -1,3 +1,4 @@
+//@@author michaelshyam1
 package seedu.duke.ui;
 
 import seedu.duke.course.Assessment;
@@ -80,3 +81,4 @@ public class CourseUi {
         return message;
     }
 }
+//@@author

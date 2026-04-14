@@ -1,3 +1,4 @@
+//@@author michaelshyam1
 package seedu.duke.command;
 
 import seedu.duke.course.CourseManager;
@@ -171,3 +172,4 @@ public class CourseParser {
         }
     }
 }
+//@@author
