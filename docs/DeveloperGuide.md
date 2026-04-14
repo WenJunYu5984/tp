@@ -217,6 +217,7 @@ The `Deadline` class,
 - Extends `Task` to inherit description and completion state, adding only the `by` field to keep deadline-specific logic self-contained 
 - Implements the `Timed` interface so that `Calendar` can register and sort `Deadline` objects polymorphically without depending on the concrete type 
 - Delegates all date parsing to `DateUtils`, ensuring consistent validation and formatting rules are applied uniformly across task types
+
 <!-- @@author -->
 
 <!-- @@author sushmiithaa -->
