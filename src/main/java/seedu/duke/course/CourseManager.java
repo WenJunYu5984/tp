@@ -7,6 +7,9 @@ import seedu.duke.ui.CourseUi;
 public class CourseManager {
     private static final double MAX_WEIGHTAGE_PERCENTAGE = 100;
     private static final double MAX_ASSESSMENT_SCORE = 10000;
+    private static final double MIN_WEIGHTAGE = 0;
+    private static final double MIN_SCORE = 0;
+
 
     //stores all courses
     private final CourseList courseList;
