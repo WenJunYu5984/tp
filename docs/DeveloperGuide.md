@@ -218,7 +218,9 @@ The `Deadline` class,
 - Implements the `Timed` interface so that `Calendar` can register and sort `Deadline` objects polymorphically without depending on the concrete type 
 - Delegates all date parsing to `DateUtils`, ensuring consistent validation and formatting rules are applied uniformly across task types
 <!-- @@author -->
+
 <!-- @@author sushmiithaa -->
+
 ### Event management
 The event commands manages one-time occurrences and automated recurring schedules, utilising a mapping layer to ensure UI actions correctly modify the underlying data.
 
