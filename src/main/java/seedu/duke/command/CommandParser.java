@@ -3,14 +3,24 @@ package seedu.duke.command;
 public class CommandParser {
 
     public static final int INDEX_OF_COMMANDTYPE = 0;
+    private static final String EMPTY_COMMAND = "";
 
     //@@author marken9
     public Command parse(String line) {
-        if (line.contains("|")) {
+        if (line == null) {
+            return new UnknownCommand(EMPTY_COMMAND);
+        }
+
+        String trimmedLine = line.trim();
+        if (trimmedLine.isEmpty()) {
+            return new UnknownCommand(EMPTY_COMMAND);
+        }
+
+        if (trimmedLine.contains("|")) {
             return new UnknownCommand("|");
         }
-        String[] sentence = line.trim().split("\\s+");
-        String commandWord = sentence[INDEX_OF_COMMANDTYPE];
+        String[] sentence = trimmedLine.split("\\s+");
+        String commandWord = sentence[INDEX_OF_COMMANDTYPE].toLowerCase();
 
         // Map aliases to full command names
         commandWord = mapAliasToCommand(commandWord);
@@ -35,7 +45,7 @@ public class CommandParser {
         case "find":
             return new FindCommand(sentence);
         case "course":
-            return new CourseCommand(line);
+            return new CourseCommand(trimmedLine);
         case "limit":
             return new LimitCommand(sentence);
         case "help":

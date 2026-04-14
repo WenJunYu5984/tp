@@ -93,11 +93,10 @@ public class CourseManager {
         }
 
         if (weightage > MAX_WEIGHTAGE) {
-            throw new CourseException("Weightage must be between 0 and 100.");
+            throw new CourseException("Weightage must be between 0 and " + MAX_WEIGHTAGE + ".");
         }
-
         if (maxScore > MAX_ALLOWED_SCORE) {
-            throw new CourseException("Maximum score cannot exceed 10000.");
+            throw new CourseException("Maximum score cannot exceed " + MAX_ALLOWED_SCORE + ".");
         }
 
         course.addAssessment(new Assessment(normalizedAssessmentName, weightage, maxScore));
