@@ -24,6 +24,7 @@ import java.util.logging.Logger;
  *
  * <p>This class cannot be instantiated.
  */
+//@@author WenJunYu5984
 public class DateUtils {
     private static final int END_OF_DAY_HOUR = 23;
     private static final int END_OF_DAY_MINUTE = 59;
