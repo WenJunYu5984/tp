@@ -58,7 +58,7 @@ public class ErrorUi {
 
     public static void printAddRecurringEventFormatError() {
         printError("Could not add event. Check your input format. " +
-                "(e.g., add recurring 1 weekly event CS2113 lecture /from Friday 1600 /to Friday 1800)");
+                "(e.g., add recurring 1 CS2113 lecture /from Friday 1600 /to Friday 1800)");
     }
 
     public static void printRangeOutOfBounds(int startYear, int endYear) {

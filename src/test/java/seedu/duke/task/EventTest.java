@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import seedu.duke.calender.Calendar;
+import seedu.duke.exception.OverlapEventException;
 import seedu.duke.tasklist.CategoryList;
 import seedu.duke.tasklist.EventList;
 import seedu.duke.tasklist.EventReference;
@@ -151,7 +152,7 @@ public class EventTest {
     }
 
     @Test
-    public void addRecurringEvent_success() {
+    public void addRecurringEvent_success() throws OverlapEventException {
         CategoryList categoryList = new CategoryList();
         categoryList.addCategory("School");
 
@@ -178,7 +179,7 @@ public class EventTest {
     }
 
     @Test
-    public void deleteRecurringEvent_success() {
+    public void deleteRecurringEvent_success() throws OverlapEventException {
         CategoryList categoryList = new CategoryList();
         categoryList.addCategory("School");
 
@@ -233,7 +234,7 @@ public class EventTest {
     }
 
     @Test
-    void addRecurringSameDayBoundary_success() {
+    void addRecurringSameDayBoundary_success() throws OverlapEventException {
         CategoryList categories = new CategoryList();
         categories.addCategory("Work");
 

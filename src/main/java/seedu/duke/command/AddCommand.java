@@ -27,7 +27,6 @@ import seedu.duke.util.DateUtils;
 import seedu.duke.util.TaskValidator;
 
 import static seedu.duke.tasklist.CategoryList.refreshCalendar;
-
 public class AddCommand implements Command {
     public static final int ADD_MIN_LENGTH = 2;
     public static final int ADD_CATEGORY_MIN_LENGTH = 3;
@@ -434,7 +433,7 @@ public class AddCommand implements Command {
         TaskValidator.validateUniqueTask(
                 container.categories(), eventCategoryIndex, desc);
         TaskValidator.validateNoOverlap(
-                container.categories().getCategory(eventCategoryIndex).getEventList(), from, to);
+                container.categories(), from, to);
     }
 
     //@@author sushmiithaa

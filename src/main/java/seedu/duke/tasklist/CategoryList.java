@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.logging.Logger;
 
 import seedu.duke.calender.Calendar;
+import seedu.duke.exception.OverlapEventException;
 import seedu.duke.task.Deadline;
 import seedu.duke.task.Event;
 import seedu.duke.task.Task;
@@ -221,7 +222,7 @@ public class CategoryList {
      *
      */
     public void addRecurringWeeklyEventFile(int categoryIndex, String description,
-                                            LocalDateTime from, LocalDateTime to, int recurringGroupIndex) {
+            LocalDateTime from, LocalDateTime to, int recurringGroupIndex) throws OverlapEventException {
         assert (recurringGroupIndex > 0) : "Recurring Group Id must be greater than 0";
         addRecurring(categoryIndex, description, from, to, recurringGroupIndex,
                 null, null, 0, true);
@@ -242,15 +243,15 @@ public class CategoryList {
      *
      */
     public void addRecurringWeeklyEvent(int categoryIndex, String description, LocalDateTime from,
-                                        LocalDateTime to, Calendar calendar, LocalDateTime date, int months) {
+            LocalDateTime to, Calendar calendar, LocalDateTime date, int months) throws OverlapEventException {
         assert (calendar != null) : "Calendar should exist";
         recurringGroupId += 1;
         addRecurring(categoryIndex, description, from, to, recurringGroupId, calendar, date, months, false);
     }
 
     private void addRecurring(int categoryIndex, String description, LocalDateTime from, LocalDateTime to,
-                              int groupId, Calendar calendar, LocalDateTime date, int months, boolean isFromFile) {
-
+            int groupId, Calendar calendar, LocalDateTime date, int months, boolean isFromFile)
+            throws OverlapEventException {
         Event event = createEvent(description, from, to, true, groupId);
 
         if (isFromFile) {
@@ -259,7 +260,7 @@ public class CategoryList {
                 recurringGroupId = groupId;
             }
         } else {
-            categories.get(categoryIndex).addRecurringWeeklyEvent(event, calendar, date, months);
+            categories.get(categoryIndex).addRecurringWeeklyEvent(event, calendar, date, months,this);
         }
         logger.info((isFromFile ? "Add recurring event from file: " : "Add recurring event: ")
                 + description + " from " + from + " to " + to

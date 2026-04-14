@@ -1,6 +1,7 @@
 package seedu.duke.tasklist;
 
 import seedu.duke.calender.Calendar;
+import seedu.duke.exception.OverlapEventException;
 import seedu.duke.task.Event;
 
 import java.time.LocalDateTime;
@@ -8,6 +9,8 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import static seedu.duke.util.TaskValidator.validateNoOverlap;
 
 /**
  * Manages a list of {@link Event} tasks.
@@ -29,7 +32,7 @@ public class EventList extends TaskList<Event> {
             assert event != null : "Event must exist";
             if (event.getIsRecurring() && !printedGroups.contains(event.getRecurringGroupId())) {
                 result = result + (viewType? uiIndex+1: i+1) + ". "
-                        + (event.toStringRecurring()) + System.lineSeparator();
+                        + (event.toStringRecurringList()) + System.lineSeparator();
                 printedGroups.add(event.getRecurringGroupId());
                 uiIndex++;
             } else if (!event.getIsRecurring()) {
@@ -77,7 +80,8 @@ public class EventList extends TaskList<Event> {
      * @param date     The end date to stop adding recurring events within that group.
      * @param months   The number of months to add weekly recurring events
      */
-    public void addRecurringWeeklyEvent(Event event, Calendar calendar, LocalDateTime date, int months) {
+    public void addRecurringWeeklyEvent(Event event, Calendar calendar, LocalDateTime date, int months,
+            CategoryList categories) throws OverlapEventException {
         assert (calendar != null) : "There must be an instance of calendar";
         assert (event != null) : "Event must exist";
         LocalDateTime boundaryDateTime = null;
@@ -88,6 +92,18 @@ public class EventList extends TaskList<Event> {
         } else {
             boundaryDateTime = event.getFrom().plusMonths(months);
         }
+
+        LocalDateTime tempFrom = event.getFrom();
+        LocalDateTime tempTo = event.getTo();
+
+        while (tempFrom.isBefore(boundaryDateTime)) {
+
+            validateNoOverlap(categories, tempFrom, tempTo);
+
+            tempFrom = tempFrom.plusDays(7);
+            tempTo = tempTo.plusDays(7);
+        }
+
         LocalDateTime currentFromDateTime = event.getFrom();
         LocalDateTime currentToDateTime = event.getTo();
         int recurringGroupId = event.getRecurringGroupId();

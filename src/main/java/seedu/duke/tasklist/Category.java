@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import seedu.duke.calender.Calendar;
+import seedu.duke.exception.OverlapEventException;
 import seedu.duke.task.Deadline;
 import seedu.duke.task.Event;
 import seedu.duke.task.Todo;
@@ -78,10 +79,11 @@ public class Category {
         eventList.add(event);
     }
 
-    public void addRecurringWeeklyEvent(Event event, Calendar calendar, LocalDateTime date, int months) {
+    public void addRecurringWeeklyEvent(Event event, Calendar calendar, LocalDateTime date, int months,
+            CategoryList categories) throws OverlapEventException {
         assert (event != null) : "Event must not be null";
         assert (calendar != null) : "Calendar must not be null";
-        eventList.addRecurringWeeklyEvent(event, calendar, date, months);
+        eventList.addRecurringWeeklyEvent(event, calendar, date, months, categories);
     }
 
     public void deleteEvent(int index) {

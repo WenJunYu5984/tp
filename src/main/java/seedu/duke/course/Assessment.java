@@ -74,6 +74,7 @@ public class Assessment {
     public void resetScore() {
         this.scoreObtained = NOT_GRADED;
     }
+    //@@author
 
     public double getWeightedScore() {
         if (!isGraded() || maxScore == 0) {

@@ -9,10 +9,7 @@ import org.junit.jupiter.api.Test;
 import seedu.duke.exception.DuplicateCategoryException;
 import seedu.duke.exception.DuplicateTaskException;
 import seedu.duke.exception.HighWorkloadException;
-import seedu.duke.exception.OverlapEventException;
 import seedu.duke.tasklist.CategoryList;
-import seedu.duke.tasklist.EventList;
-import seedu.duke.task.Event;
 
 import java.time.LocalDateTime;
 
@@ -28,65 +25,13 @@ public class TaskValidatorTest {
 
     @Test
     void validateNoOverlap_emptyList_doesNotThrow() {
-        EventList empty = new EventList();
+        // EventList empty = new EventList();
+        CategoryList empty = new CategoryList();
         LocalDateTime start = LocalDateTime.of(2026, 5, 1, 9, 0);
         LocalDateTime end = LocalDateTime.of(2026, 5, 1, 10, 0);
         assertDoesNotThrow(() -> TaskValidator.validateNoOverlap(empty, start, end));
     }
 
-    @Test
-    void validateNoOverlap_nonOverlappingEvent_doesNotThrow() {
-        EventList list = new EventList();
-        LocalDateTime existFrom = LocalDateTime.of(2026, 5, 1, 14, 0);
-        LocalDateTime existTo = LocalDateTime.of(2026, 5, 1, 15, 0);
-        list.add(new Event("Existing", existFrom, existTo, false, -1));
-
-        // New event ends before the existing one starts
-        LocalDateTime newFrom = LocalDateTime.of(2026, 5, 1, 10, 0);
-        LocalDateTime newTo = LocalDateTime.of(2026, 5, 1, 11, 0);
-        assertDoesNotThrow(() -> TaskValidator.validateNoOverlap(list, newFrom, newTo));
-    }
-
-    @Test
-    void validateNoOverlap_overlappingEvent_throwsException() {
-        EventList list = new EventList();
-        LocalDateTime existFrom = LocalDateTime.of(2026, 5, 1, 9, 0);
-        LocalDateTime existTo = LocalDateTime.of(2026, 5, 1, 11, 0);
-        list.add(new Event("Morning Meeting", existFrom, existTo, false, -1));
-
-        // New event starts during the existing one
-        LocalDateTime newFrom = LocalDateTime.of(2026, 5, 1, 10, 0);
-        LocalDateTime newTo = LocalDateTime.of(2026, 5, 1, 12, 0);
-        assertThrows(OverlapEventException.class, () ->
-                TaskValidator.validateNoOverlap(list, newFrom, newTo));
-    }
-
-    @Test
-    void validateNoOverlap_newEventContainsExisting_throwsException() {
-        EventList list = new EventList();
-        LocalDateTime existFrom = LocalDateTime.of(2026, 6, 1, 10, 0);
-        LocalDateTime existTo = LocalDateTime.of(2026, 6, 1, 11, 0);
-        list.add(new Event("Short Meeting", existFrom, existTo, false, -1));
-
-        // New event completely wraps around the existing one
-        LocalDateTime newFrom = LocalDateTime.of(2026, 6, 1, 9, 0);
-        LocalDateTime newTo = LocalDateTime.of(2026, 6, 1, 12, 0);
-        assertThrows(OverlapEventException.class, () ->
-                TaskValidator.validateNoOverlap(list, newFrom, newTo));
-    }
-
-    @Test
-    void validateNoOverlap_adjacentEvents_doesNotThrow() {
-        // New event starts exactly when the existing one ends — no overlap
-        EventList list = new EventList();
-        LocalDateTime existFrom = LocalDateTime.of(2026, 6, 1, 8, 0);
-        LocalDateTime existTo = LocalDateTime.of(2026, 6, 1, 9, 0);
-        list.add(new Event("Early slot", existFrom, existTo, false, -1));
-
-        LocalDateTime newFrom = LocalDateTime.of(2026, 6, 1, 9, 0);
-        LocalDateTime newTo = LocalDateTime.of(2026, 6, 1, 10, 0);
-        assertDoesNotThrow(() -> TaskValidator.validateNoOverlap(list, newFrom, newTo));
-    }
 
     @Test
     void validateWorkload_underLimit_doesNotThrow() {

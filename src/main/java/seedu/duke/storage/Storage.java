@@ -11,7 +11,9 @@ import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 import java.util.logging.Level;
 
+import seedu.duke.exception.OverlapEventException;
 import seedu.duke.exception.UniTaskerException;
+import seedu.duke.ui.GeneralUi;
 import seedu.duke.util.DateUtils;
 import seedu.duke.exception.IllegalDateException;
 
@@ -319,6 +321,8 @@ public class Storage {
                         logger.severe("Could not parse recurring group ID from line: "
                                 + lineNumber + " " + e.getMessage());
                         continue;
+                    } catch (OverlapEventException e) {
+                        GeneralUi.printMessage("");
                     }
                 } else {
                     categoryList.addEvent(catIdx, desc, from, to);

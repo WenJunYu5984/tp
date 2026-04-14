@@ -1,3 +1,4 @@
+//@@author michaelshyam1
 package seedu.duke.course;
 
 import seedu.duke.exception.CourseException;
@@ -5,12 +6,11 @@ import seedu.duke.storage.CourseStorage;
 import seedu.duke.ui.CourseUi;
 
 public class CourseManager {
-    private static final double MAX_WEIGHTAGE_PERCENTAGE = 100;
-    private static final double MAX_ASSESSMENT_SCORE = 10000;
+    private static final double MAX_ALLOWED_SCORE = 10000;
+    private static final double MAX_WEIGHTAGE = 100;
     private static final double MIN_WEIGHTAGE = 0;
     private static final double MIN_SCORE = 0;
-
-
+  
     //stores all courses
     private final CourseList courseList;
     //handles saving and loading courses
@@ -89,16 +89,15 @@ public class CourseManager {
                     + normalizedAssessmentName);
         }
 
-        if (course.getTotalWeightage() + weightage > MAX_WEIGHTAGE_PERCENTAGE) {
-            throw new CourseException("Total assessment weightage cannot exceed " + MAX_WEIGHTAGE_PERCENTAGE + "%.");
+        if (course.getTotalWeightage() + weightage > MAX_WEIGHTAGE) {
+            throw new CourseException("Total assessment weightage cannot exceed " + MAX_WEIGHTAGE + "%.");
         }
 
-        if (weightage > MAX_WEIGHTAGE_PERCENTAGE) {
-            throw new CourseException("Weightage must be between 0 and " + MAX_WEIGHTAGE_PERCENTAGE + ".");
+        if (weightage > MAX_WEIGHTAGE) {
+            throw new CourseException("Weightage must be between 0 and " + MAX_WEIGHTAGE + ".");
         }
-
-        if (maxScore > MAX_ASSESSMENT_SCORE) {
-            throw new CourseException("Maximum score cannot exceed " + MAX_ASSESSMENT_SCORE + ".");
+        if (maxScore > MAX_ALLOWED_SCORE) {
+            throw new CourseException("Maximum score cannot exceed " + MAX_ALLOWED_SCORE + ".");
         }
 
         course.addAssessment(new Assessment(normalizedAssessmentName, weightage, maxScore));
@@ -188,3 +187,4 @@ public class CourseManager {
         courseStorage.save(courseList);
     }
 }
+//@@author

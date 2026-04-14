@@ -228,7 +228,7 @@ The event commands manages one-time occurrences and automated recurring schedule
 **Workflow for Add Event command**
 1. User enters either:
    - `add event <categoryIndex> <description> /from <startDateTime> /to <endDateTime>`
-   - `add recurring <categoryIndex> weekly event <description> /from <day> <time> /to <day> <time> /(date or month) <dateOrMonth>`
+   - `add recurring <categoryIndex> <description> /from <day> <time> /to <day> <time> /(date or month) <dateOrMonth>`
 2. Input is parsed and `AddCommand` is created.
 3. `AddCommand` calls `CategoryList` functions to add events.
 4. If non-recurring:

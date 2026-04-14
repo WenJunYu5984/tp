@@ -18,17 +18,20 @@ public class TaskValidator {
     /**
      * Checks if a proposed time range overlaps with any existing events in a list.
      */
-    public static void validateNoOverlap(EventList existingEvents, LocalDateTime start, LocalDateTime end)
+    //@@author WenJunYu5984
+    public static void validateNoOverlap(CategoryList categories, LocalDateTime start, LocalDateTime end)
             throws OverlapEventException {
+        for (int j = 0; j < categories.getAmount(); j++) {
+            EventList existingEvents = categories.getCategory(j).getEventList();
+            for (int i = 0; i < existingEvents.getSize(); i++) {
+                Event existing = existingEvents.get(i);
 
-        for (int i = 0; i < existingEvents.getSize(); i++) {
-            Event existing = existingEvents.get(i);
+                boolean isOverlapping = start.isBefore(existing.getTo()) && end.isAfter(existing.getFrom());
 
-            boolean isOverlapping = start.isBefore(existing.getTo()) && end.isAfter(existing.getFrom());
-
-            if (isOverlapping) {
-                throw new OverlapEventException("Conflict: Overlaps with '" + existing.getDescription() +
-                        "' [" + existing.getFrom().toLocalTime() + " - " + existing.getTo().toLocalTime() + "]");
+                if (isOverlapping) {
+                    throw new OverlapEventException("Conflict: Overlaps with '" + existing.getDescription() +
+                            "' [" + existing.getFrom().toLocalTime() + " - " + existing.getTo().toLocalTime() + "]");
+                }
             }
         }
     }
