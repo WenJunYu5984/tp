@@ -14,6 +14,7 @@ import seedu.duke.util.DateUtils;
  * the task must be completed. It implements the {@link Timed} interface to
  * allow for chronological sorting and calendar integration.
  */
+//@@author WenJunYu5984
 public class Deadline extends Task implements Timed {
     private static final Logger logger = Logger.getLogger(Deadline.class.getName());
     private static final int TASK_DONE = 1;
